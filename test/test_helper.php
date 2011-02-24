@@ -22,6 +22,10 @@ function assert_no_difference($expression, $lambda) {
     assert_equal($value, eval($expression));
 }
 
+function assert_not_identical($value, $other, $message = '') {
+    ensure($value !== $other, $message);
+}
+
 function assert_in_array($needle, $haystack) {
     ensure(in_array($needle, $haystack));
 }
