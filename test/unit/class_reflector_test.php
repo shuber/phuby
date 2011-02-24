@@ -4,8 +4,8 @@ namespace ClassReflectorTest {
     class Mock { }
 
     class Dummy extends Mock {
-        public $variable = 'test';
-        static $class_variable = 'test';
+        public $variable;
+        static $class_variable;
 
         function method() { }
         static function class_method() { }
@@ -13,7 +13,7 @@ namespace ClassReflectorTest {
 
     class User extends Dummy {
         public $name;
-        static $table_name = 'users';
+        static $table_name;
 
         function email() { }
         static function all() { }
@@ -55,11 +55,17 @@ namespace {
         }
 
         function test_should_return_class_variables() {
-            //
+            $variables = $this->reflector->class_variables();
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('class_variable', 'table_name'), $keys);
         }
 
         function test_should_return_class_variables_without_super() {
-            //
+            $variables = $this->reflector->class_variables(false);
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('table_name'), $keys);
         }
 
         function test_should_return_instance_methods() {
@@ -77,19 +83,32 @@ namespace {
         }
 
         function test_should_return_instance_variables() {
-            // 
+            $variables = $this->reflector->instance_variables();
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('name', 'variable'), $keys);
         }
 
         function test_should_return_instance_variables_without_super() {
-            // 
+            $variables = $this->reflector->instance_variables(false);
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('name'), $keys);
         }
 
         function test_should_return_methods() {
-            // 
+            $methods = $this->reflector->methods();
+            $keys = array_keys($methods);
+            sort($keys);
+            assert_equal(array('all', 'class_method', 'email', 'method'), $keys);
+            foreach ($methods as $method) ensure(is_a($method, 'ReflectionMethod'));
         }
 
         function test_should_return_methods_without_super() {
-            // 
+            $methods = $this->reflector->methods(false);
+            $keys = array_keys($methods);
+            sort($keys);
+            assert_equal(array('all', 'email'), $keys);
         }
 
         function test_should_set_name() {
@@ -101,11 +120,22 @@ namespace {
         }
 
         function test_should_return_superclass() {
-            // 
+            assert_identical(ClassReflector::instance('ClassReflectorTest\Dummy'), $this->reflector->superclass);
         }
 
         function test_should_return_variables() {
-            // 
+            $variables = $this->reflector->variables();
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('class_variable', 'name', 'table_name', 'variable'), $keys);
+            foreach ($variables as $variable) ensure(is_a($variable, 'ReflectionProperty'));
+        }
+
+        function test_should_return_variables_without_super() {
+            $variables = $this->reflector->variables(false);
+            $keys = array_keys($variables);
+            sort($keys);
+            assert_equal(array('name', 'table_name'), $keys);
         }
 
         function test_should_store_and_return_instances() {

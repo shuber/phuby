@@ -64,7 +64,7 @@ class ClassReflector {
     }
 
     function &superclass() {
-        if (!empty($this->_ancestors)) return static::instance($this->_ancestors[0]);
+        if (!empty($this->_ancestors)) return static::instance(reset($this->_ancestors));
     }
 
     function variables($include_super = true) {
