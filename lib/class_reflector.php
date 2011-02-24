@@ -2,9 +2,9 @@
 
 class ClassReflector {
 
+    protected $_ancestors;
     protected $_methods;
     protected $_name;
-    protected $_parent;
     protected $_reflection;
     protected $_variables;
 
@@ -12,7 +12,7 @@ class ClassReflector {
 
     function __construct($class) {
         $this->_name = $class;
-        $this->_parent = get_parent_class($class);
+        $this->_ancestors = class_parents($class);
     }
 
     function &__get($method) {
@@ -21,7 +21,7 @@ class ClassReflector {
     }
 
     function ancestors() {
-        return array_map(function($ancestor) { return ClassReflector::instance($ancestor); }, class_parents($this->name));
+        return array_map(function($ancestor) { return ClassReflector::instance($ancestor); }, $this->_ancestors);
     }
 
     function class_methods($include_super = true) {
@@ -59,12 +59,12 @@ class ClassReflector {
     }
 
     function &reflection() {
-        if (!isset($this->_reflection)) $this->_reflection = new ReflectionClass($this->name);
+        if (!isset($this->_reflection)) $this->_reflection = new ReflectionClass($this->_name);
         return $this->_reflection;
     }
 
     function &superclass() {
-        if ($this->_parent) return static::instance($this->_parent);
+        if (!empty($this->_ancestors)) return static::instance($this->_ancestors[0]);
     }
 
     function variables($include_super = true) {
