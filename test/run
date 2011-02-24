@@ -6,7 +6,9 @@ ini_set('display_errors', true);
 
 require_once 'ztest/ztest.php';
 require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'phuby.php';
-require_once 'test_helper.php';
+
+$support_files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.DIRECTORY_SEPARATOR.'support'), RecursiveIteratorIterator::SELF_FIRST);
+foreach ($support_files as $file) require_once $file;
 
 $reporter = new ztest\ConsoleReporter;
 $reporter->enable_color();
