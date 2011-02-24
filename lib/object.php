@@ -1,11 +1,7 @@
 <?php
 
 namespace Object {
-    abstract class InstanceMethods {
-
-        function initialize() {}
-
-    }
+    abstract class InstanceMethods { }
 }
 
 namespace {
