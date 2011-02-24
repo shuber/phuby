@@ -2,7 +2,9 @@
 
 namespace Object {
     abstract class InstanceMethods {
-        // 
+
+        function initialize() {}
+
     }
 }
 
