@@ -120,7 +120,7 @@ namespace {
         }
 
         function test_should_return_superclass() {
-            assert_identical(ClassReflector::instance('ClassReflectorTest\Dummy'), $this->reflector->superclass);
+            assert_identical(ClassReflector::instance('ClassReflectorTest\Dummy'), $this->reflector->superclass());
         }
 
         function test_should_return_variables() {
