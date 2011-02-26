@@ -8,15 +8,19 @@ class Klass extends Object {
 
     static $instances = array();
 
-    function __construct($class) {
+    function __construct($class, $create_if_undefined = true) {
         parent::__construct();
         if (!class_exists($class)) {
-            $namespaces = array_filter(preg_split('#\\\\|::#', $class));
-            $class_name = array_pop($namespaces);
-            $namespace = implode('\\', $namespaces);
-            $superclass = '\\'.get_parent_class(__CLASS__);
-            $class_definition = 'namespace '.$namespace.' { class '.$class_name.' extends '.$superclass.' { } }';
-            eval($class_definition);
+            if ($create_if_undefined) {
+                $namespaces = array_filter(preg_split('#\\\\|::#', $class));
+                $class_name = array_pop($namespaces);
+                $namespace = implode('\\', $namespaces);
+                $superclass = '\\'.get_parent_class(__CLASS__);
+                $class_definition = 'namespace '.$namespace.' { class '.$class_name.' extends '.$superclass.' { } }';
+                eval($class_definition);
+            } else {
+                throw new \InvalidArgumentException('Undefined class '.$class);
+            }
         }
         $this->_name = $class;
         $this->_parent = get_parent_class($class);
@@ -41,7 +45,7 @@ class Klass extends Object {
     }
 
     static function &instance($class) {
-        if (!isset(static::$instances[$class])) static::$instances[$class] = new static($class);
+        if (!isset(static::$instances[$class])) static::$instances[$class] = new static($class, false);
         return static::$instances[$class];
     }
 

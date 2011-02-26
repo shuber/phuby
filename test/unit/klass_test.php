@@ -19,6 +19,12 @@ namespace {
             ensure(class_exists('KlassTest\RuntimeCreatedClass'));
         }
 
+        function test_should_not_create_a_new_real_class_at_runtime() {
+            ensure(!class_exists('KlassTest\RuntimeCreatedClass2'));
+            assert_throws('InvalidArgumentException', function() { new Klass('KlassTest\RuntimeCreatedClass2', false); });
+            ensure(!class_exists('KlassTest\RuntimeCreatedClass2'));
+        }
+
         function test_should_return_correct_name() {
             assert_equal('KlassTest\User', $this->user_class->name());
         }
@@ -34,6 +40,7 @@ namespace {
 
         function test_should_return_same_instance() {
             assert_identical(Klass::instance('Object'), Klass::instance('Object'));
+            assert_throws('InvalidArgumentException', function() { Klass::instance('KlassTest\NonExistentClass'); });
         }
 
     }
