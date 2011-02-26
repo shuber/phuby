@@ -21,7 +21,7 @@ namespace {
 
         function test_should_not_create_a_new_real_class_at_runtime() {
             ensure(!class_exists('KlassTest\RuntimeCreatedClass2'));
-            assert_throws('InvalidArgumentException', function() { new Klass('KlassTest\RuntimeCreatedClass2', false); });
+            assert_throws('InvalidArgumentException', function() { new Klass('KlassTest\RuntimeCreatedClass2', null, false); });
             ensure(!class_exists('KlassTest\RuntimeCreatedClass2'));
         }
 
