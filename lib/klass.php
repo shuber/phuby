@@ -2,9 +2,11 @@
 
 class Klass extends Object {
 
+    protected $_included_modules = array();
     protected $_name;
     protected $_parent;
     protected $_reflection;
+    protected $_superclass;
 
     static $instances = array();
 
@@ -23,7 +25,27 @@ class Klass extends Object {
             }
         }
         $this->_name = $class;
-        $this->_parent = get_parent_class($class);
+        if ($superclass = get_parent_class($class)) $this->_superclass = &static::instance($superclass);
+    }
+
+    function &__include($modules) {
+        if (!is_array($modules)) $modules = func_get_args();
+        foreach (array_reverse($modules) as $module) {
+            $module = &static::instance($module);
+            if (!in_array($module, $this->ancestors())) {
+                array_unshift($this->_included_modules, $module);
+                // $module->included($this);
+            }
+        }
+        return $this;
+    }
+
+    function ancestors() {
+        $ancestors = array();
+        foreach ($this->_included_modules as $module) $ancestors = array_merge($ancestors, $module->ancestors());
+        $ancestors[] = $this;
+        if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors());
+        return array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
     }
 
     function name() {
@@ -36,12 +58,7 @@ class Klass extends Object {
     }
 
     function &superclass() {
-        if ($this->_parent) {
-            $superclass = &static::instance($this->_parent);
-        } else {
-            $superclass = null;
-        }
-        return $superclass;
+        return $this->_superclass;
     }
 
     static function &instance($class) {
