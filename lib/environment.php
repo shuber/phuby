@@ -50,7 +50,7 @@ abstract class Environment {
     **/
     static function autoload($class) {
         $filename = self::filename_for_class($class);
-        // class_eval('NonExistentClass') throws warnings if we just "include_once $filename"
+        // class_eval('NonExistentClass') throws warnings if we include_once when $filename doesn't exist
         foreach (static::include_paths() as $include_path) {
             $file = realpath($include_path.DIRECTORY_SEPARATOR.$filename);
             if (file_exists($file)) {
