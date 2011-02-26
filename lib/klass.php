@@ -33,8 +33,12 @@ class Klass extends Object {
         foreach (array_reverse($modules) as $module) {
             $module = &static::instance($module);
             if (!in_array($module, $this->ancestors())) {
-                array_unshift($this->_included_modules, $module);
-                // $module->included($this);
+                if (in_array($this, $module->included_modules)) {
+                    throw new \InvalidArgumentException('cyclic include detected');
+                } else {
+                    array_unshift($this->_included_modules, $module);
+                    // $module->included($this);
+                }
             }
         }
         return $this;
@@ -46,6 +50,13 @@ class Klass extends Object {
         $ancestors[] = $this;
         if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors());
         return array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+    }
+
+    function included_modules() {
+        $modules = array();
+        foreach ($this->_included_modules as $module) $modules = array_merge($module->included_modules(), array($module), $modules);
+        if ($this->superclass()) $modules = array_merge($this->superclass()->included_modules(), $modules);
+        return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
     }
 
     function name() {

@@ -37,6 +37,12 @@ namespace {
             assert_equal(array(Klass::instance('KlassTest\Module')), $property->getValue($this->user_class_with_modules));
         }
 
+        function test_should_throw_cyclic_include_error() {
+            assert_throws('InvalidArgumentException', function() {
+                Klass::instance('KlassTest\AnotherModule')->__include('KlassTest\Module');
+            });
+        }
+
         function test_should_return_ancestors() {
             $ancestors = array(Klass::instance('KlassTest\User'), Klass::instance('KlassTest\Base'), Klass::instance('Object'));
             assert_equal($ancestors, $this->user_class->ancestors());
@@ -47,6 +53,13 @@ namespace {
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
             Klass::instance('KlassTest\UserWithModules')->__include('KlassTest\AnotherModule');
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
+        }
+
+        function test_should_return_unique_included_modules() {
+            $included_modules = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'));
+            assert_equal($included_modules, $this->user_class_with_modules->included_modules());
+            Klass::instance('KlassTest\UserWithModules')->__include('KlassTest\AnotherModule');
+            assert_equal($included_modules, $this->user_class_with_modules->included_modules());
         }
 
         function test_should_return_correct_name() {
