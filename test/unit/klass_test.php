@@ -13,6 +13,12 @@ namespace {
             $this->object_class = new Klass('Object');
         }
 
+        function test_should_create_a_new_real_class_at_runtime() {
+            ensure(!class_exists('KlassTest\RuntimeCreatedClass'));
+            $class = new Klass('KlassTest\RuntimeCreatedClass');
+            ensure(class_exists('KlassTest\RuntimeCreatedClass'));
+        }
+
         function test_should_return_correct_name() {
             assert_equal('KlassTest\User', $this->user_class->name());
         }

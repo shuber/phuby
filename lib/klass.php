@@ -9,13 +9,17 @@ class Klass extends Object {
     static $instances = array();
 
     function __construct($class) {
-        if (class_exists($class)) {
-            parent::__construct();
-            $this->_name = $class;
-            $this->_parent = get_parent_class($class);
-        } else {
-            throw new InvalidArgumentException('Undefined class '.$class);
+        parent::__construct();
+        if (!class_exists($class)) {
+            $namespaces = array_filter(preg_split('#\\\\|::#', $class));
+            $class_name = array_pop($namespaces);
+            $namespace = implode('\\', $namespaces);
+            $superclass = '\\'.get_parent_class(__CLASS__);
+            $class_definition = 'namespace '.$namespace.' { class '.$class_name.' extends '.$superclass.' { } }';
+            eval($class_definition);
         }
+        $this->_name = $class;
+        $this->_parent = get_parent_class($class);
     }
 
     function name() {

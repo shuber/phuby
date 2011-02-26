@@ -41,7 +41,7 @@ abstract class Environment {
      * Requires a file with the underscored version of a class name and subdirectories for each namespace.
      *
      * <code>
-     * Environment::autoload('ActiveRecord\Base');  // => require_once 'active_record/base.php';
+     * Environment::autoload('ActiveRecord\Base');  // => include_once 'active_record/base.php';
      * </code>
      *
      * @param string $class
@@ -49,7 +49,14 @@ abstract class Environment {
      * @static
     **/
     static function autoload($class) {
-        require_once self::filename_for_class($class);
+        $filename = self::filename_for_class($class);
+        foreach (static::include_paths() as $include_path) {
+            $file = $include_path.DIRECTORY_SEPARATOR.$filename;
+            if (file_exists($file)) {
+                include_once $file;
+                break;
+            }
+        }
     }
 
     /**
@@ -84,7 +91,7 @@ abstract class Environment {
      * @static
     **/
     static function filename_for_class($class) {
-        $namespaces = array_filter(preg_split('#\\\\|::#', $class), function($part) { return !empty($part); });
+        $namespaces = array_filter(preg_split('#\\\\|::#', $class));
         $parts = array_map(function($namespace) { return strtolower(preg_replace('/[^A-Z^a-z^0-9]+/', '_', preg_replace('/([a-z\d])([A-Z])/', '\1_\2', preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2', $namespace)))); }, $namespaces);
         return implode(DIRECTORY_SEPARATOR, $parts).static::$autoload_filename_extension;
     }
