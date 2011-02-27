@@ -111,5 +111,16 @@ namespace {
             assert_equal('HI Doug', $this->user->greet(' Doug'));
         }
 
+        function test_inspect() {
+            assert_equal('#<'.$this->user->__class()->name().':'.$this->user->object_id().'>', $this->user->inspect());
+        }
+
+        function test_to_s_should_return_inspect() {
+            ob_start();
+            echo $this->user;
+            $implicit = ob_get_clean();
+            assert_all_equal($this->user->inspect(), $this->user->to_s(), $implicit);
+        }
+
     }
 }

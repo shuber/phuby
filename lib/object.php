@@ -3,6 +3,10 @@
 namespace Object {
     abstract class InstanceMethods {
 
+        function inspect() {
+            return '#<'.$this->__class()->name().':'.$this->object_id().'>';
+        }
+
         function object_id() {
             return spl_object_hash($this);
         }
@@ -23,7 +27,7 @@ namespace Object {
         }
 
         function to_s() {
-            return '<'.$this->__class()->name().'#'.$this->object_id().'>';
+            return $this->inspect();
         }
 
     }
@@ -50,7 +54,7 @@ namespace {
             if ($method == 'super') {
                 $backtrace = debug_backtrace();
                 $result = &$this->super_array($backtrace[1]['arguments']);
-            } else if (method_exists($this, $method)) {
+            } else if ($this->respond_to($method)) {
                 $result = &$this->$method();
             } else {
                 $result = null;

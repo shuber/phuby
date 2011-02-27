@@ -80,5 +80,12 @@ namespace {
             assert_throws('InvalidArgumentException', function() { Klass::instance('KlassTest\NonExistentClass'); });
         }
 
+        function test_should_return_to_s() {
+            ob_start();
+            echo $this->user_class;
+            $implicit = ob_get_clean();
+            assert_all_equal($this->user_class->name(), $this->user_class->to_s(), $implicit);
+        }
+
     }
 }
