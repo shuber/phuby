@@ -84,7 +84,8 @@ namespace {
             ob_start();
             echo $this->user_class;
             $implicit = ob_get_clean();
-            assert_all_equal($this->user_class->name(), $this->user_class->to_s(), $implicit);
+            $concatenation = ''.$this->user_class.'';
+            assert_all_equal($this->user_class->name(), $this->user_class->to_s(), $implicit, $concatenation);
         }
 
     }

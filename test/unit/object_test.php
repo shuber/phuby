@@ -119,7 +119,8 @@ namespace {
             ob_start();
             echo $this->user;
             $implicit = ob_get_clean();
-            assert_all_equal($this->user->inspect(), $this->user->to_s(), $implicit);
+            $concatenation = ''.$this->user.'';
+            assert_all_equal($this->user->inspect(), $this->user->to_s(), $implicit, $concatenation);
         }
 
     }
