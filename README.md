@@ -47,4 +47,4 @@
 * ${ClassName} syntax
 * instance/class variables (class's instance\_vars array should store references to real vars)
 * method_added, included, extended, inherited, call
-* check access scope in __get, __set, __call
+* check access scope in __get, __set, __call - see if we can get something working with Object#coerce (just changes __class?) and ReflectionMethod
