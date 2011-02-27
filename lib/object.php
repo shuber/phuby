@@ -11,7 +11,7 @@ namespace Object {
             return spl_object_hash($this);
         }
 
-        function &method_missing($method, $arguments) {
+        function method_missing($method, $arguments) {
             throw new \BadMethodCallException('Undefined method '.$this->__class()->name().'::'.$method.'()');
         }
 
@@ -19,11 +19,10 @@ namespace Object {
             return false;
         }
 
-        function &send($method) {
+        function send($method) {
             $arguments = func_get_args();
             $method = array_shift($arguments);
-            $result = &$this->send_array($method, $arguments);
-            return $result;
+            return $this->send_array($method, $arguments);
         }
 
         function to_s() {
@@ -40,38 +39,36 @@ namespace {
 
         function __construct() { }
 
-        function &__call($method, $arguments) {
-            $result = &$this->send_array($method, $arguments);
-            return $result;
+        function __call($method, $arguments) {
+            return $this->send_array($method, $arguments);
         }
 
-        function &__class() {
+        function __class() {
             if (!isset($this->_class)) $this->_class = Klass::instance(get_class($this));
             return $this->_class;
         }
 
-        function &__get($method) {
+        function __get($method) {
             if ($method == 'super') {
                 $backtrace = debug_backtrace();
-                $result = &$this->super_array($backtrace[1]['arguments']);
+                $result = $this->super_array($backtrace[1]['arguments']);
             } else if ($this->respond_to($method)) {
-                $result = &$this->$method();
+                $result = $this->$method();
             } else {
                 $result = null;
             }
             return $result;
         }
 
-        function &__toString() {
-            $result = &$this->to_s();
-            return $result;
+        function __toString() {
+            return $this->to_s();
         }
 
-        function &call_method($method, $arguments = array()) {
+        function call_method($method, $arguments = array()) {
             $variables = array();
             $arguments = array_values($arguments);
             foreach ($arguments as $index => $argument) $variables[] = '$arguments['.$index.']';
-            eval('$result = &'.$method->class.'::'.$method->name.'('.implode(', ', $variables).');');
+            eval('$result = '.$method->class.'::'.$method->name.'('.implode(', ', $variables).');');
             return $result;
         }
 
@@ -84,7 +81,7 @@ namespace {
             }
         }
 
-        function &caller() {
+        function caller() {
             $backtrace = debug_backtrace();
             array_shift($backtrace);
             if ($backtrace[1]['function'] == 'super' && $backtrace[1]['class'] == __CLASS__) array_shift($backtrace);
@@ -105,11 +102,10 @@ namespace {
                 $callee = $this->callee('method_missing');
                 $arguments = array($method, $arguments);
             }
-            $result = &$this->call_method($callee, $arguments);
-            return $result;
+            return $this->call_method($callee, $arguments);
         }
 
-        protected function &super() {
+        protected function super() {
             $arguments = func_get_args();
             $caller = $this->caller();
             $method = $caller['function'];
@@ -117,13 +113,11 @@ namespace {
                 $callee = $this->callee('method_missing');
                 array_unshift($arguments, $method);
             }
-            $result = &$this->call_method($callee, $arguments);
-            return $result;
+            return $this->call_method($callee, $arguments);
         }
 
-        protected function &super_array($arguments = array()) {
-            $result = &$this->send_array('super', $arguments);
-            return $result;
+        protected function super_array($arguments = array()) {
+            return $this->send_array('super', $arguments);
         }
 
     }

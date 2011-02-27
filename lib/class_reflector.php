@@ -15,9 +15,8 @@ class ClassReflector {
         $this->_ancestors = class_parents($class);
     }
 
-    function &__get($method) {
-        $result = &$this->$method();
-        return $result;
+    function __get($method) {
+        return $this->$method();
     }
 
     function ancestors() {
@@ -58,12 +57,12 @@ class ClassReflector {
         return $this->_name;
     }
 
-    function &reflection() {
+    function reflection() {
         if (!isset($this->_reflection)) $this->_reflection = new ReflectionClass($this->_name);
         return $this->_reflection;
     }
 
-    function &superclass() {
+    function superclass() {
         if (!empty($this->_ancestors)) return static::instance(reset($this->_ancestors));
     }
 
@@ -81,7 +80,7 @@ class ClassReflector {
         return $variables;
     }
 
-    static function &instance($class) {
+    static function instance($class) {
         if (!isset(static::$instances[$class])) static::$instances[$class] = new static($class);
         return static::$instances[$class];
     }
