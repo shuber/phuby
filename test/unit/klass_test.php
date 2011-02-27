@@ -44,19 +44,19 @@ namespace {
         }
 
         function test_should_return_ancestors() {
-            $ancestors = array(Klass::instance('KlassTest\User'), Klass::instance('KlassTest\Base'), Klass::instance('Object'));
+            $ancestors = array(Klass::instance('KlassTest\User'), Klass::instance('KlassTest\Base'), Klass::instance('Object\InstanceMethods'), Klass::instance('Object'));
             assert_equal($ancestors, $this->user_class->ancestors());
         }
 
         function test_should_return_ancestors_with_unique_included_modules() {
-            $ancestors = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'), Klass::instance('KlassTest\UserWithModules'), Klass::instance('KlassTest\Base'), Klass::instance('Object'));
+            $ancestors = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'), Klass::instance('KlassTest\UserWithModules'), Klass::instance('KlassTest\Base'), Klass::instance('Object\InstanceMethods'), Klass::instance('Object'));
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
             Klass::instance('KlassTest\UserWithModules')->__include('KlassTest\AnotherModule');
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
         }
 
         function test_should_return_unique_included_modules() {
-            $included_modules = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'));
+            $included_modules = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'), Klass::instance('Object\InstanceMethods'));
             assert_equal($included_modules, $this->user_class_with_modules->included_modules());
             Klass::instance('KlassTest\UserWithModules')->__include('KlassTest\AnotherModule');
             assert_equal($included_modules, $this->user_class_with_modules->included_modules());
