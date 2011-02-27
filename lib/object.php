@@ -47,7 +47,10 @@ namespace {
         }
 
         function &__get($method) {
-            if (method_exists($this, $method)) {
+            if ($method == 'super') {
+                $backtrace = debug_backtrace();
+                $result = &$this->super_array($backtrace[1]['arguments']);
+            } else if (method_exists($this, $method)) {
                 $result = &$this->$method();
             } else {
                 $result = null;
@@ -77,6 +80,14 @@ namespace {
             }
         }
 
+        function &caller() {
+            $backtrace = debug_backtrace();
+            array_shift($backtrace);
+            if ($backtrace[1]['function'] == 'super' && $backtrace[1]['class'] == __CLASS__) array_shift($backtrace);
+            $caller_index = ($backtrace[2]['function'] == 'call_method' && $backtrace[2]['class'] == __CLASS__) ? 6 : 1;
+            return $backtrace[$caller_index];
+        }
+
         function method_defined($method) {
             return !!$this->callee($method);
         }
@@ -96,15 +107,18 @@ namespace {
 
         protected function &super() {
             $arguments = func_get_args();
-            $backtrace = debug_backtrace();
-            $caller_index = ($backtrace[2]['function'] == 'call_method' && $backtrace[2]['class'] == __CLASS__) ? 6 : 1;
-            $caller = $backtrace[$caller_index];
+            $caller = $this->caller();
             $method = $caller['function'];
             if (!$callee = $this->callee($method, Klass::instance($caller['class']))) {
                 $callee = $this->callee('method_missing');
                 array_unshift($arguments, $method);
             }
             $result = &$this->call_method($callee, $arguments);
+            return $result;
+        }
+
+        protected function &super_array($arguments = array()) {
+            $result = &$this->send_array('super', $arguments);
             return $result;
         }
 
