@@ -123,5 +123,10 @@ namespace {
             assert_all_equal($this->user->inspect(), $this->user->to_s(), $implicit, $concatenation);
         }
 
+        function test_should_return_object_id() {
+            $id = spl_object_hash($this->user);
+            assert_equal($id, $this->user->object_id);
+        }
+
     }
 }
