@@ -17,18 +17,17 @@ namespace {
         protected $_name;
         protected $_parent;
         protected $_reflection;
-        protected $_superclass;
 
         static $instances = array();
 
         function __construct($class, $superclass = null, $create_if_undefined = true) {
-            $parent = get_parent_class(__CLASS__);
+            $base_class = get_parent_class(__CLASS__);
             if (!class_exists($class)) {
                 if ($create_if_undefined) {
                     $namespaces = array_filter(preg_split('#\\\\|::#', $class));
                     $class_name = array_pop($namespaces);
                     $namespace = implode('\\', $namespaces);
-                    if (!$superclass) $superclass = '\\'.$parent;
+                    if (!$superclass) $superclass = '\\'.$base_class;
                     $class_definition = 'namespace '.$namespace.' { class '.$class_name.' extends '.$superclass.' { } }';
                     eval($class_definition);
                 } else {
@@ -36,8 +35,8 @@ namespace {
                 }
             }
             $this->_name = $class;
-            if ($superclass = get_parent_class($class)) $this->_superclass = self::instance($superclass);
-            if (is_subclass_of($class, $parent)) {
+            $this->_parent = get_parent_class($class);
+            if (is_subclass_of($class, $base_class)) {
                 $instance_methods = $class.'\InstanceMethods';
                 if (class_exists($instance_methods, false)) $this->__include($instance_methods);
             }
@@ -101,7 +100,7 @@ namespace {
         }
 
         function superclass() {
-            return $this->_superclass;
+            if ($this->_parent) return self::instance($this->_parent);
         }
 
         static function instance($class) {
