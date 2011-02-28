@@ -57,8 +57,8 @@ php 5.3+
 	    echo $jane->greet; // Hi Jane Smith
 	}
 
-== Todo
 
+== Todo
 
 * class\_eval and instance\_eval - (should also accept string arguments which are embedded in a new random module and evaluated, then included/extended)
 * ${ClassName} syntax
@@ -70,3 +70,4 @@ php 5.3+
 * respond\_to('super'), send('super'), send_array('super')
 * ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public
 * class instantiation and allocation
+* extend('self')
