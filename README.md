@@ -27,7 +27,7 @@ php 5.3+
 	        }
 
 	        function greet() {
-	            return 'Hi '.$name;
+	            return 'Hi '.$this->name;
 	        }
 	    }
 
@@ -37,6 +37,12 @@ php 5.3+
 	        function initialize($name, $surname = '') {
 	            $this->super($name);
 	            $this->surname = $surname;
+	        }
+
+	        function greet() {
+	            $greeting = $this->super;
+	            if ($this->surname) $greeting .= ' '.$this->surname;
+	            return $greeting;
 	        }
 	    }
 	}
