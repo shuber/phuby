@@ -3,7 +3,11 @@
 namespace KlassTest {
     class Base extends \Object { }
     class User extends Base { }
-    class Module { }
+    class Module {
+        static function static_method() { }
+        function test_method() { }
+        function another_test_method() { }
+    }
     class AnotherModule { }
     class UserWithModules extends Base { }
 }
@@ -13,7 +17,7 @@ namespace {
 
         function setup() {
             $this->user_class = new Klass('KlassTest\User');
-            $this->user_class_with_modules = &Klass::instance('KlassTest\UserWithModules');
+            $this->user_class_with_modules = Klass::instance('KlassTest\UserWithModules');
             $this->user_class_with_modules->__include('KlassTest\Module');
             $this->object_class = new Klass('Object');
             Klass::instance('KlassTest\Module')->__include('KlassTest\AnotherModule');
@@ -86,6 +90,21 @@ namespace {
             $implicit = ob_get_clean();
             $concatenation = ''.$this->user_class.'';
             assert_all_equal($this->user_class->name(), $this->user_class->to_s(), $implicit, $concatenation);
+        }
+
+        function test_should_return_instance_methods() {
+            $methods = $this->user_class_with_modules->instance_methods();
+            assert_in_array('test_method', $methods);
+            assert_not_in_array('static_test_method', $methods);
+        }
+
+        function test_should_return_instance_methods_without_super() {
+            $methods = $this->user_class_with_modules->instance_methods();
+            $methods_without_super = $this->user_class_with_modules->instance_methods(false);
+            assert_not_equal($methods, $methods_without_super);
+            ensure(count($methods) > count($methods_without_super));
+            sort($methods_without_super);
+            assert_equal(array('another_test_method', 'test_method'), $methods_without_super);
         }
 
     }

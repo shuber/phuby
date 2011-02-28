@@ -70,6 +70,15 @@ namespace {
             return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
         }
 
+        function instance_methods($include_super = true) {
+            $methods = array();
+            foreach ($this->ancestors() as $ancestor) {
+                $methods = array_merge($methods, array_keys($ancestor->reflection()->instance_methods(false)));
+                if ($ancestor == $this && !$include_super) break;
+            }
+            return $methods;
+        }
+
         function name() {
             return $this->_name;
         }
