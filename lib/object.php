@@ -64,6 +64,11 @@ namespace {
             return $this->to_s();
         }
 
+        /**
+         * [QUIRK] call_user_func_array() does not set $this
+         * [QUIRK] ReflectionMethod requires the calling object to be the same as ReflectionMethod#class
+         * [QUIRK] calling methods statically e.g. Object\InstanceMethods::object_id() sets $this equal to the calling object
+        **/
         function call_method($method, $arguments = array()) {
             $variables = array();
             $arguments = array_values($arguments);
