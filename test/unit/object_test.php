@@ -128,5 +128,9 @@ namespace {
             assert_equal($id, $this->user->object_id);
         }
 
+        function test_should_intercept_calls_to_keyword_methods() {
+            assert_all_equal($this->user->__class(), $this->user->class(), $this->user->send_array('class'), $this->user->send('class'));
+        }
+
     }
 }

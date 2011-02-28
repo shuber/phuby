@@ -37,6 +37,8 @@ namespace {
 
         protected $_class;
 
+        static $keyword_methods = array('class', 'include');
+
         function __construct() { }
 
         function __call($method, $arguments) {
@@ -103,6 +105,7 @@ namespace {
         }
 
         function send_array($method, $arguments = array()) {
+            if (in_array($method, static::$keyword_methods)) $method = "__$method";
             if (!$callee = $this->callee($method)) {
                 $callee = $this->callee('method_missing');
                 $arguments = array($method, $arguments);
