@@ -48,3 +48,8 @@
 * instance/class variables (class's instance\_vars array should store references to real vars)
 * method_added, included, extended, inherited, call
 * check access scope in __get, __set, __call - see if we can get something working with Object#coerce (just changes __class?) and ReflectionMethod
+* implicitly pass all arguments when calling super with __get
+* Object#caller
+* respond\_to('super'), send('super'), send_array('super')
+* eigenclass
+* keyword methods
