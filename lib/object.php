@@ -75,14 +75,6 @@ namespace {
             return $result;
         }
 
-        function caller() {
-            $backtrace = debug_backtrace();
-            array_shift($backtrace);
-            if ($backtrace[1]['function'] == 'super' && $backtrace[1]['class'] == __CLASS__) array_shift($backtrace);
-            $caller_index = ($backtrace[2]['function'] == 'call_method' && $backtrace[2]['class'] == __CLASS__) ? 6 : 1;
-            return $backtrace[$caller_index];
-        }
-
         function is_a($module, $include_super = true) {
             $module = Klass::instance($module);
             $class = $this->__class();
@@ -107,6 +99,14 @@ namespace {
                 $arguments = array($method, $arguments);
             }
             return $this->call_method($callee, $arguments);
+        }
+
+        protected function caller() {
+            $backtrace = debug_backtrace();
+            array_shift($backtrace);
+            if ($backtrace[1]['function'] == 'super' && $backtrace[1]['class'] == __CLASS__) array_shift($backtrace);
+            $caller_index = ($backtrace[2]['function'] == 'call_method' && $backtrace[2]['class'] == __CLASS__) ? 6 : 1;
+            return $backtrace[$caller_index];
         }
 
         protected function super() {
