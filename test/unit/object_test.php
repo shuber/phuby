@@ -121,6 +121,14 @@ namespace {
             assert_all_equal($this->user->__class(), $this->user->class(), $this->user->send_array('class'), $this->user->send('class'));
         }
 
+        function test_is_a() {
+            ensure($this->child->is_a('ObjectTest\Child'));
+            ensure($this->child->is_a('ObjectTest\User'));
+            ensure($this->child->is_a('ObjectTest\User\Module'));
+            ensure($this->child->is_a('ObjectTest\Child', false));
+            ensure(!$this->child->is_a('ObjectTest\User', false));
+        }
+
         function test_should_include_modules_in_instance() {
             $module = Klass::instance('ObjectTest\User\Module');
             $instance = new ObjectTest\Instance;

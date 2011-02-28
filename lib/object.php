@@ -83,6 +83,12 @@ namespace {
             return $backtrace[$caller_index];
         }
 
+        function is_a($module, $include_super = true) {
+            $module = Klass::instance($module);
+            $class = $this->__class();
+            return $include_super ? in_array($module, $class->ancestors()) : $module == $class->reference();
+        }
+
         function method_defined($method) {
             return !!$this->__class()->callee($method);
         }

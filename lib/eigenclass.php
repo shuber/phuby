@@ -2,8 +2,9 @@
 
 class Eigenclass extends Klass {
 
-    function __construct($instance) {
-        parent::__construct(get_class($instance));
+    function __construct($class) {
+        if (is_object($class)) $class = get_class($class);
+        parent::__construct($class);
     }
 
     function __include($modules, $instance = false) {
