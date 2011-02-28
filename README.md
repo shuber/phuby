@@ -71,3 +71,4 @@ php 5.3+
 * ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public
 * class instantiation and allocation
 * extend('self')
+* move everything under Phuby namespace

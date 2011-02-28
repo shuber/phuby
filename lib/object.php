@@ -12,7 +12,14 @@ namespace Object {
         }
 
         function method_missing($method, $arguments) {
-            throw new \BadMethodCallException('Undefined method '.$this->__class()->name().'::'.$method.'()');
+            if ($this->is_a('Klass')) {
+                $class = $this;
+                $scope = '::';
+            } else {
+                $class = $this->__class();
+                $scope = '->';
+            }
+            throw new \BadMethodCallException('Undefined method '.$class->name().$scope.$method.'()');
         }
 
         function respond_to_missing($method) {
