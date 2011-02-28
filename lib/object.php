@@ -49,15 +49,7 @@ namespace {
         }
 
         function __get($method) {
-            if ($method == 'super') {
-                $backtrace = debug_backtrace();
-                $result = $this->super_array($backtrace[1]['arguments']);
-            } else if ($this->respond_to($method)) {
-                $result = $this->$method();
-            } else {
-                $result = null;
-            }
-            return $result;
+            return $this->respond_to($method) ? $this->$method() : null;
         }
 
         function __include($modules) {
