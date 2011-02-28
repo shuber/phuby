@@ -75,15 +75,6 @@ namespace {
             return $result;
         }
 
-        function callee($method, &$caller = null) {
-            $ancestors = $this->__class()->ancestors();
-            if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
-            foreach ($ancestors as $ancestor) {
-                $methods = $ancestor->reflection()->instance_methods(false);
-                if (isset($methods[$method])) return $methods[$method];
-            }
-        }
-
         function caller() {
             $backtrace = debug_backtrace();
             array_shift($backtrace);
@@ -93,7 +84,7 @@ namespace {
         }
 
         function method_defined($method) {
-            return !!$this->callee($method);
+            return !!$this->__class()->callee($method);
         }
 
         function respond_to($method) {
@@ -105,8 +96,8 @@ namespace {
         **/
         function send_array($method, $arguments = array()) {
             if (in_array($method, static::$keyword_methods)) $method = "__$method";
-            if (!$callee = $this->callee($method)) {
-                $callee = $this->callee('method_missing');
+            if (!$callee = $this->__class()->callee($method)) {
+                $callee = $this->__class()->callee('method_missing');
                 $arguments = array($method, $arguments);
             }
             return $this->call_method($callee, $arguments);
@@ -116,8 +107,8 @@ namespace {
             $arguments = func_get_args();
             $caller = $this->caller();
             $method = $caller['function'];
-            if (!$callee = $this->callee($method, Klass::instance($caller['class']))) {
-                $callee = $this->callee('method_missing');
+            if (!$callee = $this->__class()->callee($method, Klass::instance($caller['class']))) {
+                $callee = $this->__class()->callee('method_missing');
                 array_unshift($arguments, $method);
             }
             return $this->call_method($callee, $arguments);

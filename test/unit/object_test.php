@@ -74,20 +74,6 @@ namespace {
             assert_equal('12', $this->user->call_method($methods['send_test'], array(1, 2)));
         }
 
-        function test_should_return_callee() {
-            $methods = Klass::instance('ObjectTest\User')->reflection()->instance_methods();
-            assert_identical($methods['name'], $this->user->callee('name'));
-        }
-
-        function test_should_return_callee_from_included_module() {
-            $methods = Klass::instance('ObjectTest\User\Module')->reflection()->instance_methods();
-            assert_identical($methods['greet'], $this->user->callee('greet'));
-        }
-
-        function test_should_return_a_null_callee_when_method_is_undefined() {
-            assert_equal(null, $this->user->callee('invalid_method'));
-        }
-
         function test_method_defined() {
             ensure($this->user->method_defined('name'));
             ensure($this->user->method_defined('greet'));
