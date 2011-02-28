@@ -36,7 +36,7 @@ namespace {
                 }
             }
             $this->_name = $class;
-            if ($superclass = get_parent_class($class)) $this->_superclass = static::instance($superclass);
+            if ($superclass = get_parent_class($class)) $this->_superclass = self::instance($superclass);
         }
 
         function __include($modules) {
@@ -93,8 +93,8 @@ namespace {
         }
 
         static function instance($class) {
-            if (!isset(static::$instances[$class])) static::$instances[$class] = new static($class, null, false);
-            return static::$instances[$class];
+            if (!isset(self::$instances[$class])) self::$instances[$class] = new self($class, null, false);
+            return self::$instances[$class];
         }
 
     }

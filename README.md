@@ -52,4 +52,4 @@
 * Object#caller
 * respond\_to('super'), send('super'), send_array('super')
 * eigenclass
-* keyword methods
+* ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public
