@@ -9,8 +9,8 @@ class Eigenclass extends Klass {
     function __include($modules, $instance = false) {
         if (!is_array($modules)) $modules = func_get_args();
         if (is_bool(end($modules))) $instance = array_pop($modules);
-        $callee = $instance ? 'parent::__include' : array($this->reference(), '__include');
-        return call_user_func_array($callee, $modules);
+        $method = $instance ? 'parent::__include' : array($this->reference(), '__include');
+        return call_user_func_array($method, $modules);
     }
 
     function reference() {

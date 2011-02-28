@@ -1,5 +1,21 @@
 = phuby
 
+rubyisms in php
+
+
+== Requirements
+
+php 5.3+
+
+
+== Features
+
+* mixins
+* classes are objects
+* eigenclasses
+* method\_missing, respond_to, send, super
+
+
 == Usage
 
 	namespace Person {
@@ -43,6 +59,7 @@
 
 == Todo
 
+
 * class\_eval and instance\_eval - (should also accept string arguments which are embedded in a new random module and evaluated, then included/extended)
 * ${ClassName} syntax
 * instance/class variables (class's instance\_vars array should store references to real vars)
@@ -52,3 +69,4 @@
 * Object#caller
 * respond\_to('super'), send('super'), send_array('super')
 * ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public
+* class instantiation and allocation
