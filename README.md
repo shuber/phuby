@@ -13,7 +13,7 @@ php 5.3+
 * mixins
 * classes are objects
 * eigenclasses
-* method\_missing, respond_to, send, super
+* method\_missing, respond\_to, respond\_to_missing, send, super
 
 
 == Usage
