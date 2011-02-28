@@ -51,5 +51,4 @@
 * implicitly pass all arguments when calling super with __get
 * Object#caller
 * respond\_to('super'), send('super'), send_array('super')
-* eigenclass
 * ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public

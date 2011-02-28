@@ -35,19 +35,17 @@ namespace Object {
 namespace {
     abstract class Object {
 
-        protected $_class;
+        protected $_eigenclass;
 
         static $keyword_methods = array('class', 'include');
-
-        function __construct() { }
 
         function __call($method, $arguments) {
             return $this->send_array($method, $arguments);
         }
 
         function __class() {
-            if (!isset($this->_class)) $this->_class = Klass::instance(get_class($this));
-            return $this->_class;
+            if (!isset($this->_eigenclass)) $this->_eigenclass = new Eigenclass($this);
+            return $this->_eigenclass;
         }
 
         function __get($method) {
@@ -62,13 +60,19 @@ namespace {
             return $result;
         }
 
+        function __include($modules) {
+            if (!is_array($modules)) $modules = func_get_args();
+            $this->__class()->__include($modules, true);
+            return $this;
+        }
+
         function __toString() {
             return $this->to_s();
         }
 
         /**
          * [QUIRK] call_user_func_array() does not set $this
-         * [QUIRK] ReflectionMethod requires the calling object to be the same as ReflectionMethod#class
+         * [QUIRK] ReflectionMethod requires the calling object to be an instance of ReflectionMethod#class
          * [QUIRK] calling methods statically e.g. Object\InstanceMethods::object_id() sets $this equal to the calling object
         **/
         function call_method($method, $arguments = array()) {
@@ -104,6 +108,9 @@ namespace {
             return $this->method_defined($method) || $this->respond_to_missing($method);
         }
 
+        /**
+         * [QUIRK] function __KEYWORD__() e.g. "function include($modules) { }" throws syntax errors
+        **/
         function send_array($method, $arguments = array()) {
             if (in_array($method, static::$keyword_methods)) $method = "__$method";
             if (!$callee = $this->callee($method)) {

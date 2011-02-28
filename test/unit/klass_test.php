@@ -80,7 +80,9 @@ namespace {
         }
 
         function test_should_return_same_instance() {
-            assert_identical(Klass::instance('Object'), Klass::instance('Object'));
+            $object = Klass::instance('Object');
+            assert_identical($object, Klass::instance('Object'));
+            assert_identical($object, Klass::instance($object));
             assert_throws('InvalidArgumentException', function() { Klass::instance('KlassTest\NonExistentClass'); });
         }
 

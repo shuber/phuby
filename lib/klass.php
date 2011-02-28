@@ -22,7 +22,6 @@ namespace {
         static $instances = array();
 
         function __construct($class, $superclass = null, $create_if_undefined = true) {
-            parent::__construct();
             if (!class_exists($class)) {
                 if ($create_if_undefined) {
                     $namespaces = array_filter(preg_split('#\\\\|::#', $class));
@@ -58,15 +57,23 @@ namespace {
         function ancestors() {
             $ancestors = array();
             foreach ($this->_included_modules as $module) $ancestors = array_merge($ancestors, $module->ancestors());
-            $ancestors[] = $this;
-            if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors());
+            if (is_subclass_of($this, __CLASS__)) {
+                $ancestors = array_merge($ancestors, $this->reference()->ancestors());
+            } else {
+                $ancestors[] = $this;
+                if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors());
+            }
             return array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
         }
 
         function included_modules() {
             $modules = array();
             foreach ($this->_included_modules as $module) $modules = array_merge($module->included_modules(), array($module), $modules);
-            if ($this->superclass()) $modules = array_merge($modules, $this->superclass()->included_modules());
+            if (is_subclass_of($this, __CLASS__)) {
+                $modules = array_merge($modules, $this->reference()->included_modules());
+            } else if ($this->superclass()) {
+                $modules = array_merge($modules, $this->superclass()->included_modules());
+            }
             return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
         }
 
@@ -93,7 +100,11 @@ namespace {
         }
 
         static function instance($class) {
-            if (!isset(self::$instances[$class])) self::$instances[$class] = new self($class, null, false);
+            if (is_a($class, __CLASS__)) {
+                return $class;
+            } else if (!isset(self::$instances[$class])) {
+                self::$instances[$class] = new self($class, null, false);
+            }
             return self::$instances[$class];
         }
 

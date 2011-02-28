@@ -34,6 +34,8 @@ namespace ObjectTest {
             return $this->super().$last_name;
         }
     }
+
+    class Instance extends \Object { }
     \Klass::instance('ObjectTest\User')->__include('ObjectTest\User\Module', 'ObjectTest\User\InstanceMethods');
 }
 
@@ -62,8 +64,9 @@ namespace {
             assert_throws('BadMethodCallException', function() use ($user) { $user->invalid_method(); });
         }
 
-        function test_should_return_class() {
-            assert_identical(Klass::instance('ObjectTest\User'), $this->user->__class());
+        function test_should_return_eigenclass() {
+            ensure(is_a($this->user->__class(), 'Eigenclass'));
+            assert_identical(Klass::instance('ObjectTest\User'), $this->user->__class()->reference());
         }
 
         function test_should_call_method() {
@@ -130,6 +133,14 @@ namespace {
 
         function test_should_intercept_calls_to_keyword_methods() {
             assert_all_equal($this->user->__class(), $this->user->class(), $this->user->send_array('class'), $this->user->send('class'));
+        }
+
+        function test_should_include_modules_in_instance() {
+            $module = Klass::instance('ObjectTest\User\Module');
+            $instance = new ObjectTest\Instance;
+            $instance->__include($module);
+            assert_in_array($module, $instance->__class()->included_modules());
+            assert_not_in_array($module, Klass::instance('ObjectTest\Instance')->included_modules());
         }
 
     }
