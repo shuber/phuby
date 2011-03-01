@@ -77,6 +77,17 @@ namespace {
             return $this;
         }
 
+        function extended_modules() {
+            $modules = $this->__class()->included_modules();
+            if (is_subclass_of($this, __CLASS__)) {
+                $modules = array_merge($modules, $this->reference()->extended_modules());
+            } else if ($this->superclass()) {
+                $modules = array_merge($modules, $this->superclass()->extended_modules());
+            }
+            $modules = array_diff($modules, Klass::instance(__CLASS__)->included_modules());
+            return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+        }
+
         function included_modules() {
             $modules = array();
             foreach ($this->_included_modules as $module) $modules = array_merge($module->included_modules(), array($module), $modules);

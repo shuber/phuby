@@ -18,6 +18,7 @@ class Eigenclass extends Klass {
 
     function ancestors() {
         if ($this->is_class()) {
+            // $ancestors = array_merge($this->_object->extended_modules(), array($this->_object));
             $ancestors = array($this->_object);
             if ($this->_object->superclass()) {
                 $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors());
@@ -42,7 +43,7 @@ class Eigenclass extends Klass {
     }
 
     function is_class() {
-        return is_a($this->_object, get_parent_class(__CLASS__));
+        return get_class($this->_object) == get_parent_class(__CLASS__);
     }
 
     function object() {

@@ -124,7 +124,13 @@ namespace {
         }
 
         function test_should_extend_module() {
-            assert_in_array(Klass::instance('KlassTest\ExtendModule'), $this->user_class_with_modules->__class()->included_modules());
+            $module = Klass::instance('KlassTest\ExtendModule');
+            assert_in_array($module, $this->user_class_with_modules->__class()->included_modules());
+        }
+
+        function test_should_return_extended_modules() {
+            assert_equal(array(), $this->user_class->extended_modules());
+            assert_equal(array(Klass::instance('KlassTest\ExtendModule')), $this->user_class_with_modules->extended_modules());
         }
 
     }

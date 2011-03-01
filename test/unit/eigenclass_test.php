@@ -8,6 +8,7 @@ namespace EigenclassTest {
     class AnotherModule {
         function greet() { }
     }
+    class ExtendModule { }
 }
 
 namespace {
@@ -15,6 +16,7 @@ namespace {
 
         function setup() {
             $this->user_class = Klass::instance('EigenclassTest\User');
+            $this->user_class->extend('EigenclassTest\ExtendModule');
             $this->module = Klass::instance('EigenclassTest\Module');
             $this->another_module = Klass::instance('EigenclassTest\AnotherModule');
             $this->user = new EigenclassTest\User;
@@ -55,6 +57,10 @@ namespace {
             $ancestors = array('EigenclassTest\User', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
             foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
             assert_equal($ancestors, $this->user_class->__class()->ancestors());
+        }
+
+        function test_should_return_ancestors_with_extended_modules() {
+            assert_in_array(Klass::instance('EigenclassTest\ExtendModule'), $this->user_class->__class()->ancestors());
         }
 
         function test_should_return_is_class() {
