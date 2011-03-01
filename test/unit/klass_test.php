@@ -9,10 +9,14 @@ namespace KlassTest {
         function another_test_method() { }
     }
     class AnotherModule { }
+    class ExtendModule {
+        function test_static_module_method() { return true; }
+    }
+    class AnotherExtendModule {
+        function test_another_static_module_method() { return true; }
+    }
     class UserWithModules extends Base {
-        static function test_static_method() {
-            return true;
-        }
+        static function test_static_method() { return true; }
     }
 }
 
@@ -23,6 +27,7 @@ namespace {
             $this->user_class = new Klass('KlassTest\User');
             $this->user_class_with_modules = Klass::instance('KlassTest\UserWithModules');
             $this->user_class_with_modules->__include('KlassTest\Module');
+            $this->user_class_with_modules->extend('KlassTest\ExtendModule');
             $this->object_class = new Klass('Object');
             Klass::instance('KlassTest\Module')->__include('KlassTest\AnotherModule');
         }
@@ -79,7 +84,7 @@ namespace {
         }
 
         function test_should_return_superclass() {
-            assert_equal(new Klass('KlassTest\Base'), $this->user_class->superclass());
+            assert_equal(Klass::instance('KlassTest\Base'), $this->user_class->superclass());
             assert_equal(null, $this->object_class->superclass());
         }
 
@@ -116,6 +121,10 @@ namespace {
         function test_should_call_class_method() {
             ensure(KlassTest\UserWithModules::test_static_method());
             ensure($this->user_class_with_modules->test_static_method());
+        }
+
+        function test_should_extend_module() {
+            assert_in_array(Klass::instance('KlassTest\ExtendModule'), $this->user_class_with_modules->__class()->included_modules());
         }
 
     }

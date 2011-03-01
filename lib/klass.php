@@ -70,6 +70,13 @@ namespace {
             return array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
         }
 
+        function extend($modules) {
+            if (!is_array($modules)) $modules = func_get_args();
+            $class = is_subclass_of($this, __CLASS__) ? $this->reference() : $this;
+            $class->__class()->__include($modules, true);
+            return $this;
+        }
+
         function included_modules() {
             $modules = array();
             foreach ($this->_included_modules as $module) $modules = array_merge($module->included_modules(), array($module), $modules);

@@ -78,3 +78,4 @@ php 5.3+
 * class instantiation and allocation
 * extend('self')
 * move everything under Phuby namespace
+* __callStatic()
