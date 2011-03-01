@@ -16,13 +16,33 @@ class Eigenclass extends Klass {
         return call_user_func_array($method, $modules);
     }
 
+    function ancestors() {
+        if ($this->is_class()) {
+            $ancestors = array($this->_object);
+            if ($this->_object->superclass()) {
+                $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors());
+            } else {
+                $ancestors = array_merge($ancestors, Klass::instance(__CLASS__)->ancestors());
+            }
+            $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+        } else {
+            $ancestors = parent::ancestors();
+        }
+        return $ancestors;
+    }
+
     function callee($method, &$caller = null) {
         $ancestors = $this->ancestors();
         if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
         foreach ($ancestors as $ancestor) {
-            $methods = $ancestor->reflection()->instance_methods(false);
+            $methods_type = $this->is_class() && ($this->_object == $ancestor || in_array($ancestor->name(), class_parents($this->_object->name()))) ? 'class' : 'instance';
+            $methods = $ancestor->reflection()->{$methods_type.'_methods'}(false);
             if (isset($methods[$method])) return $methods[$method];
         }
+    }
+
+    function is_class() {
+        return is_a($this->_object, get_parent_class(__CLASS__));
     }
 
     function object() {

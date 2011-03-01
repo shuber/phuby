@@ -51,5 +51,16 @@ namespace {
             assert_identical($this->user_class, $this->user_class->__class()->object());
         }
 
+        function test_should_return_ancestors_for_class() {
+            $ancestors = array('EigenclassTest\User', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
+            foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
+            assert_equal($ancestors, $this->user_class->__class()->ancestors());
+        }
+
+        function test_should_return_is_class() {
+            ensure($this->user_class->__class()->is_class());
+            ensure(!$this->user->__class()->is_class());
+        }
+
     }
 }
