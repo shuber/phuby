@@ -47,8 +47,8 @@ namespace {
             assert_identical($this->user_class, $this->user->__class()->reference());
         }
 
-        function test_should_not_create_class() {
-            assert_throws('InvalidArgumentException', function() { new Eigenclass('InvalidClass'); });
+        function test_should_return_object() {
+            assert_identical($this->user_class, $this->user_class->__class()->object());
         }
 
     }

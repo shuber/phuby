@@ -2,9 +2,11 @@
 
 class Eigenclass extends Klass {
 
-    function __construct($class) {
-        if (is_object($class)) $class = get_class($class);
-        parent::__construct($class, null, false);
+    protected $_object;
+
+    function __construct(&$object) {
+        $this->_object = $object;
+        parent::__construct(get_class($object), null, false);
     }
 
     function __include($modules, $instance = false) {
@@ -21,6 +23,10 @@ class Eigenclass extends Klass {
             $methods = $ancestor->reflection()->instance_methods(false);
             if (isset($methods[$method])) return $methods[$method];
         }
+    }
+
+    function object() {
+        return $this->_object;
     }
 
     function reference() {
