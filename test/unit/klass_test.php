@@ -9,7 +9,11 @@ namespace KlassTest {
         function another_test_method() { }
     }
     class AnotherModule { }
-    class UserWithModules extends Base { }
+    class UserWithModules extends Base {
+        static function test_static_method() {
+            return true;
+        }
+    }
 }
 
 namespace {
@@ -107,6 +111,11 @@ namespace {
             ensure(count($methods) > count($methods_without_super));
             sort($methods_without_super);
             assert_equal(array('another_test_method', 'test_method'), $methods_without_super);
+        }
+
+        function test_should_call_class_method() {
+            ensure(KlassTest\UserWithModules::test_static_method());
+            ensure($this->user_class_with_modules->test_static_method());
         }
 
     }
