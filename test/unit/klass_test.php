@@ -4,6 +4,7 @@ namespace KlassTest {
     class Base extends \Object { }
     class User extends Base { }
     class Module {
+        function initialize($string) { echo $string; }
         static function static_method() { }
         function test_method() { }
         function another_test_method() { }
@@ -116,7 +117,7 @@ namespace {
             assert_not_equal($methods, $methods_without_super);
             ensure(count($methods) > count($methods_without_super));
             sort($methods_without_super);
-            assert_equal(array('another_test_method', 'test_method'), $methods_without_super);
+            assert_equal(array('another_test_method', 'initialize', 'test_method'), $methods_without_super);
         }
 
         function test_should_call_class_method() {
@@ -137,6 +138,17 @@ namespace {
         function test_should_return_extended_modules() {
             assert_equal(array(), $this->user_class->extended_modules());
             assert_equal(array(Klass::instance('KlassTest\ExtendModule')), $this->user_class_with_modules->extended_modules());
+        }
+
+        function test_should_allocate_object() {
+            ensure(is_a($this->user_class->allocate(), $this->user_class->name()));
+        }
+
+        function test_should_initialize_object() {
+            ob_start();
+            $instance = $this->user_class_with_modules->new('test');
+            ensure(is_a($instance, $this->user_class_with_modules->name()));
+            assert_equal('test', ob_get_clean());
         }
 
     }

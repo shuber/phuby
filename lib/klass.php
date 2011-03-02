@@ -3,6 +3,17 @@
 namespace Klass {
     class InstanceMethods {
 
+        function __new() {
+            $instance = $this->allocate();
+            if ($instance->respond_to('initialize')) $instance->send_array('initialize', func_get_args());
+            return $instance;
+        }
+
+        function allocate() {
+            $class = $this->name();
+            return new $class;
+        }
+
         function to_s() {
             return $this->name();
         }

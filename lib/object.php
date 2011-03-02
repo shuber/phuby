@@ -44,7 +44,7 @@ namespace {
 
         protected $_eigenclass;
 
-        static $keyword_methods = array('class', 'include');
+        static $keyword_methods = array('class', 'include', 'new');
 
         function __call($method, $arguments) {
             return $this->send_array($method, $arguments);
@@ -99,6 +99,7 @@ namespace {
         }
 
         function respond_to($method) {
+            if (in_array($method, static::$keyword_methods)) $method = "__$method";
             return $this->method_defined($method) || $this->respond_to_missing($method);
         }
 
