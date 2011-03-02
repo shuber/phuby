@@ -58,16 +58,17 @@ namespace {
             return $this;
         }
 
-        function ancestors() {
+        function ancestors($unique = true) {
             $ancestors = array();
-            foreach ($this->_included_modules as $module) $ancestors = array_merge($ancestors, $module->ancestors());
+            foreach ($this->_included_modules as $module) $ancestors = array_merge($ancestors, $module->ancestors(false));
             if (is_subclass_of($this, __CLASS__)) {
-                $ancestors = array_merge($ancestors, $this->reference()->ancestors());
+                $ancestors = array_merge($ancestors, $this->reference()->ancestors(false));
             } else {
                 $ancestors[] = $this;
-                if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors());
+                if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors(false));
             }
-            return array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+            if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+            return $ancestors;
         }
 
         function extend($modules) {
