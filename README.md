@@ -37,7 +37,7 @@ Code is stable and test backed, however the api may change as features are imple
 	        }
 
 	        function greet() {
-	            return 'Hi '.$this->name;
+	            return 'Hello, my name is '.$this->name;
 	        }
 	    }
 
@@ -59,18 +59,18 @@ Code is stable and test backed, however the api may change as features are imple
 
 	namespace {
 	    class Person extends Object { }
-	    ${Person}->include('Person\InstanceMethods');
+	    c(Person)->include('Person\InstanceMethods');
 
-	    $tom = ${Person}->new('Tom');
-	    echo $tom->greet; // Hi Tom
+	    $tom = c(Person)->new('Tom');
+	    echo $tom->greet; // Hello, my name is Tom
 
-	    ${Person}->include('Person\Surname');
+	    c(Person)->include('Person\Surname');
 
 	    $tom->surname = 'Jones';
-	    echo $tom->greet; // Hi Tom Jones
+	    echo $tom->greet; // Hello, my name is Tom Jones
 
-	    $jane = ${Person}->new('Jane', 'Smith');
-	    echo $jane->greet; // Hi Jane Smith
+	    $jane = c(Person)->new('Jane', 'Smith');
+	    echo $jane->greet; // Hello, my name is Jane Smith
 	}
 
 
