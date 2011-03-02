@@ -39,6 +39,8 @@ namespace {
             if (is_subclass_of($class, $base_class)) {
                 $instance_methods = $class.'\InstanceMethods';
                 if (class_exists($instance_methods, false)) $this->__include($instance_methods);
+                $class_methods = $class.'\ClassMethods';
+                if (class_exists($class_methods, false)) $this->extend($class_methods);
             }
         }
 

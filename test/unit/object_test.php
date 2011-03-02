@@ -24,6 +24,10 @@ namespace ObjectTest\User {
 
 namespace ObjectTest {
     class User extends \Object {
+        static function test_static_method() {
+            return true;
+        }
+
         function name() {
             return 'Tom';
         }
@@ -45,6 +49,7 @@ namespace {
         function setup() {
             $this->user = new ObjectTest\User;
             $this->child = new ObjectTest\Child;
+            $this->instance_class = Klass::instance('ObjectTest\Instance');
         }
 
         function test_should_allocate() {
@@ -135,6 +140,18 @@ namespace {
             $instance->__include($module);
             assert_in_array($module, $instance->__class()->included_modules());
             assert_not_in_array($module, Klass::instance('ObjectTest\Instance')->included_modules());
+        }
+
+        function test_should_call_static_method_thru_eigenclass() {
+            ensure($this->user->__class()->test_static_method());
+        }
+
+        function test_should_only_extend_in_eigenclass() {
+            $module = Klass::instance('ObjectTest\User\Module');
+            $instance = new ObjectTest\Instance;
+            $instance->extend($module);
+            assert_in_array($module, $instance->__class()->extended_modules());
+            assert_not_in_array($module, $this->instance_class->extended_modules());
         }
 
     }

@@ -56,13 +56,13 @@ namespace {
         }
 
         function test_should_return_ancestors_for_class() {
-            $ancestors = array('EigenclassTest\Basic', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
+            $ancestors = array('EigenclassTest\Basic', 'Eigenclass\InstanceMethods', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
             foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
             assert_equal($ancestors, Klass::instance('EigenclassTest\Basic')->__class()->ancestors());
         }
 
         function test_should_return_ancestors_with_extended_modules() {
-            $ancestors = array('EigenclassTest\ExtendModule', 'EigenclassTest\User', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
+            $ancestors = array('EigenclassTest\ExtendModule', 'EigenclassTest\User', 'Eigenclass\InstanceMethods', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
             foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
             assert_equal($ancestors, $this->user_class->__class()->ancestors());
         }

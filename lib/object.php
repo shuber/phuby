@@ -82,6 +82,12 @@ namespace {
             return $result;
         }
 
+        function extend($modules) {
+            if (!is_array($modules)) $modules = func_get_args();
+            $this->__class()->__class()->__include($modules, true);
+            return $this;
+        }
+
         function is_a($module, $include_super = true) {
             $module = Klass::instance($module);
             $class = $this->__class();

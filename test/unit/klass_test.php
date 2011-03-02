@@ -62,7 +62,8 @@ namespace {
         }
 
         function test_should_return_ancestors_with_unique_included_modules() {
-            $ancestors = array(Klass::instance('KlassTest\AnotherModule'), Klass::instance('KlassTest\Module'), Klass::instance('KlassTest\UserWithModules'), Klass::instance('KlassTest\Base'), Klass::instance('Object\InstanceMethods'), Klass::instance('Object'));
+            $ancestors = array('KlassTest\AnotherModule', 'KlassTest\Module', 'KlassTest\UserWithModules', 'KlassTest\Base', 'Object\InstanceMethods', 'Object');
+            foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
             Klass::instance('KlassTest\UserWithModules')->__include('KlassTest\AnotherModule');
             assert_equal($ancestors, $this->user_class_with_modules->ancestors());
