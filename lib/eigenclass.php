@@ -16,18 +16,18 @@ class Eigenclass extends Klass {
         return call_user_func_array($method, $modules);
     }
 
-    function ancestors() {
+    function ancestors($unique = true) {
         if ($this->is_class()) {
             // $ancestors = array_merge($this->_object->extended_modules(), array($this->_object));
             $ancestors = array($this->_object);
             if ($this->_object->superclass()) {
-                $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors());
+                $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors(false));
             } else {
-                $ancestors = array_merge($ancestors, Klass::instance(__CLASS__)->ancestors());
+                $ancestors = array_merge($ancestors, Klass::instance(__CLASS__)->ancestors(false));
             }
-            $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+            if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
         } else {
-            $ancestors = parent::ancestors();
+            $ancestors = parent::ancestors($unique);
         }
         return $ancestors;
     }
