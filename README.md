@@ -1,22 +1,32 @@
-= phuby
+# phuby (foo-bee)
 
-rubyisms in php
-
-
-== Requirements
-
-php 5.3+
+[rubyisms](http://www.ruby-lang.org/) in php
 
 
-== Features
+## Status
+
+Pre-alpha
+
+Code is stable and test backed, however the api may change as features are implemented or refactored
+
+
+## Dependencies
+
+* php 5.3+
+
+
+## Features
 
 * mixins
 * classes are objects
 * eigenclasses
 * method\_missing, respond\_to, respond\_to_missing, send, super
+* splat
+
+(See TODO below)
 
 
-== Usage
+## Usage
 
 	namespace Person {
 	    class InstanceMethods {
@@ -64,7 +74,12 @@ php 5.3+
 	}
 
 
-== Todo
+## Testing
+
+Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phuby/test/ztest` (or anywhere else in your php `include_path`), then run `test/runner.php`
+
+
+## Todo
 
 * class\_eval and instance\_eval - (should also accept string arguments which are embedded in a new random module and evaluated, then included/extended)
 * ${ClassName} syntax
@@ -79,3 +94,4 @@ php 5.3+
 * extend('self')
 * move everything under Phuby namespace
 * __callStatic()
+* alias methods
