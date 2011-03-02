@@ -26,7 +26,7 @@ Code is stable and test backed, however the api may change as features are imple
 (See TODO below)
 
 
-## Usage
+## Usage preview (instance variables aren't supported yet)
 
 	namespace Person {
 	    class InstanceMethods {
@@ -90,8 +90,6 @@ Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phub
 * Object#caller
 * respond\_to('super'), send('super'), send_array('super')
 * ruby style method access http://en.wikibooks.org/wiki/Ruby_Programming/Syntax/Classes#Public
-* class instantiation and allocation
 * extend('self')
 * move everything under Phuby namespace
-* __callStatic()
 * alias methods
