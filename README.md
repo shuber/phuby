@@ -28,6 +28,8 @@ Code is stable and test backed, however the api may change as features are imple
 
 ## Usage preview (instance variables aren't supported yet)
 
+	require 'phuby/phuby.php';
+
 	namespace Person {
 	    class InstanceMethods {
 	        public $name;
