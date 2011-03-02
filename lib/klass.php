@@ -77,26 +77,28 @@ namespace {
             return $this;
         }
 
-        function extended_modules() {
-            $modules = $this->__class()->included_modules();
+        function extended_modules($unique = true) {
+            $modules = $this->__class()->included_modules(false);
             if (is_subclass_of($this, __CLASS__)) {
-                $modules = array_merge($modules, $this->reference()->extended_modules());
+                $modules = array_merge($modules, $this->reference()->extended_modules(false));
             } else if ($this->superclass()) {
-                $modules = array_merge($modules, $this->superclass()->extended_modules());
+                $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            $modules = array_diff($modules, Klass::instance(__CLASS__)->included_modules());
-            return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            $modules = array_diff($modules, Klass::instance(__CLASS__)->included_modules(false));
+            if ($unique) $modules = array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            return $modules;
         }
 
-        function included_modules() {
+        function included_modules($unique = true) {
             $modules = array();
-            foreach ($this->_included_modules as $module) $modules = array_merge($module->included_modules(), array($module), $modules);
+            foreach ($this->_included_modules as $module) $modules = array_merge($modules, $module->included_modules(false), array($module));
             if (is_subclass_of($this, __CLASS__)) {
-                $modules = array_merge($modules, $this->reference()->included_modules());
+                $modules = array_merge($modules, $this->reference()->included_modules(false));
             } else if ($this->superclass()) {
-                $modules = array_merge($modules, $this->superclass()->included_modules());
+                $modules = array_merge($modules, $this->superclass()->included_modules(false));
             }
-            return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            if ($unique) $modules = array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            return $modules;
         }
 
         function instance_methods($include_super = true) {
