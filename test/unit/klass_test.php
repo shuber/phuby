@@ -123,6 +123,11 @@ namespace {
             ensure($this->user_class_with_modules->test_static_method());
         }
 
+        function test_should_call_extended_module_method() {
+            ensure(KlassTest\UserWithModules::test_static_module_method());
+            ensure($this->user_class_with_modules->test_static_module_method());
+        }
+
         function test_should_extend_module() {
             $module = Klass::instance('KlassTest\ExtendModule');
             assert_in_array($module, $this->user_class_with_modules->__class()->included_modules());

@@ -131,6 +131,10 @@ namespace {
             return $this->send_array('super', $arguments);
         }
 
+        static function __callStatic($method, $arguments) {
+            return Klass::instance(get_called_class())->send_array($method, $arguments);
+        }
+
     }
 
     Klass::instance('Object')->__include('Object\InstanceMethods');

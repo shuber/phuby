@@ -18,8 +18,7 @@ class Eigenclass extends Klass {
 
     function ancestors($unique = true) {
         if ($this->is_class()) {
-            // $ancestors = array_merge($this->_object->extended_modules(), array($this->_object));
-            $ancestors = array($this->_object);
+            $ancestors = array_merge($this->_object->extended_modules(false), array($this->_object));
             if ($this->_object->superclass()) {
                 $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors(false));
             } else {
@@ -34,11 +33,17 @@ class Eigenclass extends Klass {
 
     function callee($method, &$caller = null) {
         $ancestors = $this->ancestors();
+        if ($this->is_class()) $extended_modules = $this->_object->extended_modules(false);
         if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
         foreach ($ancestors as $ancestor) {
-            $methods_type = $this->is_class() && ($this->_object == $ancestor || in_array($ancestor->name(), class_parents($this->_object->name()))) ? 'class' : 'instance';
-            $methods = $ancestor->reflection()->{$methods_type.'_methods'}(false);
-            if (isset($methods[$method])) return $methods[$method];
+            if (!$this->is_class() || in_array($ancestor, $extended_modules)) {
+                $methods = $ancestor->reflection()->instance_methods(false);
+                if (isset($methods[$method])) return $methods[$method];
+            }
+            if ($this->is_class() && ($this->_object == $ancestor || in_array($ancestor->name(), class_parents($this->_object->name())))) {
+                $methods = $ancestor->reflection()->class_methods(false);
+                if (isset($methods[$method])) return $methods[$method];
+            }
         }
     }
 

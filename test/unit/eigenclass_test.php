@@ -1,12 +1,13 @@
 <?php
 
 namespace EigenclassTest {
+    class Basic extends \Object { }
     class User extends \Object {
         function name() { }
     }
     class Module { }
     class AnotherModule {
-        function greet() { }
+        function greet() { return true; }
     }
     class ExtendModule { }
 }
@@ -19,6 +20,7 @@ namespace {
             $this->user_class->extend('EigenclassTest\ExtendModule');
             $this->module = Klass::instance('EigenclassTest\Module');
             $this->another_module = Klass::instance('EigenclassTest\AnotherModule');
+            $this->another_module->extend($this->another_module);
             $this->user = new EigenclassTest\User;
         }
 
@@ -54,18 +56,24 @@ namespace {
         }
 
         function test_should_return_ancestors_for_class() {
-            $ancestors = array('EigenclassTest\User', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
+            $ancestors = array('EigenclassTest\Basic', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
             foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
-            assert_equal($ancestors, $this->user_class->__class()->ancestors());
+            assert_equal($ancestors, Klass::instance('EigenclassTest\Basic')->__class()->ancestors());
         }
 
         function test_should_return_ancestors_with_extended_modules() {
-            assert_in_array(Klass::instance('EigenclassTest\ExtendModule'), $this->user_class->__class()->ancestors());
+            $ancestors = array('EigenclassTest\ExtendModule', 'EigenclassTest\User', 'Eigenclass', 'Klass\InstanceMethods', 'Klass', 'Object\InstanceMethods', 'Object');
+            foreach ($ancestors as $index => $ancestor) $ancestors[$index] = Klass::instance($ancestor);
+            assert_equal($ancestors, $this->user_class->__class()->ancestors());
         }
 
         function test_should_return_is_class() {
             ensure($this->user_class->__class()->is_class());
             ensure(!$this->user->__class()->is_class());
+        }
+
+        function test_module_should_be_able_to_extend_self() {
+            ensure($this->another_module->greet());
         }
 
     }

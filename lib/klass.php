@@ -46,10 +46,10 @@ namespace {
             if (!is_array($modules)) $modules = func_get_args();
             foreach (array_reverse($modules) as $module) {
                 $module = static::instance($module);
-                if (!in_array($module, $this->ancestors())) {
+                if (!in_array($module, $this->ancestors()) || is_subclass_of($this, __CLASS__) && $this->is_class()) {
                     if (in_array($this, $module->included_modules())) {
                         throw new \InvalidArgumentException('cyclic include detected');
-                    } else {
+                    } else if (!in_array($module, $this->_included_modules)) {
                         array_unshift($this->_included_modules, $module);
                         // if ($module->respond_to('included')) $module->included($this);
                     }
@@ -85,8 +85,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            $modules = array_diff($modules, Klass::instance(__CLASS__)->included_modules(false));
-            if ($unique) $modules = array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            if ($unique) $modules = array_diff(array_reverse(array_unique(array_reverse($modules), SORT_REGULAR)), Klass::instance(__CLASS__)->included_modules(false));
             return $modules;
         }
 
