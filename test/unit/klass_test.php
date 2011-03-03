@@ -19,7 +19,12 @@ namespace KlassTest {
     class UserWithModules extends Base {
         static function test_static_method() { return true; }
     }
-    class Callbacks extends \Object { }
+    class CallbacksBase extends \Object {
+        static function inherited($base) {
+            echo 'inherited by '.$base->object_id();
+        }
+    }
+    class Callbacks extends CallbacksBase { }
     class IncludedTestModule {
         static function included($base) {
             echo 'included by '.$base->object_id();
@@ -41,7 +46,7 @@ namespace {
             $this->user_class_with_modules->__include('KlassTest\Module');
             $this->user_class_with_modules->extend('KlassTest\ExtendModule');
             $this->object_class = new Klass('Object');
-            $this->callbacks_class = Klass::instance('KlassTest\Callbacks');
+            $this->callbacks_base_class = Klass::instance('KlassTest\CallbacksBase');
             Klass::instance('KlassTest\Module')->__include('KlassTest\AnotherModule');
         }
 
@@ -165,14 +170,20 @@ namespace {
 
         function test_should_call_included() {
             ob_start();
-            $this->callbacks_class->__include('KlassTest\IncludedTestModule');
-            assert_equal('included by '.$this->callbacks_class->object_id(), ob_get_clean());
+            $this->callbacks_base_class->__include('KlassTest\IncludedTestModule');
+            assert_equal('included by '.$this->callbacks_base_class->object_id(), ob_get_clean());
         }
 
         function test_should_call_extended() {
             ob_start();
-            $this->callbacks_class->extend('KlassTest\ExtendedTestModule');
-            assert_equal('extended by '.$this->callbacks_class->object_id(), ob_get_clean());
+            $this->callbacks_base_class->extend('KlassTest\ExtendedTestModule');
+            assert_equal('extended by '.$this->callbacks_base_class->object_id(), ob_get_clean());
+        }
+
+        function test_should_call_inherited() {
+            ob_start();
+            $this->callbacks_class = Klass::instance('KlassTest\Callbacks');
+            assert_equal('inherited by '.$this->callbacks_class->object_id(), ob_get_clean());
         }
 
     }

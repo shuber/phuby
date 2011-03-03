@@ -139,13 +139,15 @@ namespace {
             if ($this->_parent) return self::instance($this->_parent);
         }
 
-        protected function include_and_extend_default_modules() {
+        protected function include_extend_and_inherit_defaults() {
             if (is_subclass_of($this, get_parent_class(__CLASS__))) {
                 $instance_methods = $this->_name.'\InstanceMethods';
                 if (class_exists($instance_methods, false)) $this->__include($instance_methods);
                 $class_methods = $this->_name.'\ClassMethods';
                 if (class_exists($class_methods, false)) $this->extend($class_methods);
             }
+            $superclass = $this->superclass();
+            if ($superclass && $superclass->respond_to('inherited')) $superclass->inherited($this);
         }
 
         static function instance($class) {
@@ -153,7 +155,7 @@ namespace {
             if (!isset(self::$instances[$class])) {
                 $instance = new self($class, null, false);
                 self::$instances[$class] = $instance;
-                $instance->include_and_extend_default_modules();
+                $instance->include_extend_and_inherit_defaults();
             }
             return self::$instances[$class];
         }
