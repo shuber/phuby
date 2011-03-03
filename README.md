@@ -22,13 +22,14 @@ Code is stable and test backed, however the api may change as features are imple
 * eigenclasses
 * method\_missing, respond\_to, respond\_to_missing, send, super
 * splat
+* extended, included, inherited
 
 (See TODO below)
 
 
 ## Usage preview (instance variables aren't supported yet)
 
-	require 'phuby/phuby.php';
+	require_once 'phuby/phuby.php';
 
 	namespace Person {
 	    class InstanceMethods {
@@ -60,6 +61,8 @@ Code is stable and test backed, however the api may change as features are imple
 	}
 
 	namespace {
+	    function c($class) { return Klass::instance($class); }
+
 	    class Person extends Object { }
 	    c(Person)->include('Person\InstanceMethods');
 
@@ -78,7 +81,7 @@ Code is stable and test backed, however the api may change as features are imple
 
 ## Testing
 
-Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phuby/test/ztest` (or anywhere else in your php `include_path`), then run `test/runner.php`
+Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phuby/test/ztest` (or anywhere else in your php `include_path`), then run `test/run`
 
 
 ## Todo
