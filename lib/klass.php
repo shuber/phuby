@@ -47,12 +47,6 @@ namespace {
             }
             $this->_name = $class;
             $this->_parent = get_parent_class($class);
-            if (is_subclass_of($class, $base_class)) {
-                $instance_methods = $class.'\InstanceMethods';
-                if (class_exists($instance_methods, false)) $this->__include($instance_methods);
-                $class_methods = $class.'\ClassMethods';
-                if (class_exists($class_methods, false)) $this->extend($class_methods);
-            }
         }
 
         function __include($modules) {
@@ -64,7 +58,7 @@ namespace {
                         throw new \InvalidArgumentException('cyclic include detected');
                     } else if (!in_array($module, $this->_included_modules)) {
                         array_unshift($this->_included_modules, $module);
-                        // if ($module->respond_to('included')) $module->included($this);
+                        if ($module->respond_to('included')) $module->included($this);
                     }
                 }
             }
@@ -136,15 +130,24 @@ namespace {
             if ($this->_parent) return self::instance($this->_parent);
         }
 
+        protected function include_and_extend_default_modules() {
+            if (is_subclass_of($this, get_parent_class(__CLASS__))) {
+                $instance_methods = $this->_name.'\InstanceMethods';
+                if (class_exists($instance_methods, false)) $this->__include($instance_methods);
+                $class_methods = $this->_name.'\ClassMethods';
+                if (class_exists($class_methods, false)) $this->extend($class_methods);
+            }
+        }
+
         static function instance($class) {
-            if (is_a($class, __CLASS__)) {
-                return $class;
-            } else if (!isset(self::$instances[$class])) {
-                self::$instances[$class] = new self($class, null, false);
+            if (is_a($class, __CLASS__)) $class = $class->name();
+            if (!isset(self::$instances[$class])) {
+                $instance = new self($class, null, false);
+                self::$instances[$class] = $instance;
+                $instance->include_and_extend_default_modules();
             }
             return self::$instances[$class];
         }
 
     }
-
 }

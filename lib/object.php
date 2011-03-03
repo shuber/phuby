@@ -143,6 +143,4 @@ namespace {
         }
 
     }
-
-    Klass::instance('Object')->__include('Object\InstanceMethods');
 }
