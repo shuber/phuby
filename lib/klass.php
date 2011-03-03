@@ -51,14 +51,23 @@ namespace {
 
         function __include($modules) {
             if (!is_array($modules)) $modules = func_get_args();
+            if (is_subclass_of($this, __CLASS__) && $this->is_class()) {
+                $is_class = true;
+                $callback = 'extended';
+                $object = $this->_object;
+            } else {
+                $is_class = false;
+                $callback = 'included';
+                $object = $this;
+            }
             foreach (array_reverse($modules) as $module) {
                 $module = static::instance($module);
-                if (!in_array($module, $this->ancestors()) || is_subclass_of($this, __CLASS__) && $this->is_class()) {
+                if (!in_array($module, $this->ancestors()) || $is_class) {
                     if (in_array($this, $module->included_modules())) {
                         throw new \InvalidArgumentException('cyclic include detected');
                     } else if (!in_array($module, $this->_included_modules)) {
                         array_unshift($this->_included_modules, $module);
-                        if ($module->respond_to('included')) $module->included($this);
+                        if ($module->respond_to($callback)) $module->$callback($object);
                     }
                 }
             }

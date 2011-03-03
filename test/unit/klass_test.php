@@ -19,6 +19,17 @@ namespace KlassTest {
     class UserWithModules extends Base {
         static function test_static_method() { return true; }
     }
+    class Callbacks extends \Object { }
+    class IncludedTestModule {
+        static function included($base) {
+            echo 'included by '.$base->object_id();
+        }
+    }
+    class ExtendedTestModule {
+        static function extended($base) {
+            echo 'extended by '.$base->object_id();
+        }
+    }
 }
 
 namespace {
@@ -30,6 +41,7 @@ namespace {
             $this->user_class_with_modules->__include('KlassTest\Module');
             $this->user_class_with_modules->extend('KlassTest\ExtendModule');
             $this->object_class = new Klass('Object');
+            $this->callbacks_class = Klass::instance('KlassTest\Callbacks');
             Klass::instance('KlassTest\Module')->__include('KlassTest\AnotherModule');
         }
 
@@ -149,6 +161,18 @@ namespace {
             $instance = $this->user_class_with_modules->new('test');
             ensure(is_a($instance, $this->user_class_with_modules->name()));
             assert_equal('test', ob_get_clean());
+        }
+
+        function test_should_call_included() {
+            ob_start();
+            $this->callbacks_class->__include('KlassTest\IncludedTestModule');
+            assert_equal('included by '.$this->callbacks_class->object_id(), ob_get_clean());
+        }
+
+        function test_should_call_extended() {
+            ob_start();
+            $this->callbacks_class->extend('KlassTest\ExtendedTestModule');
+            assert_equal('extended by '.$this->callbacks_class->object_id(), ob_get_clean());
         }
 
     }

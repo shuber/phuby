@@ -56,7 +56,7 @@ namespace {
         }
 
         function __get($method) {
-            return $this->respond_to($method) ? $this->$method() : null;
+            return $this->$method();
         }
 
         function __include($modules) {
