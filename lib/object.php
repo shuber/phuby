@@ -7,6 +7,10 @@ namespace Object {
             return '#<'.$this->__class()->name().':'.$this->object_id().'>';
         }
 
+        function instance_variable_missing($variable) {
+            return $this->$variable();
+        }
+
         function object_id() {
             return spl_object_hash($this);
         }
@@ -56,7 +60,7 @@ namespace {
         }
 
         function __get($method) {
-            return $this->$method();
+            return $this->instance_variable_missing($method);
         }
 
         function __include($modules) {
