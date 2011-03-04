@@ -148,7 +148,7 @@ namespace {
             }
             $superclass = $this->superclass();
             if ($superclass && $superclass->respond_to('inherited')) $superclass->inherited($this);
-            if ($this->respond_to('initialized')) $this->initialized();
+            if ($this->respond_to('initialize')) $this->initialize();
         }
 
         static function instance($class) {

@@ -35,9 +35,9 @@ namespace KlassTest {
             echo 'extended by '.$base->object_id();
         }
     }
-    class InitializedTestModule {
-        static function initialized() {
-            echo 'initialized';
+    class InitializeTestModule {
+        static function initialize() {
+            echo 'initialize';
         }
     }
 }
@@ -193,8 +193,8 @@ namespace {
 
         function test_should_call_initialized() {
             ob_start();
-            $class = Klass::instance('KlassTest\InitializedTestModule');
-            assert_equal('initialized', ob_get_clean());
+            $class = Klass::instance('KlassTest\InitializeTestModule');
+            assert_equal('initialize', ob_get_clean());
         }
 
     }
