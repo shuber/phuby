@@ -15,7 +15,7 @@ Code is stable and test backed, however the api may change as features are imple
 * php 5.3+
 
 
-## Features
+## Features (incomplete)
 
 * mixins
 * classes are objects
@@ -99,3 +99,4 @@ Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phub
 * move everything under Phuby namespace
 * alias methods
 * c(User)->include vs __include issue
+* splat
