@@ -35,13 +35,18 @@ namespace KlassTest {
             echo 'extended by '.$base->object_id();
         }
     }
+    class InitializedTestModule {
+        static function initialized() {
+            echo 'initialized';
+        }
+    }
 }
 
 namespace {
     class KlassTest extends ztest\UnitTestCase {
 
         function setup() {
-            $this->user_class = new Klass('KlassTest\User');
+            $this->user_class = Klass::instance('KlassTest\User');
             $this->user_class_with_modules = Klass::instance('KlassTest\UserWithModules');
             $this->user_class_with_modules->__include('KlassTest\Module');
             $this->user_class_with_modules->extend('KlassTest\ExtendModule');
@@ -182,8 +187,14 @@ namespace {
 
         function test_should_call_inherited() {
             ob_start();
-            $this->callbacks_class = Klass::instance('KlassTest\Callbacks');
-            assert_equal('inherited by '.$this->callbacks_class->object_id(), ob_get_clean());
+            $callbacks_class = Klass::instance('KlassTest\Callbacks');
+            assert_equal('inherited by '.$callbacks_class->object_id(), ob_get_clean());
+        }
+
+        function test_should_call_initialized() {
+            ob_start();
+            $class = Klass::instance('KlassTest\InitializedTestModule');
+            assert_equal('initialized', ob_get_clean());
         }
 
     }

@@ -100,7 +100,7 @@ namespace {
 
         function respond_to($method) {
             if (in_array($method, static::$keyword_methods)) $method = "__$method";
-            return $this->method_defined($method) || $this->respond_to_missing($method);
+            return $this->method_defined($method) || ($this->method_defined('respond_to_missing') && $this->respond_to_missing($method));
         }
 
         /**
