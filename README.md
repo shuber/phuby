@@ -100,3 +100,4 @@ Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phub
 * alias methods
 * c(User)->include vs __include issue
 * splat
+* optionally allow individual classes to appear in their ancestry before included modules (help avoid method conflicts)
