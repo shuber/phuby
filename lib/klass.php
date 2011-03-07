@@ -143,13 +143,13 @@ namespace {
 
         protected function include_extend_and_inherit_defaults() {
             if (is_subclass_of($this, get_parent_class(__CLASS__))) {
-                foreach (self::$auto_includes as $suffix) {
-                    $instance_methods = $this->_name.$suffix;
-                    if (class_exists($instance_methods, false)) $this->__include($instance_methods);
-                }
                 foreach (self::$auto_extends as $suffix) {
                     $class_methods = $this->_name.$suffix;
                     if (class_exists($class_methods, false)) $this->extend($class_methods);
+                }
+                foreach (self::$auto_includes as $suffix) {
+                    $instance_methods = $this->_name.$suffix;
+                    if (class_exists($instance_methods, false)) $this->__include($instance_methods);
                 }
             }
             $superclass = $this->superclass();
