@@ -4,7 +4,12 @@ namespace Eigenclass {
     class InstanceMethods {
 
         function method_missing($method, $arguments) {
-            return $this->reference()->send_array($method, $arguments);
+            if (get_class($this) == 'Klass') {
+                $response = $this->super($method, $arguments);
+            } else {
+                $response = $this->reference()->send_array($method, $arguments);
+            }
+            return $response;
         }
 
     }
