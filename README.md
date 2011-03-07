@@ -98,6 +98,5 @@ Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phub
 * extend('self')
 * move everything under Phuby namespace
 * alias methods
-* c(User)->include vs __include issue
 * splat
 * Klass#freeze

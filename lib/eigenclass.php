@@ -33,7 +33,7 @@ namespace {
                 if ($this->_object->superclass()) {
                     $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors(false));
                 } else {
-                    $ancestors = array_merge($ancestors, Klass::instance(__CLASS__)->ancestors(false));
+                    $ancestors = array_merge($ancestors, self::instance(__CLASS__)->ancestors(false));
                 }
                 if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
             } else {
@@ -44,10 +44,14 @@ namespace {
 
         function callee($method, &$caller = null) {
             $ancestors = $this->ancestors();
-            if ($this->is_class()) $extended_modules = $this->_object->extended_modules(false);
+            if ($this->is_class()) {
+                $extended_modules = $this->_object->extended_modules(false);
+                $class_ancestors = self::instance(__CLASS__)->ancestors();
+                $modules = array_merge($extended_modules, $class_ancestors);
+            }
             if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
             foreach ($ancestors as $ancestor) {
-                if (!$this->is_class() || in_array($ancestor, $extended_modules)) {
+                if (!$this->is_class() || in_array($ancestor, $modules)) {
                     $methods = $ancestor->reflection()->instance_methods(false);
                     if (isset($methods[$method])) return $methods[$method];
                 }

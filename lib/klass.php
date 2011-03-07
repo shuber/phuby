@@ -63,7 +63,7 @@ namespace {
                 $object = $this;
             }
             foreach (array_reverse($modules) as $module) {
-                $module = static::instance($module);
+                $module = self::instance($module);
                 if (!in_array($module, $this->ancestors()) || $is_class) {
                     if (in_array($this, $module->included_modules())) {
                         throw new \InvalidArgumentException('cyclic include detected');
@@ -103,7 +103,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            if ($unique) $modules = array_diff(array_reverse(array_unique(array_reverse($modules), SORT_REGULAR)), Klass::instance(__CLASS__)->included_modules(false));
+            if ($unique) $modules = array_diff(array_reverse(array_unique(array_reverse($modules), SORT_REGULAR)), self::instance(__CLASS__)->included_modules(false));
             return $modules;
         }
 
