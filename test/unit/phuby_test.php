@@ -7,6 +7,11 @@ class PhubyTest extends ztest\UnitTestCase {
         ensure(function_exists('Object'));
     }
 
+    function test_should_call_object_call() {
+        Phuby::autoload('Object');
+        assert_throws('BadMethodCallException', function() { Object(); });
+    }
+
     function test_non_static_method_call_error_handler() {
         $context = array();
         assert_not_identical(false, Phuby::non_static_method_call_error_handler(2048, false, false, false, $context));

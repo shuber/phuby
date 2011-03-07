@@ -4,7 +4,12 @@ namespace Eigenclass {
     class InstanceMethods {
 
         function method_missing($method, $arguments) {
-            return $this->reference()->send_array($method, $arguments);
+            if (get_class($this) == 'Klass') {
+                $response = $this->super($method, $arguments);
+            } else {
+                $response = $this->reference()->send_array($method, $arguments);
+            }
+            return $response;
         }
 
     }
@@ -33,9 +38,9 @@ namespace {
                 if ($this->_object->superclass()) {
                     $ancestors = array_merge($ancestors, $this->_object->superclass()->__class()->ancestors(false));
                 } else {
-                    $ancestors = array_merge($ancestors, Klass::instance(__CLASS__)->ancestors(false));
+                    $ancestors = array_merge($ancestors, self::instance(__CLASS__)->ancestors(false));
                 }
-                if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+                if ($unique) $ancestors = self::unique_sorted_modules($ancestors);
             } else {
                 $ancestors = parent::ancestors($unique);
             }
@@ -44,10 +49,14 @@ namespace {
 
         function callee($method, &$caller = null) {
             $ancestors = $this->ancestors();
-            if ($this->is_class()) $extended_modules = $this->_object->extended_modules(false);
+            if ($this->is_class()) {
+                $extended_modules = $this->_object->extended_modules(false);
+                $class_ancestors = self::instance(__CLASS__)->ancestors(false);
+                $modules = array_merge($extended_modules, $class_ancestors);
+            }
             if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
             foreach ($ancestors as $ancestor) {
-                if (!$this->is_class() || in_array($ancestor, $extended_modules)) {
+                if (!$this->is_class() || in_array($ancestor, $modules)) {
                     $methods = $ancestor->reflection()->instance_methods(false);
                     if (isset($methods[$method])) return $methods[$method];
                 }

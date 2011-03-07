@@ -17,7 +17,17 @@ abstract class Phuby {
         Environment::autoload($class);
         if (class_exists($class, false)) {
             if (!function_exists($class)) {
-                $function = sprintf('function %s() { return Klass::instance("%s")->call_array(func_get_args()); }', $class, $class);
+                $reflection = new ReflectionClass($class);
+                $function = sprintf('
+                    namespace %s {
+                        function %s() {
+                            return Klass::instance("%s")->send_array("call", func_get_args());
+                        }
+                    }',
+                    $reflection->getNamespaceName(),
+                    $reflection->getShortName(),
+                    $class
+                );
                 eval($function);
             }
         }

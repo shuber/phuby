@@ -29,6 +29,8 @@ namespace {
         protected $_parent;
         protected $_reflection;
 
+        static $auto_extends = array('_ClassMethods', '\ClassMethods');
+        static $auto_includes = array('_InstanceMethods', '\InstanceMethods');
         static $instances = array();
 
         function __construct($class, $superclass = null, $create_if_undefined = true) {
@@ -61,7 +63,7 @@ namespace {
                 $object = $this;
             }
             foreach (array_reverse($modules) as $module) {
-                $module = static::instance($module);
+                $module = self::instance($module);
                 if (!in_array($module, $this->ancestors()) || $is_class) {
                     if (in_array($this, $module->included_modules())) {
                         throw new \InvalidArgumentException('cyclic include detected');
@@ -83,7 +85,7 @@ namespace {
                 $ancestors[] = $this;
                 if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors(false));
             }
-            if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+            if ($unique) $ancestors = self::unique_sorted_modules($ancestors);
             return $ancestors;
         }
 
@@ -101,7 +103,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            if ($unique) $modules = array_diff(array_reverse(array_unique(array_reverse($modules), SORT_REGULAR)), Klass::instance(__CLASS__)->included_modules(false));
+            if ($unique) $modules = array_diff(self::unique_sorted_modules($modules), self::instance(get_class($this))->included_modules(false));
             return $modules;
         }
 
@@ -113,7 +115,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->included_modules(false));
             }
-            if ($unique) $modules = array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            if ($unique) $modules = self::unique_sorted_modules($modules);
             return $modules;
         }
 
@@ -141,10 +143,14 @@ namespace {
 
         protected function include_extend_and_inherit_defaults() {
             if (is_subclass_of($this, get_parent_class(__CLASS__))) {
-                $instance_methods = $this->_name.'\InstanceMethods';
-                if (class_exists($instance_methods, false)) $this->__include($instance_methods);
-                $class_methods = $this->_name.'\ClassMethods';
-                if (class_exists($class_methods, false)) $this->extend($class_methods);
+                foreach (self::$auto_extends as $suffix) {
+                    $class_methods = $this->_name.$suffix;
+                    if (class_exists($class_methods, false)) $this->extend($class_methods);
+                }
+                foreach (self::$auto_includes as $suffix) {
+                    $instance_methods = $this->_name.$suffix;
+                    if (class_exists($instance_methods, false)) $this->__include($instance_methods);
+                }
             }
             $superclass = $this->superclass();
             if ($superclass && $superclass->respond_to('inherited')) $superclass->inherited($this);
@@ -159,6 +165,10 @@ namespace {
                 $instance->include_extend_and_inherit_defaults();
             }
             return self::$instances[$class];
+        }
+
+        protected static function unique_sorted_modules($modules) {
+            return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
         }
 
     }

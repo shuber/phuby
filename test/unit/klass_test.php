@@ -197,5 +197,9 @@ namespace {
             assert_equal('initialize', ob_get_clean());
         }
 
+        function test_class_should_respond_to_its_instance_methods() {
+            ensure($this->user_class_with_modules->respond_to('class'));
+        }
+
     }
 }
