@@ -103,7 +103,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            if ($unique) $modules = array_diff(self::unique_sorted_modules($modules), self::instance(__CLASS__)->included_modules(false));
+            if ($unique) $modules = array_diff(self::unique_sorted_modules($modules), self::instance(get_class($this))->included_modules(false));
             return $modules;
         }
 
