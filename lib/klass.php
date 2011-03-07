@@ -85,7 +85,7 @@ namespace {
                 $ancestors[] = $this;
                 if ($this->superclass()) $ancestors = array_merge($ancestors, $this->superclass()->ancestors(false));
             }
-            if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+            if ($unique) $ancestors = self::unique_sorted_modules($ancestors);
             return $ancestors;
         }
 
@@ -103,7 +103,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->extended_modules(false));
             }
-            if ($unique) $modules = array_diff(array_reverse(array_unique(array_reverse($modules), SORT_REGULAR)), self::instance(__CLASS__)->included_modules(false));
+            if ($unique) $modules = array_diff(self::unique_sorted_modules($modules), self::instance(__CLASS__)->included_modules(false));
             return $modules;
         }
 
@@ -115,7 +115,7 @@ namespace {
             } else if ($this->superclass()) {
                 $modules = array_merge($modules, $this->superclass()->included_modules(false));
             }
-            if ($unique) $modules = array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
+            if ($unique) $modules = self::unique_sorted_modules($modules);
             return $modules;
         }
 
@@ -165,6 +165,10 @@ namespace {
                 $instance->include_extend_and_inherit_defaults();
             }
             return self::$instances[$class];
+        }
+
+        protected static function unique_sorted_modules($modules) {
+            return array_reverse(array_unique(array_reverse($modules), SORT_REGULAR));
         }
 
     }

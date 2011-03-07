@@ -40,7 +40,7 @@ namespace {
                 } else {
                     $ancestors = array_merge($ancestors, self::instance(__CLASS__)->ancestors(false));
                 }
-                if ($unique) $ancestors = array_reverse(array_unique(array_reverse($ancestors), SORT_REGULAR));
+                if ($unique) $ancestors = self::unique_sorted_modules($ancestors);
             } else {
                 $ancestors = parent::ancestors($unique);
             }
