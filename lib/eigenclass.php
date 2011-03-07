@@ -51,7 +51,7 @@ namespace {
             $ancestors = $this->ancestors();
             if ($this->is_class()) {
                 $extended_modules = $this->_object->extended_modules(false);
-                $class_ancestors = self::instance(__CLASS__)->ancestors();
+                $class_ancestors = self::instance(__CLASS__)->ancestors(false);
                 $modules = array_merge($extended_modules, $class_ancestors);
             }
             if ($caller && in_array($caller, $ancestors)) $ancestors = array_slice($ancestors, array_search($caller, $ancestors) + 1);
