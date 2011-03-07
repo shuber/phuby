@@ -18,9 +18,16 @@ abstract class Phuby {
         if (class_exists($class, false)) {
             if (!function_exists($class)) {
                 $reflection = new ReflectionClass($class);
-                $namespace = $reflection->getNamespaceName();
-                $class_name = $reflection->getShortName();
-                $function = sprintf('namespace %s { function %s() { return Klass::instance("%s")->call_array(func_get_args()); } }', $namespace, $class_name, $class);
+                $function = sprintf('
+                    namespace %s {
+                        function %s() {
+                            return Klass::instance("%s")->send_array("call", func_get_args());
+                        }
+                    }',
+                    $reflection->getNamespaceName(),
+                    $reflection->getShortName(),
+                    $class
+                );
                 eval($function);
             }
         }

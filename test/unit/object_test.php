@@ -2,6 +2,10 @@
 
 namespace ObjectTest\User {
     class InstanceMethods {
+        function call() {
+            return func_get_args();
+        }
+
         function greet() {
             return 'HI';
         }
@@ -152,6 +156,12 @@ namespace {
             $instance->extend($module);
             assert_in_array($module, $instance->__class()->extended_modules());
             assert_not_in_array($module, $this->instance_class->extended_modules());
+        }
+
+        function test_should_invoke_by_calling_call() {
+            $arguments = array(1, 2, 3);
+            $user = $this->user;
+            assert_equal(array($arguments), $user($arguments));
         }
 
     }

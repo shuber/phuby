@@ -65,6 +65,10 @@ namespace {
             return $this;
         }
 
+        function __invoke() {
+            return $this->send_array('call', func_get_args());
+        }
+
         function __toString() {
             return $this->to_s();
         }
