@@ -99,3 +99,4 @@ Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phub
 * move everything under Phuby namespace
 * alias methods
 * Klass#freeze
+* refactor tests - they're kind of messy right now
