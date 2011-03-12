@@ -81,6 +81,7 @@ namespace {
          * [QUIRK] call_user_func_array() does not set $this
          * [QUIRK] ReflectionMethod requires the calling object to be an instance of ReflectionMethod#class
          * [QUIRK] calling methods statically e.g. Object\InstanceMethods::object_id() sets $this equal to the calling object
+         *         but the method must be public
         **/
         function call_method($method, $arguments = array()) {
             $variables = array();
