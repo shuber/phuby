@@ -49,6 +49,8 @@ namespace {
             }
             $this->_name = $class;
             $this->_parent = get_parent_class($class);
+            parent::__construct();
+            foreach (array_keys($this->reflection()->class_variables(false)) as $variable) $this->_instance_variables[$variable] = &$class::${$variable};
         }
 
         function __include($modules) {

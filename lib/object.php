@@ -47,8 +47,13 @@ namespace {
     abstract class Object {
 
         protected $_eigenclass;
+        protected $_instance_variables = array();
 
         static $keyword_methods = array('class', 'include', 'new');
+
+        function __construct() {
+            foreach (array_keys(get_object_vars($this)) as $variable) $this->_instance_variables[$variable] = &$this->$variable;
+        }
 
         function __call($method, $arguments) {
             return $this->send_array($method, $arguments);
@@ -59,8 +64,13 @@ namespace {
             return $this->_eigenclass;
         }
 
-        function __get($method) {
-            return $this->instance_variable_missing($method);
+        function __get($variable) {
+            if ($this->instance_variable_defined($variable)) {
+                $response = $this->instance_variable_get($variable);
+            } else {
+                $response = $this->instance_variable_missing($variable);
+            }
+            return $response;
         }
 
         function __include($modules) {
@@ -71,6 +81,15 @@ namespace {
 
         function __invoke() {
             return $this->send_array('call', func_get_args());
+        }
+
+        function __set($variable, $value) {
+            if ($this->instance_variable_defined($variable)) {
+                $response = $this->instance_variable_set($variable, $value);
+            } else {
+                $response = $this->method_missing("$variable=", array($value));
+            }
+            return $response;
         }
 
         function __toString() {
@@ -87,14 +106,46 @@ namespace {
             $variables = array();
             $arguments = array_values($arguments);
             foreach ($arguments as $index => $argument) $variables[] = '$arguments['.$index.']';
-            eval('$result = '.$method->class.'::'.$method->name.'('.implode(', ', $variables).');');
-            return $result;
+            eval('$response = '.$method->class.'::'.$method->name.'('.implode(', ', $variables).');');
+            return $response;
         }
 
         function extend($modules) {
             if (!is_array($modules)) $modules = func_get_args();
             $this->__class()->__class()->__include($modules, true);
             return $this;
+        }
+
+        function instance_variable_defined($variable) {
+            return in_array($variable, array_keys($this->_instance_variables)) || in_array($variable, array_keys($this->instance_variables()));
+        }
+
+        function instance_variable_get($variable) {
+            if ($this->instance_variable_defined($variable)) return $this->_instance_variables[$variable];
+        }
+
+        function instance_variable_isset($variable) {
+            if ($this->instance_variable_defined($variable)) {
+                return isset($this->_instance_variables[$variable]);
+            } else {
+                return false;
+            }
+        }
+
+        function instance_variable_set($variable, $value) {
+            $this->_instance_variables[$variable] = $value;
+            return $value;
+        }
+
+        // TODO: unset() will remove key from _instance_variables, calling instance_variables() may reload that key
+        //       - set equal to null instead?
+        //       - store an array of "unset" instance variables? (don't lookup in ancestors)
+        function instance_variable_unset($variable) {
+            unset($this->_instance_variables[$variable]);
+        }
+
+        function instance_variables() { // TODO: merge with ancestors
+            return $this->_instance_variables;
         }
 
         function is_a($module, $include_super = true) {
