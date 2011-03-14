@@ -4,13 +4,13 @@ class EnvironmentTest extends ztest\UnitTestCase {
 
     function setup() {
         $this->include_path = get_include_path();
-        $this->autoload_filename_extension = Environment::$autoload_filename_extension;
+        $this->autoload_extensions = spl_autoload_extensions();
         $this->error_handlers = Environment::$error_handlers;
     }
 
     function teardown() {
         set_include_path($this->include_path);
-        Environment::$autoload_filename_extension = $this->autoload_filename_extension;
+        spl_autoload_extensions($this->autoload_extensions);
         Environment::$error_handlers = $this->error_handlers;
     }
 
@@ -25,11 +25,6 @@ class EnvironmentTest extends ztest\UnitTestCase {
     function failing_error_handler($number, $message, $file, $line, &$context) {
         $this->failing_error_handler_called = true;
         return false;
-    }
-
-    function test_should_append_include_path() {
-        Environment::append_include_path(__DIR__);
-        assert_equal($this->include_path.PATH_SEPARATOR.__DIR__, get_include_path());
     }
 
     function test_should_call_error_handlers() {
@@ -51,26 +46,26 @@ class EnvironmentTest extends ztest\UnitTestCase {
     }
 
     function test_should_return_correct_filename_for_class() {
-        assert_equal('user.php', Environment::filename_for_class('User'));
-        assert_equal('namespaced/user.php', Environment::filename_for_class('Namespaced\User'));
-        assert_equal('namespaced/user.php', Environment::filename_for_class('\Namespaced\User'));
-        assert_equal('namespaced/user.php', Environment::filename_for_class('Namespaced::User'));
-        assert_equal('namespaced/user.php', Environment::filename_for_class('::Namespaced::User'));
-        assert_equal('camel_cased/user.php', Environment::filename_for_class('CamelCased\User'));
-        assert_equal('under_scored/user.php', Environment::filename_for_class('under_scored\User'));
-        assert_equal('capital_under_scored/user.php', Environment::filename_for_class('Capital_under_scored\User'));
-        assert_equal('user.php', Environment::filename_for_class('user'));
-        assert_equal('user.php', Environment::filename_for_class('USER'));
-        assert_equal('user99.php', Environment::filename_for_class('User99'));
-    }
-
-    function test_should_return_correct_filename_for_class_with_different_extension() {
-        Environment::$autoload_filename_extension = '.inc';
-        assert_equal('user.inc', Environment::filename_for_class('User'));
+        assert_equal('user', Environment::filename_for_class('User'));
+        assert_equal('namespaced/user', Environment::filename_for_class('Namespaced\User'));
+        assert_equal('namespaced/user', Environment::filename_for_class('\Namespaced\User'));
+        assert_equal('namespaced/user', Environment::filename_for_class('Namespaced::User'));
+        assert_equal('namespaced/user', Environment::filename_for_class('::Namespaced::User'));
+        assert_equal('camel_cased/user', Environment::filename_for_class('CamelCased\User'));
+        assert_equal('under_scored/user', Environment::filename_for_class('under_scored\User'));
+        assert_equal('capital_under_scored/user', Environment::filename_for_class('Capital_under_scored\User'));
+        assert_equal('user', Environment::filename_for_class('user'));
+        assert_equal('user', Environment::filename_for_class('USER'));
+        assert_equal('user99', Environment::filename_for_class('User99'));
     }
 
     function test_should_return_include_paths() {
         assert_equal(explode(PATH_SEPARATOR, $this->include_path), Environment::include_paths());
+    }
+
+    function test_should_append_include_path() {
+        Environment::append_include_path(__DIR__);
+        assert_equal($this->include_path.PATH_SEPARATOR.__DIR__, get_include_path());
     }
 
     function test_should_prepend_include_path() {
@@ -99,6 +94,38 @@ class EnvironmentTest extends ztest\UnitTestCase {
         $paths = 'test'.PATH_SEPARATOR.'paths';
         Environment::set_include_paths($paths);
         assert_equal($paths, get_include_path());
+    }
+
+    function test_should_return_autoload_extensions() {
+        assert_equal(explode(Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $this->autoload_extensions), Environment::autoload_extensions());
+    }
+
+    function test_should_append_autoload_extension() {
+        Environment::append_autoload_extension('.test');
+        assert_equal($this->autoload_extensions.Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR.'.test', spl_autoload_extensions());
+    }
+
+    function test_should_prepend_autoload_extension() {
+        Environment::prepend_autoload_extension('.test');
+        assert_equal('.test'.Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR.$this->autoload_extensions, spl_autoload_extensions());
+    }
+
+    function test_should_remove_autoload_extension() {
+        $extensions = explode(Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $this->autoload_extensions);
+        Environment::remove_autoload_extension(array_pop($extensions));
+        assert_equal(implode(Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $extensions), spl_autoload_extensions());
+    }
+
+    function test_should_set_autoload_extensions() {
+        $extensions = array('.test', '.example');
+        Environment::set_autoload_extensions($extensions);
+        assert_equal(implode(Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $extensions), spl_autoload_extensions());
+    }
+
+    function test_should_set_autoload_extensions_as_string() {
+        $extensions = '.test'.Environment::SPL_AUTOLOAD_EXTENSION_SEPARATOR.'.example';
+        Environment::set_autoload_extensions($extensions);
+        assert_equal($extensions, spl_autoload_extensions());
     }
 
 }

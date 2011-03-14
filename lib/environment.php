@@ -9,13 +9,7 @@
 **/
 abstract class Environment {
 
-    /**
-     * The filename extension used by Environment::filename_for_class() when autoloading.
-     * Defaults to '.php'
-     *
-     * @static
-    **/
-    static $autoload_filename_extension = '.php';
+    const SPL_AUTOLOAD_EXTENSION_SEPARATOR = ',';
 
     /**
      * Stores registered custom error handlers.
@@ -23,6 +17,18 @@ abstract class Environment {
      * @static
     **/
     static $error_handlers = array();
+
+    /**
+     * Appends an extension to the end of spl_autoload_extensions.
+     * Returns the new spl_autoload_extensions string.
+     *
+     * @param string $extension
+     * @return string
+     * @static
+    **/
+    static function append_autoload_extension($extension) {
+        return self::set_autoload_extensions(array_merge(self::autoload_extensions(), array($extension)));
+    }
 
     /**
      * Appends a path to the end of the include_path.
@@ -50,14 +56,22 @@ abstract class Environment {
     **/
     static function autoload($class) {
         $filename = self::filename_for_class($class);
-        // class_eval('NonExistentClass') throws warnings if we include_once when $filename doesn't exist
-        foreach (static::include_paths() as $include_path) {
-            $file = realpath($include_path.DIRECTORY_SEPARATOR.$filename);
-            if (file_exists($file)) {
+        foreach (self::autoload_extensions() as $extension) {
+            if ($file = self::resolve_include_path($filename.$extension)) {
                 include_once $file;
                 break;
             }
         }
+    }
+
+    /**
+     * Returns an array of autoload extensions defined with spl_autoload_extensions.
+     *
+     * @return array
+     * @static
+    **/
+    static function autoload_extensions() {
+        return preg_split('#\s*'.self::SPL_AUTOLOAD_EXTENSION_SEPARATOR.'\s*#', spl_autoload_extensions());
     }
 
     /**
@@ -94,7 +108,7 @@ abstract class Environment {
     static function filename_for_class($class) {
         $namespaces = array_filter(preg_split('#\\\\|::#', $class));
         $parts = array_map(function($namespace) { return strtolower(preg_replace('/[^A-Z^a-z^0-9]+/', '_', preg_replace('/([a-z\d])([A-Z])/', '\1_\2', preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2', $namespace)))); }, $namespaces);
-        return implode(DIRECTORY_SEPARATOR, $parts).static::$autoload_filename_extension;
+        return implode(DIRECTORY_SEPARATOR, $parts);
     }
 
     /**
@@ -105,6 +119,18 @@ abstract class Environment {
     **/
     static function include_paths() {
         return explode(PATH_SEPARATOR, get_include_path());
+    }
+
+    /**
+     * Prepends an extension to the beginning of spl_autoload_extensions.
+     * Returns the new spl_autoload_extensions string.
+     *
+     * @param string $extension
+     * @return string
+     * @static
+    **/
+    static function prepend_autoload_extension($extension) {
+        return self::set_autoload_extensions(array_merge(array($extension), self::autoload_extensions()));
     }
 
     /**
@@ -133,6 +159,18 @@ abstract class Environment {
     }
 
     /**
+     * Removes an extension from the spl_autoload_extensions.
+     * Returns the new spl_autoload_extensions string.
+     *
+     * @param string $extension
+     * @return string
+     * @static
+    **/
+    static function remove_autoload_extension($extension) {
+        return self::set_autoload_extensions(array_diff(self::autoload_extensions(), array($extension)));
+    }
+
+    /**
      * Removes a path from the include_path.
      * Returns the old include_path or false on failure.
      *
@@ -141,18 +179,49 @@ abstract class Environment {
      * @static
     **/
     static function remove_include_path($path) {
-        $paths = array();
-        foreach (self::include_paths() as $include_path) {
-            if ($include_path != $path) array_push($paths, $include_path);
+        return self::set_include_paths(array_diff(self::include_paths(), array($path)));
+    }
+
+    /**
+     * Returns the fully resolved include path of $filename, or false if it doesn't exist in include_paths.
+     *
+     * @param string $filename
+     * @return string | false
+     * @static
+    **/
+    static function resolve_include_path($filename) {
+        $resolved_include_path = false;
+        if (function_exists('stream_resolve_include_path')) {
+            $resolved_include_path = stream_resolve_include_path($filename);
+        } else {
+            foreach (self::include_paths() as $include_path) {
+                $file = realpath($include_path.DIRECTORY_SEPARATOR.$filename);
+                if (file_exists($file)) {
+                    $resolved_include_path = $file;
+                    break;
+                }
+            }
         }
-        self::set_include_paths($paths);
+        return $resolved_include_path;
+    }
+
+    /**
+     * Sets spl_autload_extensions to the string or array of extensions specified.
+     *
+     * @param string | array $extensions
+     * @return string
+     * @static
+    **/
+    static function set_autoload_extensions($extensions) {
+        if (is_array($extensions)) $extensions = implode(self::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $extensions);
+        return spl_autoload_extensions($extensions);
     }
 
     /**
      * Replaces the current include_path with $paths.
      * Returns the old include_path or false on failure.
      *
-     * @param array $paths
+     * @param string | array $paths
      * @return string
      * @static
     **/
