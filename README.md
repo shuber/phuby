@@ -27,7 +27,7 @@ Code is stable and test backed, however the api may change as features are imple
 (See TODO below)
 
 
-## Usage preview (instance variables aren't supported yet)
+## Usage preview
 
 	require_once 'phuby/phuby.php';
 
