@@ -1,7 +1,9 @@
 <?php
 
 namespace KlassTest {
-    class Base extends \Object { }
+    class Base extends \Object {
+        static $property = 1;
+    }
     class User extends Base { }
     class Module {
         function initialize($string) { echo $string; }
@@ -46,6 +48,7 @@ namespace {
     class KlassTest extends ztest\UnitTestCase {
 
         function setup() {
+            $this->base_class = Klass::instance('KlassTest\Base');
             $this->user_class = Klass::instance('KlassTest\User');
             $this->user_class_with_modules = Klass::instance('KlassTest\UserWithModules');
             $this->user_class_with_modules->__include('KlassTest\Module');
@@ -199,6 +202,16 @@ namespace {
 
         function test_class_should_respond_to_its_instance_methods() {
             ensure($this->user_class_with_modules->respond_to('class'));
+        }
+
+        function test_instance_variable_should_reference_static_property() {
+            $value = KlassTest\Base::$property;
+            assert_equal($value, $this->base_class->property);
+            $new_value = 2;
+            assert_not_equal($new_value, $value);
+            $this->base_class->property = $new_value;
+            assert_equal($new_value, KlassTest\Base::$property);
+            KlassTest\Base::$property = $value;
         }
 
     }
