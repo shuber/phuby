@@ -164,5 +164,37 @@ namespace {
             assert_equal(array($arguments), $user($arguments));
         }
 
+        function test_should_read_and_write_property() {
+            fail();
+        }
+
+        function test_should_read_and_write_included_property() {
+            fail();
+        }
+
+        function test_should_get_instance_variable() {
+            fail();
+        }
+
+        function test_should_set_instance_variable() {
+            fail();
+        }
+
+        function test_instance_variable_defined() {
+            fail();
+        }
+
+        function test_should_call_instance_variable_missing() {
+            fail();
+        }
+
+        function test_instance_variable_isset() {
+            fail();
+        }
+
+        function test_instance_variable_unset() {
+            fail();
+        }
+
     }
 }
