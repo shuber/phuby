@@ -1,10 +1,20 @@
 <?php
 
-foreach (array('environment', 'phuby') as $file) require_once 'lib'.DIRECTORY_SEPARATOR.$file.'.php';
+namespace Phuby {
+    const DS = DIRECTORY_SEPARATOR;
+    const NS = '\\';
+    const PS = PATH_SEPARATOR;
+    const VERSION = '0.0.0';
 
-Environment::register_error_handler('Phuby::non_static_method_call_error_handler');
-Environment::register_error_handler('Phuby::undefined_constant_error_handler');
-set_error_handler('Environment::error_handler');
+    // [QUIRK] Cannot use "const FOO = 'BAR'" syntax with string concatenation e.g. "const __NS__ = __NAMESPACE__.NS;"
+    define(__NAMESPACE__.NS.'__NS__', __NAMESPACE__.NS);
+    define(__NS__.'ROOT',             __DIR__.DS.'lib');
 
-Environment::append_include_path(__DIR__.DIRECTORY_SEPARATOR.'lib');
-spl_autoload_register('Phuby::autoload');
+    require ROOT.DS.'phuby'.DS.'environment.php';
+
+    spl_autoload_register(__NS__.'Environment::autoload');
+    Environment::append_include_path(ROOT);
+
+    set_error_handler(__NS__.'Environment::error_handler');
+    Environment::register_error_handler(__NS__.'ErrorHandler::non_static_method_call_error_handler');
+}
