@@ -47,17 +47,17 @@ namespace Phuby {
         }
 
         function test_should_return_correct_filename_for_class() {
-            assert_equal('user', Environment::filename_for_class('User'));
-            assert_equal('namespaced/user', Environment::filename_for_class('Namespaced\User'));
-            assert_equal('namespaced/user', Environment::filename_for_class('\Namespaced\User'));
-            assert_equal('namespaced/user', Environment::filename_for_class('Namespaced::User'));
-            assert_equal('namespaced/user', Environment::filename_for_class('::Namespaced::User'));
-            assert_equal('camel_cased/user', Environment::filename_for_class('CamelCased\User'));
-            assert_equal('under_scored/user', Environment::filename_for_class('under_scored\User'));
+            assert_equal('user',                      Environment::filename_for_class('User'));
+            assert_equal('namespaced/user',           Environment::filename_for_class('Namespaced\User'));
+            assert_equal('namespaced/user',           Environment::filename_for_class('\Namespaced\User'));
+            assert_equal('namespaced/user',           Environment::filename_for_class('Namespaced::User'));
+            assert_equal('namespaced/user',           Environment::filename_for_class('::Namespaced::User'));
+            assert_equal('camel_cased/user',          Environment::filename_for_class('CamelCased\User'));
+            assert_equal('under_scored/user',         Environment::filename_for_class('under_scored\User'));
             assert_equal('capital_under_scored/user', Environment::filename_for_class('Capital_under_scored\User'));
-            assert_equal('user', Environment::filename_for_class('user'));
-            assert_equal('user', Environment::filename_for_class('USER'));
-            assert_equal('user99', Environment::filename_for_class('User99'));
+            assert_equal('user',                      Environment::filename_for_class('user'));
+            assert_equal('user',                      Environment::filename_for_class('USER'));
+            assert_equal('user99',                    Environment::filename_for_class('User99'));
         }
 
         function test_should_return_include_paths() {
