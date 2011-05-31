@@ -41,7 +41,7 @@ namespace Phuby {
             return $this->__send__array(array_shift($arguments), $arguments);
         }
 
-        function __send__array($method, $arguments) {
+        function __send__array($method, $arguments = array()) {
             if (in_array($method, static::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
             throw new \BadMethodCallException($method);
         }
@@ -49,6 +49,10 @@ namespace Phuby {
         function __set($property, $value) {
             return $this->instance_variable_defined($property) ?
                 $this->instance_variable_set($property, $value) : $this->__send__array('instance_variable_missing', array($property.'=', array($value)));
+        }
+
+        function __toString() {
+            return $this->__send__array('to_s');
         }
 
         function __unset($property) {

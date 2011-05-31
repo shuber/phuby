@@ -53,6 +53,11 @@ namespace Phuby {
             assert_equal(true, $user->invalid);
         }
 
+        function test___toString() {
+            $user = $this->user;
+            assert_throws('\BadMethodCallException', function() use ($user) { $user->__toString(); });
+        }
+
         function test___unset() {
             $this->user->name = 'Test';
             ensure(isset($this->user->name));
