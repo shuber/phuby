@@ -11,10 +11,7 @@ namespace Phuby {
         static $keyword_methods = array('class', 'include', 'new');
 
         function __construct($object = null) {
-            if ($object && is_a($object, __CLASS__)) {
-                $this->_eigenclass = &$object->_eigenclass;
-                $this->_instance_variables = &$object->_instance_variables;
-            }
+            if ($object && is_a($object, __CLASS__)) $this->_instance_variables = &$object->_instance_variables;
             $this->bind_instance_variables_to_properties($object);
         }
 
@@ -51,7 +48,7 @@ namespace Phuby {
         }
 
         function __unset($property) {
-            $this->instance_variable_unset($property);
+            unset($this->_instance_variables[$property]);
         }
 
         function cast($class) {
@@ -75,7 +72,7 @@ namespace Phuby {
         }
 
         function instance_variable_unset($variable) {
-            unset($this->_instance_variables[$variable]);
+            unset($this->$variable);
         }
 
         function instance_variables() {
@@ -84,8 +81,11 @@ namespace Phuby {
 
         protected function bind_instance_variables_to_properties($object) {
             foreach (get_object_vars($this) as $property => $value) {
-                if ($object && $this->instance_variable_defined($property)) $this->$property = $this->_instance_variables[$property];
-                $this->_instance_variables[$property] = &$this->$property;
+                if ($object && $this->instance_variable_defined($property)) $this->$property = $this->instance_variable_get($property, true);
+                if ($property != '_instance_variables') {
+                    $this->instance_variable_set($property, $this->$property);
+                    unset($this->$property);
+                }
             }
         }
 

@@ -6,8 +6,8 @@ namespace Phuby {
         protected $_name;
 
         function __construct($name) {
-            parent::__construct();
             $this->_name = $name;
+            parent::__construct();
         }
 
         function name() {
