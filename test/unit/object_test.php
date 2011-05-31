@@ -26,6 +26,10 @@ namespace Phuby {
             assert_throws('\BadMethodCallException', function() use ($user) { $user->invalid; });
         }
 
+        function test___id__() {
+            assert_equal(spl_object_hash($this->user), $this->user->__id__());
+        }
+
         function test___isset() {
             ensure(!isset($this->user->name));
             $this->user->name = 'Test';

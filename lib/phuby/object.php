@@ -29,6 +29,10 @@ namespace Phuby {
                 $this->instance_variable_get($property, true) : $this->__send__array('instance_variable_missing', array($property));
         }
 
+        function __id__() {
+            return spl_object_hash($this);
+        }
+
         function __isset($property) {
             return $this->instance_variable_isset($property);
         }
