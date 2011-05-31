@@ -1,7 +1,7 @@
 <?php
 
 namespace Phuby {
-    abstract class Module extends Object {
+    class Module extends Object {
 
         protected $_included_modules = array();
         protected $_name;
