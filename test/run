@@ -13,7 +13,7 @@ foreach ($support_files as $file) require_once $file;
 $reporter = new ztest\ConsoleReporter;
 $reporter->enable_color();
 
-$suite = new ztest\TestSuite('phuby unit tests');
+$suite = new ztest\TestSuite('Phuby unit tests');
 $suite->require_all(__DIR__.DIRECTORY_SEPARATOR.'unit');
 $suite->auto_fill();
 $suite->run($reporter);

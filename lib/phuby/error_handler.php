@@ -3,6 +3,8 @@
 namespace Phuby {
     abstract class ErrorHandler {
 
+        const NON_STATIC_METHOD_CALL = 2048;
+
         /**
          * Hides the "Non-static method should not be called statically" strict errors since this functionality is required.
          *
@@ -15,7 +17,7 @@ namespace Phuby {
          * @static
         **/
         static function non_static_method_call_error_handler($number, $message, $file, $line, &$context) {
-            if ($number != 2048) return false;
+            if ($number != static::NON_STATIC_METHOD_CALL) return false;
         }
 
     }

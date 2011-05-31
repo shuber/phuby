@@ -59,7 +59,7 @@ namespace Phuby {
             $filename = self::filename_for_class($class);
             foreach (self::autoload_extensions() as $extension) {
                 if ($file = self::resolve_include_path($filename.$extension)) {
-                    include_once $file;
+                    include $file;
                     break;
                 }
             }
