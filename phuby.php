@@ -17,4 +17,5 @@ namespace Phuby {
 
     set_error_handler(__NS__.'Environment::error_handler');
     Environment::register_error_handler(__NS__.'ErrorHandler::non_static_method_call_error_handler');
+    Environment::register_error_handler(__NS__.'ErrorHandler::undefined_constant_error_handler');
 }
