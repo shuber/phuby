@@ -11,7 +11,10 @@ namespace Phuby {
         static $keyword_methods = array('class', 'include', 'new');
 
         function __construct($object = null) {
-            if ($object && is_a($object, __CLASS__)) $this->_instance_variables = &$object->_instance_variables;
+            if ($object && is_a($object, __CLASS__)) {
+                $object->_class_();
+                $this->_instance_variables = &$object->_instance_variables;
+            }
             $this->bind_instance_variables_to_properties($object);
         }
 

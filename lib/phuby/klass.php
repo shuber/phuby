@@ -3,24 +3,18 @@
 namespace Phuby {
     class Klass extends Module {
 
-        protected $_name;
+        protected $_parent;
 
         function __construct($name) {
-            $this->_name = $name;
-            parent::__construct();
+            $this->_parent = get_parent_class($name);
+            parent::__construct($name);
         }
 
-        function name() {
-            return $this->_name;
-        }
-
-        protected function bind_instance_variables_to_properties($object) {
-            $class = $this->_name;
-            foreach (get_class_vars($this) as $property => $value) {
-                if ($object && $this->instance_variable_defined($property)) $class::${$property} = $this->_instance_variables[$property];
-                $this->_instance_variables[$property] = &$class::${$property};
+        function superclass() {
+            if ($this->_parent) {
+                $class = __CLASS__;
+                return $class::instance($this->_parent);
             }
-            parent::bind_instance_variables_to_properties($object);
         }
 
     }
