@@ -21,8 +21,8 @@ namespace Phuby {
         }
 
         static function instance($class) {
-            if (!isset(static::$instances[$class])) static::$instances[$class] = new static($class);
-            return static::$instances[$class];
+            if (!isset(self::$instances[$class])) self::$instances[$class] = new static($class);
+            return self::$instances[$class];
         }
 
     }
