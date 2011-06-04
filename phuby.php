@@ -6,7 +6,8 @@ namespace Phuby {
     const PS = PATH_SEPARATOR;
     const VERSION = '0.0.0';
 
-    // [QUIRK] Cannot use "const FOO = 'BAR'" syntax with string concatenation e.g. "const __NS__ = __NAMESPACE__.NS;"
+    // [QUIRK] Cannot use "const FOO = 'BAR'" syntax with string concatenation
+    //         e.g. "const __NS__ = __NAMESPACE__.NS;"
     define(__NAMESPACE__.NS.'__NS__', __NAMESPACE__.NS);
     define(__NS__.'ROOT',             __DIR__.DS.'lib');
 
