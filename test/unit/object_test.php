@@ -70,6 +70,10 @@ namespace Phuby {
             ensure(!isset($this->user->age));
         }
 
+        function test__class_() {
+            ensure(is_a($this->user->_class_(), __NS__.'Eigenclass'));
+        }
+
         function test_cast() {
             $this->user->name = 'Test';
             $admin = $this->user->cast(__CLASS__.NS.'Admin');
@@ -81,6 +85,8 @@ namespace Phuby {
 
             $this->user->password = 'example';
             assert_equal('example', $admin->password);
+
+            assert_equal($this->user->_class_(), $admin->_class_());
         }
 
         function test_instance_variable_defined() {
