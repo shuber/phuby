@@ -11,10 +11,7 @@ namespace Phuby {
         }
 
         function superclass() {
-            if ($this->_parent) {
-                $class = __CLASS__;
-                return $class::instance($this->_parent);
-            }
+            if ($this->_parent) return self::instance($this->_parent);
         }
 
     }

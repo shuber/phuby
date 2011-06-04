@@ -29,9 +29,8 @@ namespace Phuby {
         }
 
         static function instance($name) {
-            $class = __CLASS__;
-            if (!isset($class::$instances[$name])) $class::$instances[$name] = new static($name);
-            return $class::$instances[$name];
+            if (!isset(self::$instances[$name])) self::$instances[$name] = new static($name);
+            return self::$instances[$name];
         }
 
     }
