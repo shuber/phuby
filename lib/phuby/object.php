@@ -45,7 +45,7 @@ namespace Phuby {
         }
 
         function __send__array($method, $arguments = array()) {
-            if (in_array($method, static::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
+            if (in_array($method, self::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
             throw new \BadMethodCallException($method);
         }
 
