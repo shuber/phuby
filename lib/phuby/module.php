@@ -3,14 +3,22 @@
 namespace Phuby {
     class Module extends Object {
 
+        protected $_ancestors;
         protected $_included_modules = array();
         protected $_name;
 
-        static $instances = array();
+        static protected $_instances = array();
 
         function __construct($name) {
             $this->_name = $name;
             parent::__construct();
+        }
+
+        function ancestors() {
+            if (!isset($this->_ancestors)) {
+                $this->_ancestors = array();
+            }
+            return $this->_ancestors;
         }
 
         function name() {
@@ -29,8 +37,8 @@ namespace Phuby {
         }
 
         static function instance($name) {
-            if (!isset(self::$instances[$name])) self::$instances[$name] = new static($name);
-            return self::$instances[$name];
+            if (!isset(self::$_instances[$name])) self::$_instances[$name] = new static($name);
+            return self::$_instances[$name];
         }
 
     }

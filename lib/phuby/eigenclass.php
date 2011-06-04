@@ -15,7 +15,7 @@ namespace Phuby {
         }
 
         function reference() {
-            return parent::instance($this->_name);
+            return self::instance($this->_name);
         }
 
     }
