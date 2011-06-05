@@ -40,7 +40,7 @@ namespace Phuby {
          * Requires a file with the underscored version of a class name and subdirectories for each namespace.
          *
          * <code>
-         * Environment::autoload('ActiveRecord\Base');  // => include_once 'active_record/base.php';
+         * Environment::autoload('ActiveRecord\Base');  // => include 'active_record/base.php';
          * </code>
          *
          * @param string $class
@@ -89,7 +89,7 @@ namespace Phuby {
          * Returns the underscored version of $class prefixed with its namespaces as directories
          *
          * <code>
-         * Environment::filename_for_class('ActiveRecord\Base');  // => 'active_record/base.php'
+         * Environment::filename_for_class('ActiveRecord\Base');  // => 'active_record/base'
          * </code>
          *
          * @param string $class
