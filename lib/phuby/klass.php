@@ -21,7 +21,8 @@ namespace Phuby {
 
         function ancestors() {
             if (!isset($this->_ancestors)) {
-                $this->_ancestors = array();
+                $this->_ancestors = array($this);
+                if ($superclass = $this->superclass()) $this->_ancestors = array_merge($this->_ancestors, $superclass->ancestors());
             }
             return $this->_ancestors;
         }
