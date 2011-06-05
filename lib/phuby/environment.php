@@ -3,10 +3,6 @@
 namespace Phuby {
     /**
      * Manages include paths, error handlers, and autoloading
-     *
-     * @package phuby
-     * @author Sean Huber <shuber@huberry.com>
-     * @abstract
     **/
     abstract class Environment {
 
@@ -14,8 +10,6 @@ namespace Phuby {
 
         /**
          * Stores registered custom error handlers.
-         *
-         * @static
         **/
         static $error_handlers = array();
 
@@ -25,7 +19,6 @@ namespace Phuby {
          *
          * @param string $extension
          * @return string
-         * @static
         **/
         static function append_autoload_extension($extension) {
             return self::set_autoload_extensions(array_merge(self::autoload_extensions(), array($extension)));
@@ -37,7 +30,6 @@ namespace Phuby {
          *
          * @param string $path
          * @return string
-         * @static
         **/
         static function append_include_path($path) {
             return self::set_include_paths(array_merge(self::include_paths(), array($path)));
@@ -69,7 +61,6 @@ namespace Phuby {
          * Returns an array of autoload extensions defined with spl_autoload_extensions.
          *
          * @return array
-         * @static
         **/
         static function autoload_extensions() {
             return preg_split('#\s*'.self::SPL_AUTOLOAD_EXTENSION_SEPARATOR.'\s*#', spl_autoload_extensions());
@@ -85,8 +76,7 @@ namespace Phuby {
          * @param string $file
          * @param string $line
          * @param string $context
-         * @return void|boolean
-         * @static
+         * @return void | boolean
         **/
         static function error_handler($number, $message, $file, $line, &$context) {
             foreach (self::$error_handlers as $handler) {
@@ -104,7 +94,6 @@ namespace Phuby {
          *
          * @param string $class
          * @return string
-         * @static
         **/
         static function filename_for_class($class) {
             $namespaces = array_filter(preg_split('#\\\\|::#', $class));
@@ -116,7 +105,6 @@ namespace Phuby {
          * Returns an array of the current include paths.
          *
          * @return array
-         * @static
         **/
         static function include_paths() {
             return explode(PS, get_include_path());
@@ -128,7 +116,6 @@ namespace Phuby {
          *
          * @param string $extension
          * @return string
-         * @static
         **/
         static function prepend_autoload_extension($extension) {
             return self::set_autoload_extensions(array_merge(array($extension), self::autoload_extensions()));
@@ -140,7 +127,6 @@ namespace Phuby {
          *
          * @param string $path
          * @return string
-         * @static
         **/
         static function prepend_include_path($path) {
             return self::set_include_paths(array_merge(array($path), self::include_paths()));
@@ -150,10 +136,10 @@ namespace Phuby {
          * Prepends a custom error handler with the Environment class.
          * If your custom error handler returns false, the error is passed to the next error handler registered with Environment.
          *
-         * @param string|array $handler
-         * @return void
-         * @static
          * @link http://us.php.net/set_error_handler#function.set-error-handler.parameters
+         *
+         * @param string | array $handler
+         * @return void
         **/
         static function register_error_handler($handler) {
             array_unshift(self::$error_handlers, $handler);
@@ -165,7 +151,6 @@ namespace Phuby {
          *
          * @param string $extension
          * @return string
-         * @static
         **/
         static function remove_autoload_extension($extension) {
             return self::set_autoload_extensions(array_diff(self::autoload_extensions(), array($extension)));
@@ -177,7 +162,6 @@ namespace Phuby {
          *
          * @param string $path
          * @return string
-         * @static
         **/
         static function remove_include_path($path) {
             return self::set_include_paths(array_diff(self::include_paths(), array($path)));
@@ -188,7 +172,6 @@ namespace Phuby {
          *
          * @param string $filename
          * @return string | false
-         * @static
         **/
         static function resolve_include_path($filename) {
             $resolved_include_path = false;
@@ -211,7 +194,6 @@ namespace Phuby {
          *
          * @param string | array $extensions
          * @return string
-         * @static
         **/
         static function set_autoload_extensions($extensions) {
             if (is_array($extensions)) $extensions = implode(self::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $extensions);
@@ -224,7 +206,6 @@ namespace Phuby {
          *
          * @param string | array $paths
          * @return string
-         * @static
         **/
         static function set_include_paths($paths) {
             if (is_array($paths)) $paths = implode(PS, $paths);
