@@ -3,6 +3,8 @@
 namespace Phuby {
     class ReflectionClass extends \ReflectionClass {
 
+        protected $_parent;
+
         static protected $_instances = array();
 
         function __construct($class) {
@@ -10,11 +12,7 @@ namespace Phuby {
             $this->_parent = get_parent_class($class);
         }
 
-        function ancestors() {
-            return ($superclass = $this->superclass()) ? array_merge(array($superclass), call_user_func(array($superclass, __METHOD__))) : array();
-        }
-
-        function superclass() {
+        function getParentClass() {
             if ($this->_parent) return static::instance($this->_parent);
         }
 
