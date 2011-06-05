@@ -3,13 +3,11 @@
 namespace Phuby {
     class ReflectionClass extends \ReflectionClass {
 
-        protected $_ancestors;
-
-        static $instances = array();
+        static protected $_instances = array();
 
         function __construct($class) {
             parent::__construct($class);
-            $this->_ancestors = array_values(class_parents($class));
+            $this->_parent = get_parent_class($class);
         }
 
         function ancestors() {
@@ -17,12 +15,12 @@ namespace Phuby {
         }
 
         function superclass() {
-            if (!empty($this->_ancestors)) return static::instance($this->_ancestors[0]);
+            if ($this->_parent) return static::instance($this->_parent);
         }
 
         static function instance($class) {
-            if (!isset(self::$instances[$class])) self::$instances[$class] = new static($class);
-            return self::$instances[$class];
+            if (!isset(self::$_instances[$class])) self::$_instances[$class] = new static($class);
+            return self::$_instances[$class];
         }
 
     }
