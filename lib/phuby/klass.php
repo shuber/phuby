@@ -4,6 +4,7 @@ namespace Phuby {
     class Klass extends Object {
 
         protected $_ancestors;
+        protected $_dependants = array();
         protected $_name;
         protected $_parent;
 
@@ -44,6 +45,11 @@ namespace Phuby {
                 }
             }
             parent::bind_instance_variables_to_properties($object);
+        }
+
+        protected function expire_ancestors_cache() {
+            unset($this->_ancestors);
+            foreach ($this->_dependants as $dependant) $dependant->${__METHOD__}();
         }
 
         static function instance($name) {
