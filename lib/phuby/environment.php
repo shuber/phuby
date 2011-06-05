@@ -11,7 +11,7 @@ namespace Phuby {
         /**
          * Stores registered custom error handlers.
         **/
-        static $error_handlers = array();
+        static protected $_error_handlers = array();
 
         /**
          * Appends an extension to the end of spl_autoload_extensions.
@@ -22,6 +22,20 @@ namespace Phuby {
         **/
         static function append_autoload_extension($extension) {
             return self::set_autoload_extensions(array_merge(self::autoload_extensions(), array($extension)));
+        }
+
+        /**
+         * Appends a custom error handler with the Environment class.
+         * If your custom error handler returns false, the error is passed to the next error handler registered with Environment.
+         * Returns the old registered error handlers.
+         *
+         * @link http://us.php.net/set_error_handler#function.set-error-handler.parameters
+         *
+         * @param string | array $handler
+         * @return array
+        **/
+        static function append_error_handler($handler) {
+            return self::set_error_handlers(array_merge(self::$_error_handlers, array($handler)));
         }
 
         /**
@@ -79,10 +93,19 @@ namespace Phuby {
          * @return void | boolean
         **/
         static function error_handler($number, $message, $file, $line, &$context) {
-            foreach (self::$error_handlers as $handler) {
+            foreach (self::$_error_handlers as $handler) {
                 if (call_user_func($handler, $number, $message, $file, $line, $context) !== false) return;
             }
             return false;
+        }
+
+        /**
+         * Returns an array of registered error handlers.
+         *
+         * @return array
+        **/
+        static function error_handlers() {
+            return self::$_error_handlers;
         }
 
         /**
@@ -112,13 +135,27 @@ namespace Phuby {
 
         /**
          * Prepends an extension to the beginning of spl_autoload_extensions.
-         * Returns the new spl_autoload_extensions string.
+         * Returns the old spl_autoload_extensions string.
          *
          * @param string $extension
          * @return string
         **/
         static function prepend_autoload_extension($extension) {
             return self::set_autoload_extensions(array_merge(array($extension), self::autoload_extensions()));
+        }
+
+        /**
+         * Prepends a custom error handler with the Environment class.
+         * If your custom error handler returns false, the error is passed to the next error handler registered with Environment.
+         * Returns the old registered error handlers.
+         *
+         * @link http://us.php.net/set_error_handler#function.set-error-handler.parameters
+         *
+         * @param string | array $handler
+         * @return void
+        **/
+        static function prepend_error_handler($handler) {
+            return self::set_error_handlers(array_merge(array($handler), self::$_error_handlers));
         }
 
         /**
@@ -133,27 +170,25 @@ namespace Phuby {
         }
 
         /**
-         * Prepends a custom error handler with the Environment class.
-         * If your custom error handler returns false, the error is passed to the next error handler registered with Environment.
-         *
-         * @link http://us.php.net/set_error_handler#function.set-error-handler.parameters
-         *
-         * @param string | array $handler
-         * @return void
-        **/
-        static function register_error_handler($handler) {
-            array_unshift(self::$error_handlers, $handler);
-        }
-
-        /**
          * Removes an extension from the spl_autoload_extensions.
-         * Returns the new spl_autoload_extensions string.
+         * Returns the old spl_autoload_extensions string.
          *
          * @param string $extension
          * @return string
         **/
         static function remove_autoload_extension($extension) {
             return self::set_autoload_extensions(array_diff(self::autoload_extensions(), array($extension)));
+        }
+
+        /**
+         * Removes an extension from the spl_autoload_extensions.
+         * Returns the old registered error handlers.
+         *
+         * @param string | array $handler
+         * @return array
+        **/
+        static function remove_error_handler($handler) {
+            return self::set_error_handlers(array_diff(self::error_handlers(), array($handler)));
         }
 
         /**
@@ -180,7 +215,7 @@ namespace Phuby {
             } else {
                 foreach (self::include_paths() as $include_path) {
                     $file = realpath($include_path.DS.$filename);
-                    if (file_exists($file)) {
+                    if ($file && file_exists($file)) {
                         $resolved_include_path = $file;
                         break;
                     }
@@ -190,14 +225,30 @@ namespace Phuby {
         }
 
         /**
-         * Sets spl_autload_extensions to the string or array of extensions specified.
+         * Sets spl_autoload_extensions to the string or array of extensions specified.
+         * Returns the old spl_autoload_extensions.
          *
          * @param string | array $extensions
          * @return string
         **/
         static function set_autoload_extensions($extensions) {
             if (is_array($extensions)) $extensions = implode(self::SPL_AUTOLOAD_EXTENSION_SEPARATOR, $extensions);
-            return spl_autoload_extensions($extensions);
+            $old_spl_autoload_extensions = spl_autoload_extensions();
+            spl_autoload_extensions($extensions);
+            return $old_spl_autoload_extensions;
+        }
+
+        /**
+         * Sets the current registered error handlers to the array of handlers specified.
+         * Returns the old registered error handlers.
+         *
+         * @param array $handlers
+         * @return array
+        **/
+        static function set_error_handlers($handlers) {
+            $old_handlers = self::error_handlers();
+            self::$_error_handlers = $handlers;
+            return $old_handlers;
         }
 
         /**
