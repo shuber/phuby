@@ -19,13 +19,13 @@ namespace Phuby {
             throw new \RuntimeException;
         }
 
-        function passing_error_handler($number, $message, $file, $line, &$context) {
-            $this->passing_error_handler_called = true;
-        }
-
         function failing_error_handler($number, $message, $file, $line, &$context) {
             $this->failing_error_handler_called = true;
             return false;
+        }
+
+        function passing_error_handler($number, $message, $file, $line, &$context) {
+            $this->passing_error_handler_called = true;
         }
 
         function test_should_call_error_handlers() {
@@ -47,17 +47,24 @@ namespace Phuby {
         }
 
         function test_should_return_correct_filename_for_class() {
-            assert_equal('user',                      Environment::filename_for_class('User'));
-            assert_equal('namespaced/user',           Environment::filename_for_class('Namespaced\User'));
-            assert_equal('namespaced/user',           Environment::filename_for_class('\Namespaced\User'));
-            assert_equal('namespaced/user',           Environment::filename_for_class('Namespaced::User'));
-            assert_equal('namespaced/user',           Environment::filename_for_class('::Namespaced::User'));
-            assert_equal('camel_cased/user',          Environment::filename_for_class('CamelCased\User'));
-            assert_equal('under_scored/user',         Environment::filename_for_class('under_scored\User'));
-            assert_equal('capital_under_scored/user', Environment::filename_for_class('Capital_under_scored\User'));
-            assert_equal('user',                      Environment::filename_for_class('user'));
-            assert_equal('user',                      Environment::filename_for_class('USER'));
-            assert_equal('user99',                    Environment::filename_for_class('User99'));
+            $assertions = array(
+                'User'                      => 'user',
+                'user'                      => 'user',
+                'USER'                      => 'user',
+                'User99'                    => 'user99',
+                'Namespaced\User'           => 'namespaced/user',
+                'Namespaced::User'          => 'namespaced/user',
+                '\Namespaced\User'          => 'namespaced/user',
+                '\Namespaced::User'         => 'namespaced/user',
+                '::Namespaced::User'        => 'namespaced/user',
+                '::Namespaced\User'         => 'namespaced/user',
+                'CamelCased\User'           => 'camel_cased/user',
+                'under_scored\User'         => 'under_scored/user',
+                'Capital_under_scored\User' => 'capital_under_scored/user'
+            );
+            foreach ($assertions as $argument => $expected) {
+                assert_equal($expected, Environment::filename_for_class($argument));
+            }
         }
 
         function test_should_return_include_paths() {
