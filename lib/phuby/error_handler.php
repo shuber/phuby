@@ -1,6 +1,9 @@
 <?php
 
 namespace Phuby {
+    /**
+     * Handles Phuby related errors.
+    **/
     abstract class ErrorHandler {
 
         const NON_STATIC_METHOD_CALL = 2048;
@@ -14,8 +17,7 @@ namespace Phuby {
          * @param string $file
          * @param string $line
          * @param array $context
-         * @return void|bool
-         * @static
+         * @return void | bool
         **/
         static function non_static_method_call_error_handler($number, $message, $file, $line, &$context) {
             if ($number != static::NON_STATIC_METHOD_CALL) return false;
@@ -29,8 +31,7 @@ namespace Phuby {
          * @param string $file
          * @param string $line
          * @param array $context
-         * @return void|bool
-         * @static
+         * @return void | bool
         **/
         static function undefined_constant_error_handler($number, $message, $file, $line, &$context) {
             if ($number != static::UNDEFINED_CONSTANT || !preg_match('#constant\s+(\S+)#', $message, $matches) || !class_exists($matches[1])) return false;
