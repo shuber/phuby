@@ -1,6 +1,6 @@
 <?php
 
-namespace Phuby {
+namespace Phuby\Core {
     /**
      * Handles Phuby related errors.
     **/

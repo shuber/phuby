@@ -1,6 +1,6 @@
 <?php
 
-namespace Phuby\EnvironmentTest {
+namespace Phuby\Core\EnvironmentTest {
     abstract class ErrorHandler {
 
         static $failing_error_handler_called = false;
@@ -22,7 +22,7 @@ namespace Phuby\EnvironmentTest {
     }
 }
 
-namespace Phuby {
+namespace Phuby\Core {
     class EnvironmentTest extends \ztest\UnitTestCase {
 
         function setup() {
@@ -149,11 +149,12 @@ namespace Phuby {
         }
 
         function test_resolve_include_path() {
-            $filename = 'object_test.php';
+            $filename = basename(__FILE__);
             ensure(!Environment::resolve_include_path($filename));
 
             Environment::append_include_path(__DIR__);
             assert_equal(__DIR__.DS.$filename, Environment::resolve_include_path($filename));
+            Environment::remove_include_path(__DIR__);
         }
 
         function test_set_autoload_extensions() {

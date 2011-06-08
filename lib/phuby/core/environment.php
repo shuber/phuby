@@ -1,6 +1,6 @@
 <?php
 
-namespace Phuby {
+namespace Phuby\Core {
     /**
      * Manages include paths, error handlers, and autoloading
     **/

@@ -1,10 +1,10 @@
 <?php
 
-namespace Phuby\ErrorHandlerTest {
+namespace Phuby\Core\ErrorHandlerTest {
     class User { }
 }
 
-namespace Phuby {
+namespace Phuby\Core {
     class ErrorHandlerTest extends \ztest\UnitTestCase {
 
         function test_static_non_static_method_call_error_handler() {

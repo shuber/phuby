@@ -1,15 +1,13 @@
 #!/usr/bin/php
 <?php
 
-namespace {
+namespace Phuby {
     error_reporting(E_ALL | E_STRICT);
     ini_set('display_errors', true);
 
     require_once 'ztest/ztest.php';
     require_once __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'phuby.php';
-}
 
-namespace Phuby {
     $support_files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(__DIR__.DS.'support'), \RecursiveIteratorIterator::SELF_FIRST);
     foreach ($support_files as $file) require $file;
 

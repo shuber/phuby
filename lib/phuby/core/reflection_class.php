@@ -1,6 +1,6 @@
 <?php
 
-namespace Phuby {
+namespace Phuby\Core {
     class ReflectionClass extends \ReflectionClass {
 
         protected $_parent;

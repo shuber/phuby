@@ -1,10 +1,10 @@
 <?php
 
-namespace Phuby\ReflectionClassTest {
+namespace Phuby\Core\ReflectionClassTest {
     class User extends \Phuby\Object { }
 }
 
-namespace Phuby {
+namespace Phuby\Core {
     class ReflectionClassTest extends \ztest\UnitTestCase {
 
         function setup() {
