@@ -23,10 +23,7 @@ namespace Phuby {
         }
 
         function ancestors() {
-            if (!isset($this->_ancestors)) {
-                $this->_ancestors = array($this);
-                if ($superclass = $this->superclass()) $this->_ancestors = array_merge($this->_ancestors, $superclass->ancestors());
-            }
+            if (!isset($this->_ancestors)) $this->_ancestors = $this->_ancestors();
             return $this->_ancestors;
         }
 
@@ -40,6 +37,12 @@ namespace Phuby {
 
         function superclass() {
             if ($this->_parent) return self::instance($this->_parent);
+        }
+
+        protected function _ancestors() {
+            $ancestors = array($this);
+            if ($superclass = $this->superclass()) $ancestors = array_merge($ancestors, $superclass->ancestors());
+            return $ancestors;
         }
 
         protected function bind_instance_variables_to_properties($object) {
