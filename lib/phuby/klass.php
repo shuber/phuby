@@ -23,7 +23,7 @@ namespace Phuby {
         }
 
         function ancestors() {
-            if (!isset($this->_ancestors)) $this->_ancestors = $this->_ancestors();
+            if (!isset($this->_ancestors)) $this->_ancestors = $this->build_ancestors_cache();
             return $this->_ancestors;
         }
 
@@ -39,7 +39,7 @@ namespace Phuby {
             if ($this->_parent) return self::instance($this->_parent);
         }
 
-        protected function _ancestors() {
+        protected function build_ancestors_cache() {
             $ancestors = array($this);
             if ($superclass = $this->superclass()) $ancestors = array_merge($ancestors, $superclass->ancestors());
             return $ancestors;
