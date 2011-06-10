@@ -3,6 +3,7 @@
 namespace Phuby\ObjectTest {
     class User extends \Phuby\Object {
         public $name;
+        public $array = array(1, 2, 3);
     }
 
     class Admin extends \Phuby\Object {
@@ -176,6 +177,12 @@ namespace Phuby {
             ensure(!array_key_exists('age', $this->user->instance_variables()));
             $this->user->instance_variable_set('age', 30);
             ensure(array_key_exists('age', $this->user->instance_variables()));
+        }
+
+        function test_protected_bind_instance_variables_to_properties() {
+            $instance_variables = $this->user->instance_variables();
+            assert_identical($this->user->array, $instance_variables['array']);
+            assert_not_in_array('_instance_variables', array_keys($instance_variables));
         }
 
     }
