@@ -5,6 +5,7 @@ namespace Phuby {
 
         protected $_ancestors;
         protected $_dependants = array();
+        protected $_method_table;
         protected $_name;
         protected $_parent;
 
@@ -12,6 +13,7 @@ namespace Phuby {
 
         function __construct($name) {
             if (class_exists($name)) {
+                $this->_method_table = new Core\MethodTable($this);
                 $this->_name = $name;
                 $this->_parent = get_parent_class($name);
                 parent::__construct();
@@ -30,6 +32,10 @@ namespace Phuby {
 
         function name() {
             return $this->_name;
+        }
+
+        function reflection() {
+            return Core\ReflectionClass::instance($this->_name);
         }
 
         function superclass() {

@@ -28,6 +28,10 @@ namespace Phuby {
             assert_equal($this->user_class_name, $this->user_class->name());
         }
 
+        function test_reflection() {
+            assert_equal(Core\ReflectionClass::instance($this->user_class_name), $this->user_class->reflection());
+        }
+
         function test_superclass() {
             $object = $this->user_class->superclass();
             assert_equal(Klass::instance(__NS__.'Object'), $object);
