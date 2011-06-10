@@ -27,6 +27,12 @@ namespace Phuby {
             return $this->_ancestors;
         }
 
+        function clear_ancestors_cache() {
+            $this->_ancestors = null;
+            $this->_method_table->clear_methods_cache();
+            foreach ($this->_dependants as $dependant) call_user_func(array($dependant, __METHOD__));
+        }
+
         function name() {
             return $this->_name;
         }
@@ -54,11 +60,6 @@ namespace Phuby {
                 }
             }
             parent::bind_instance_variables_to_properties($object);
-        }
-
-        protected function clear_ancestors_cache() {
-            unset($this->_ancestors);
-            foreach ($this->_dependants as $dependant) $dependant->${__METHOD__}();
         }
 
         static function instance($name) {

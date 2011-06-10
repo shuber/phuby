@@ -60,7 +60,7 @@ namespace Phuby {
         }
 
         function __unset($property) {
-            unset($this->_instance_variables[$property]);
+            $this->_instance_variables[$property] = null;
         }
 
         function cast($class) {

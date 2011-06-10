@@ -13,6 +13,7 @@ namespace Phuby {
             $this->user_class_name = __CLASS__.NS.'User';
             $this->user_class = new Klass($this->user_class_name);
             $this->user_class_ancestor_names = array(__CLASS__.NS.'User', __NS__.'Object');
+            $this->object_class = $this->user_class->superclass();
         }
 
         function test___construct() {
@@ -22,6 +23,18 @@ namespace Phuby {
         function test_ancestors() {
             $ancestor_names = array_map(function($ancestor) { return $ancestor->name(); }, $this->user_class->ancestors());
             assert_equal($this->user_class_ancestor_names, $ancestor_names);
+        }
+
+        function test_clear_ancestors_cache() {
+            $this->user_class->ancestors();
+            assert_array($this->object_class->_ancestors);
+            assert_array($this->user_class->_ancestors);
+
+            $this->object_class->_dependants = array($this->user_class);
+            $this->object_class->clear_ancestors_cache();
+
+            assert_null($this->object_class->_ancestors);
+            assert_null($this->user_class->_ancestors);
         }
 
         function test_name() {
