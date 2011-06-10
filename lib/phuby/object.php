@@ -1,7 +1,7 @@
 <?php
 
 namespace Phuby {
-    class Object {
+    class Object implements \ArrayAccess {
 
         const KEYWORD_METHOD_FORMAT = '_%s_';
 
@@ -24,12 +24,12 @@ namespace Phuby {
         }
 
         function __call($method, $arguments) {
-            return $this->__send__array($method, $arguments);
+            return $this->__send_array__($method, $arguments);
         }
 
         function __get($property) {
             return $this->instance_variable_defined($property) ?
-                $this->instance_variable_get($property, true) : $this->__send__array('instance_variable_missing', array($property));
+                $this->instance_variable_get($property, true) : $this->__send_array__('instance_variable_missing', array($property));
         }
 
         function __id__() {
@@ -41,21 +41,22 @@ namespace Phuby {
         }
 
         function __send__($method) {
-            return $this->__send__array(array_shift($arguments), $arguments);
+            $arguments = func_get_args();
+            return $this->__send_array__(array_shift($arguments), $arguments);
         }
 
-        function __send__array($method, $arguments = array()) {
+        function __send_array__($method, $arguments = array()) {
             if (in_array($method, self::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
             throw new \BadMethodCallException($method);
         }
 
         function __set($property, $value) {
             return $this->instance_variable_defined($property) ?
-                $this->instance_variable_set($property, $value) : $this->__send__array('instance_variable_missing', array($property.'=', array($value)));
+                $this->instance_variable_set($property, $value) : $this->__send_array__('instance_variable_missing', array($property.'=', array($value)));
         }
 
         function __toString() {
-            return $this->__send__array('to_s');
+            return $this->__send_array__('to_s');
         }
 
         function __unset($property) {
@@ -88,6 +89,22 @@ namespace Phuby {
 
         function instance_variables() {
             return $this->_instance_variables;
+        }
+
+        function offsetExists($offset) {
+            return $this->__send_array__('offset_exists', func_get_args());
+        }
+
+        function offsetGet($offset) {
+            return $this->__send_array__('offset_get', func_get_args());
+        }
+
+        function offsetSet($offset, $value) {
+            return $this->__send_array__('offset_set', func_get_args());
+        }
+
+        function offsetUnset($offset) {
+            return $this->__send_array__('offset_unset', func_get_args());
         }
 
         protected function bind_instance_variables_to_properties($object) {

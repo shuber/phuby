@@ -40,6 +40,18 @@ namespace Phuby {
             ensure(isset($this->user->age));
         }
 
+        function test___send__() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->__send__('__id__'); });
+            assert_throws('BadMethodCallException', function() use ($user) { $user->__send__('invalid'); });
+        }
+
+        function test___send_array__() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->__send_array__('__id__'); });
+            assert_throws('BadMethodCallException', function() use ($user) { $user->__send_array__('invalid'); });
+        }
+
         function test___set() {
             $user = $this->user;
 
@@ -133,6 +145,30 @@ namespace Phuby {
             ensure(isset($this->user->age));
             $this->user->instance_variable_unset('age');
             ensure(!isset($this->user->age));
+        }
+
+        function test_offsetExists() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->offsetExists('test'); });
+            assert_throws('BadMethodCallException', function() use ($user) { isset($user['test']); });
+        }
+
+        function test_offsetGet() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->offsetGet('test'); });
+            assert_throws('BadMethodCallException', function() use ($user) { $user['test']; });
+        }
+
+        function test_offsetSet() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->offsetSet('test', true); });
+            assert_throws('BadMethodCallException', function() use ($user) { $user['test'] = true; });
+        }
+
+        function test_offsetUnset() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->offsetUnset('test'); });
+            assert_throws('BadMethodCallException', function() use ($user) { unset($user['test']); });
         }
 
         function test_instance_variables() {
