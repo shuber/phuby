@@ -43,13 +43,13 @@ namespace Phuby {
 
         function test___send__() {
             $user = $this->user;
-            assert_throws('BadMethodCallException', function() use ($user) { $user->__send__('__id__'); });
+            assert_equal($user->_class_(), $user->__send__('_class_'));
             assert_throws('BadMethodCallException', function() use ($user) { $user->__send__('invalid'); });
         }
 
         function test___send_array__() {
             $user = $this->user;
-            assert_throws('BadMethodCallException', function() use ($user) { $user->__send_array__('__id__'); });
+            assert_equal($user->_class_(), $user->__send_array__('_class_'));
             assert_throws('BadMethodCallException', function() use ($user) { $user->__send_array__('invalid'); });
         }
 

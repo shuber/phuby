@@ -32,6 +32,10 @@ namespace Phuby {
                 $this->instance_variable_get($property, true) : $this->__send_array__('instance_variable_missing', array($property));
         }
 
+        /**
+         * [QUIRK] $this->__id__() does not equal $this->cast('OtherClass')->__id__()
+         *         This might cause unexpected behavior since cast is used when calling methods from included modules
+        **/
         function __id__() {
             return spl_object_hash($this);
         }
@@ -47,7 +51,11 @@ namespace Phuby {
 
         function __send_array__($method, $arguments = array()) {
             if (in_array($method, self::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
-            throw new \BadMethodCallException($method);
+            if ($method_reflection = $this->_class_()->method_table()->lookup($method)) {
+                return $this->__call__($method_reflection, $arguments);
+            } else {
+                throw new \BadMethodCallException($method);
+            }
         }
 
         function __set($property, $value) {
@@ -105,6 +113,11 @@ namespace Phuby {
 
         function offsetUnset($offset) {
             return $this->__send_array__('offset_unset', func_get_args());
+        }
+
+        protected function __call__($method, $arguments) {
+            $object = $this->_class_()->name() == $method->class ? $this : $this->cast($method->class);
+            return $method->invokeArgs($object, $arguments);
         }
 
         protected function bind_instance_variables_to_properties($object) {

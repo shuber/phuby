@@ -33,6 +33,10 @@ namespace Phuby {
             foreach ($this->_dependants as $dependant) call_user_func(array($dependant, __METHOD__));
         }
 
+        function method_table() {
+            return $this->_method_table;
+        }
+
         function name() {
             return $this->_name;
         }

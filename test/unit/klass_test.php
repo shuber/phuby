@@ -37,6 +37,10 @@ namespace Phuby {
             assert_null($this->user_class->_ancestors);
         }
 
+        function test_method_table() {
+            ensure(is_a($this->user_class->method_table(), __CORE__.'MethodTable'));
+        }
+
         function test_name() {
             assert_equal($this->user_class_name, $this->user_class->name());
         }
