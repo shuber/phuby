@@ -10,21 +10,21 @@ namespace Phuby\Core {
             $this->klass = $klass;
         }
 
+        function clear_methods_cache() {
+            unset($this->methods);
+        }
+
         function lookup($method, $caller = null) {
             $methods = $this->methods();
             return isset($methods[$method][$caller]) ? $methods[$method][$caller] : false;
         }
 
         function methods() {
-            if (!isset($this->methods)) $this->methods = $this->_methods();
+            if (!isset($this->methods)) $this->methods = $this->build_methods_cache();
             return $this->methods;
         }
 
-        function refresh() {
-            unset($this->methods);
-        }
-
-        protected function _methods() {
+        protected function build_methods_cache() {
             $methods = array();
             $last_ancestor = null;
             foreach ($this->klass->ancestors() as $ancestor) {

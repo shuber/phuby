@@ -19,6 +19,16 @@ namespace Phuby\Core {
             $this->method_table = new MethodTable($this->user_class);
         }
 
+        function test_clear_methods_cache() {
+            $reflection = new \ReflectionProperty(__CORE__.'MethodTable', 'methods');
+            $reflection->setAccessible(true);
+
+            $this->method_table->methods();
+            assert_array($reflection->getValue($this->method_table));
+            $this->method_table->clear_methods_cache();
+            assert_null($reflection->getValue($this->method_table));
+        }
+
         function test_lookup() {
             assert_equal(false, $this->method_table->lookup('invalid'));
             assert_equal($this->user_methods['test'], $this->method_table->lookup('test'));
@@ -34,16 +44,6 @@ namespace Phuby\Core {
             assert_equal(array(null => $this->user_methods['test']), $methods['test']);
             assert_equal(array(null => $this->object_methods['__send__']), $methods['__send__']);
             assert_equal(array(null => $this->user_methods['__id__'], $this->user_class_name => $this->object_methods['__id__']), $methods['__id__']);
-        }
-
-        function test_refresh() {
-            $reflection = new \ReflectionProperty(__CORE__.'MethodTable', 'methods');
-            $reflection->setAccessible(true);
-
-            $this->method_table->methods();
-            assert_array($reflection->getValue($this->method_table));
-            $this->method_table->refresh();
-            assert_null($reflection->getValue($this->method_table));
         }
 
     }
