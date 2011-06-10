@@ -116,7 +116,7 @@ namespace Phuby {
         }
 
         protected function __call__($method, $arguments) {
-            $object = $this->_class_()->name() == $method->class ? $this : $this->cast($method->class);
+            $object = is_a($this, $method->class) ? $this : $this->cast($method->class);
             return $method->invokeArgs($object, $arguments);
         }
 
