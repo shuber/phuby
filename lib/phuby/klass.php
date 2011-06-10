@@ -56,7 +56,7 @@ namespace Phuby {
             parent::bind_instance_variables_to_properties($object);
         }
 
-        protected function expire_ancestors_cache() {
+        protected function clear_ancestors_cache() {
             unset($this->_ancestors);
             foreach ($this->_dependants as $dependant) $dependant->${__METHOD__}();
         }
