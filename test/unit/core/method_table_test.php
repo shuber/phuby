@@ -37,7 +37,7 @@ namespace Phuby\Core {
         }
 
         function test_refresh() {
-            $reflection = new \ReflectionProperty(__CORE__.'MethodTable', '_methods');
+            $reflection = new \ReflectionProperty(__CORE__.'MethodTable', 'methods');
             $reflection->setAccessible(true);
 
             $this->method_table->methods();

@@ -3,11 +3,11 @@
 namespace Phuby\Core {
     class MethodTable {
 
-        protected $_klass;
-        protected $_methods;
+        protected $klass;
+        protected $methods;
 
         function __construct($klass) {
-            $this->_klass = $klass;
+            $this->klass = $klass;
         }
 
         function lookup($method, $caller = null) {
@@ -16,18 +16,18 @@ namespace Phuby\Core {
         }
 
         function methods() {
-            if (!isset($this->_methods)) $this->_methods = $this->_methods();
-            return $this->_methods;
+            if (!isset($this->methods)) $this->methods = $this->_methods();
+            return $this->methods;
         }
 
         function refresh() {
-            unset($this->_methods);
+            unset($this->methods);
         }
 
         protected function _methods() {
             $methods = array();
             $last_ancestor = null;
-            foreach ($this->_klass->ancestors() as $ancestor) {
+            foreach ($this->klass->ancestors() as $ancestor) {
                 foreach ($ancestor->reflection()->getInstanceMethods() as $name => $method) {
                     if (isset($methods[$name])) {
                         $current_ancestor = $last_ancestor;

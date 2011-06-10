@@ -11,7 +11,7 @@ namespace Phuby\Core {
         /**
          * Stores registered custom error handlers.
         **/
-        static protected $_error_handlers = array();
+        static protected $error_handlers = array();
 
         /**
          * Appends an extension to the end of spl_autoload_extensions.
@@ -35,7 +35,7 @@ namespace Phuby\Core {
          * @return array
         **/
         static function append_error_handler($handler) {
-            return self::set_error_handlers(array_merge(self::$_error_handlers, array($handler)));
+            return self::set_error_handlers(array_merge(self::$error_handlers, array($handler)));
         }
 
         /**
@@ -93,7 +93,7 @@ namespace Phuby\Core {
          * @return void | boolean
         **/
         static function error_handler($number, $message, $file, $line, &$context) {
-            foreach (self::$_error_handlers as $handler) {
+            foreach (self::$error_handlers as $handler) {
                 if (call_user_func($handler, $number, $message, $file, $line, $context) !== false) return;
             }
             return false;
@@ -105,7 +105,7 @@ namespace Phuby\Core {
          * @return array
         **/
         static function error_handlers() {
-            return self::$_error_handlers;
+            return self::$error_handlers;
         }
 
         /**
@@ -155,7 +155,7 @@ namespace Phuby\Core {
          * @return void
         **/
         static function prepend_error_handler($handler) {
-            return self::set_error_handlers(array_merge(array($handler), self::$_error_handlers));
+            return self::set_error_handlers(array_merge(array($handler), self::$error_handlers));
         }
 
         /**
@@ -247,7 +247,7 @@ namespace Phuby\Core {
         **/
         static function set_error_handlers($handlers) {
             $old_handlers = self::error_handlers();
-            self::$_error_handlers = $handlers;
+            self::$error_handlers = $handlers;
             return $old_handlers;
         }
 
