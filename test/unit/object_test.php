@@ -4,10 +4,16 @@ namespace Phuby\ObjectTest {
     class User extends \Phuby\Object {
         public $name;
         public $array = array(1, 2, 3);
+        protected function protected_method() { return true; }
+        private function private_method() { return true; }
     }
 
-    class Admin extends \Phuby\Object {
+    class Admin extends User {
         public $password;
+    }
+
+    class Mixin extends \Phuby\Object {
+        function public_method() { return true; }
     }
 }
 
@@ -15,7 +21,21 @@ namespace Phuby {
     class ObjectTest extends \ztest\UnitTestCase {
 
         function setup() {
+            $this->admin = new ObjectTest\Admin;
             $this->user = new ObjectTest\User;
+        }
+
+        function test_protected___call__() {
+            $user_class =  __CLASS__.NS.'User';
+            $protected_method = new \ReflectionMethod($user_class, 'protected_method');
+            $protected_method->setAccessible(true);
+            $private_method = new \ReflectionMethod($user_class, 'private_method');
+            $private_method->setAccessible(true);
+            $mixin_method = new \ReflectionMethod(__CLASS__.NS.'Mixin', 'public_method');
+
+            ensure($this->admin->__call__($protected_method));
+            ensure($this->admin->__call__($private_method));
+            ensure($this->admin->__call__($mixin_method));
         }
 
         function test___get() {
@@ -89,8 +109,9 @@ namespace Phuby {
 
         function test_cast() {
             $this->user->name = 'Test';
-            $admin = $this->user->cast(__CLASS__.NS.'Admin');
-            ensure(is_a($admin, __CLASS__.NS.'Admin'));
+            $admin_class = __CLASS__.NS.'Admin';
+            $admin = $this->user->cast($admin_class);
+            ensure(is_a($admin, $admin_class));
             assert_equal('Test', $admin->name);
 
             $admin->name = 'Steve';
@@ -100,6 +121,10 @@ namespace Phuby {
             assert_equal('example', $admin->password);
 
             assert_equal($this->user->_class_(), $admin->_class_());
+
+            $user_class = get_class($this->user);
+            assert_identical($this->user, $this->user->cast($user_class));
+            assert_equal($user_class, get_class($this->admin->cast($user_class)));
         }
 
         function test_instance_variable_defined() {

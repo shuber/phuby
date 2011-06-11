@@ -43,6 +43,7 @@ namespace Phuby\Core {
                 );
                 foreach ($this->getMethods() as $method) {
                     if ($method->getDeclaringClass()->name == $this->name) {
+                        $method->setAccessible(true);
                         $type = $method->isStatic() ? self::STATIC_METHOD : self::INSTANCE_METHOD;
                         $this->methods[$type][$method->name] = $method;
                     }

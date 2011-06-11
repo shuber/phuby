@@ -27,6 +27,10 @@ namespace Phuby {
             return $this->__send_array__($method, $arguments);
         }
 
+        function __call__($method, $arguments = array()) {
+            return is_a($this, $method->class) ? $method->invokeArgs($this, $arguments) : $this->cast($method->class)->__call__($method, $arguments);
+        }
+
         function __get($property) {
             return $this->instance_variable_defined($property) ?
                 $this->instance_variable_get($property, true) : $this->__send_array__('instance_variable_missing', array($property));
@@ -72,7 +76,7 @@ namespace Phuby {
         }
 
         function cast($class) {
-            return new $class($this);
+            return get_class($this) == $class ? $this : new $class($this);
         }
 
         function instance_variable_defined($variable) {
@@ -113,11 +117,6 @@ namespace Phuby {
 
         function offsetUnset($offset) {
             return $this->__send_array__('offset_unset', func_get_args());
-        }
-
-        protected function __call__($method, $arguments) {
-            $object = is_a($this, $method->class) ? $this : $this->cast($method->class);
-            return $method->invokeArgs($object, $arguments);
         }
 
         protected function bind_instance_variables_to_properties($object) {
