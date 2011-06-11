@@ -3,7 +3,9 @@
 namespace Phuby {
     class Object implements \ArrayAccess {
 
+        const INSTANCE_VARIABLE_MISSING = 'instance_variable_missing';
         const KEYWORD_METHOD_FORMAT = '_%s_';
+        const METHOD_MISSING = 'method_missing';
 
         protected $_eigenclass;
         protected $_instance_variables = array();
@@ -33,7 +35,7 @@ namespace Phuby {
 
         function __get($property) {
             return $this->instance_variable_defined($property) ?
-                $this->instance_variable_get($property, true) : $this->__send_array__('instance_variable_missing', array($property));
+                $this->instance_variable_get($property, true) : $this->__send_array__(self::INSTANCE_VARIABLE_MISSING, array($property));
         }
 
         /**
@@ -55,16 +57,16 @@ namespace Phuby {
 
         function __send_array__($method, $arguments = array()) {
             if (in_array($method, self::$keyword_methods)) $method = sprintf(KEYWORD_METHOD_FORMAT, $method);
-            if ($method_reflection = $this->_class_()->method_table()->lookup($method)) {
-                return $this->__call__($method_reflection, $arguments);
-            } else {
-                throw new \BadMethodCallException($method);
+            if (!$method_reflection = $this->method($method)) {
+                $method_reflection = $this->method(self::METHOD_MISSING);
+                array_unshift($arguments, $method);
             }
+            return $this->__call__($method_reflection, $arguments);
         }
 
         function __set($property, $value) {
             return $this->instance_variable_defined($property) ?
-                $this->instance_variable_set($property, $value) : $this->__send_array__('instance_variable_missing', array($property.'=', array($value)));
+                $this->instance_variable_set($property, $value) : $this->__send_array__(self::INSTANCE_VARIABLE_MISSING, array($property.'=', array($value)));
         }
 
         function __toString() {
@@ -91,6 +93,11 @@ namespace Phuby {
             return isset($this->_instance_variables[$variable]);
         }
 
+        function instance_variable_missing($variable, $arguments = array()) {
+            array_unshift($arguments, $variable);
+            return $this->__send_array__(self::METHOD_MISSING, $arguments);
+        }
+
         function instance_variable_set($variable, $value) {
             return $this->_instance_variables[$variable] = $value;
         }
@@ -105,6 +112,10 @@ namespace Phuby {
 
         function method($method) {
             return $this->_class_()->method_table()->lookup($method);
+        }
+
+        function method_missing($method, $arguments = array()) {
+            throw new \BadMethodCallException('Undefined method '.$this->_class_()->name().'::'.$method);
         }
 
         function offsetExists($offset) {
@@ -124,7 +135,8 @@ namespace Phuby {
         }
 
         function respond_to($method) {
-            return !!$this->method($method) || ($respond_to_missing = $this->method('respond_to_missing') && $this->__call__($respond_to_missing));
+            return !!$this->method($method) || 
+                (($respond_to_missing = $this->method('respond_to_missing')) && $this->__call__($respond_to_missing, array($method)));
         }
 
         protected function bind_instance_variables_to_properties($object) {

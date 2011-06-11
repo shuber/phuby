@@ -7,6 +7,9 @@ namespace Phuby\ObjectTest {
         function public_method() { return true; }
         protected function protected_method() { return true; }
         private function private_method() { return true; }
+        function respond_to_missing($method) {
+            return $method == 'missing';
+        }
     }
 
     class Admin extends User {
@@ -220,12 +223,19 @@ namespace Phuby {
             ensure(!$this->user->method('invalid'));
         }
 
+        function test_method_missing() {
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->method_missing('__id__'); });
+            assert_throws('BadMethodCallException', function() use ($user) { $user->method_missing('invalid'); });
+        }
+
         function test_respond_to() {
             ensure($this->user->respond_to('__id__'));
             ensure($this->user->respond_to('public_method'));
             ensure($this->user->respond_to('protected_method'));
             ensure($this->user->respond_to('private_method'));
             ensure(!$this->user->respond_to('invalid'));
+            ensure($this->user->respond_to('missing'));
         }
 
         function test_protected_bind_instance_variables_to_properties() {
