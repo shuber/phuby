@@ -17,7 +17,7 @@ namespace Phuby\Core {
         }
 
         function getInstanceMethods() {
-            return $this->getCachedMethods(self::INSTANCE_METHOD);
+            return $this->getCachedAccessibleMethods(self::INSTANCE_METHOD);
         }
 
         function getParentClass() {
@@ -25,15 +25,15 @@ namespace Phuby\Core {
         }
 
         function getStaticMethods() {
-            return $this->getCachedMethods(self::STATIC_METHOD);
+            return $this->getCachedAccessibleMethods(self::STATIC_METHOD);
         }
 
         function lookupMethod($method, $method_type) {
-            $methods = $this->getCachedMethods($method_type);
+            $methods = $this->getCachedAccessibleMethods($method_type);
             return isset($methods[$method]) ? $methods[$method] : false;
         }
 
-        protected function getCachedMethods($method_type = null) {
+        protected function getCachedAccessibleMethods($method_type = null) {
             if (!in_array($method_type, array(null, self::INSTANCE_METHOD, self::STATIC_METHOD))) {
                 throw new \InvalidArgumentException('Invalid method type "'.$method_type.'"');
             } else if (!isset($this->methods)) {

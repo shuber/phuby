@@ -45,8 +45,8 @@ namespace Phuby\Core {
             assert_equal(false, $this->admin_reflection->lookupMethod('static_method', ReflectionClass::STATIC_METHOD));
         }
 
-        function test_protected_getCachedMethods() {
-            $method = new \ReflectionMethod(__CORE__.'ReflectionClass', 'getCachedMethods');
+        function test_protected_getCachedAccessibleMethods() {
+            $method = new \ReflectionMethod(__CORE__.'ReflectionClass', 'getCachedAccessibleMethods');
             $method->setAccessible(true);
             $reflection = $this->user_reflection;
 
