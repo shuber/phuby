@@ -214,6 +214,20 @@ namespace Phuby {
             ensure(array_key_exists('age', $this->user->instance_variables()));
         }
 
+        function test_method() {
+            ensure(is_a($this->user->method('__id__'), 'ReflectionMethod'));
+            ensure(is_a($this->user->method('private_method'), 'ReflectionMethod'));
+            ensure(!$this->user->method('invalid'));
+        }
+
+        function test_respond_to() {
+            ensure($this->user->respond_to('__id__'));
+            ensure($this->user->respond_to('public_method'));
+            ensure($this->user->respond_to('protected_method'));
+            ensure($this->user->respond_to('private_method'));
+            ensure(!$this->user->respond_to('invalid'));
+        }
+
         function test_protected_bind_instance_variables_to_properties() {
             $instance_variables = $this->user->instance_variables();
             assert_identical($this->user->array, $instance_variables['array']);

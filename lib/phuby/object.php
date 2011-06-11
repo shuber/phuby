@@ -103,6 +103,10 @@ namespace Phuby {
             return $this->_instance_variables;
         }
 
+        function method($method) {
+            return $this->_class_()->method_table()->lookup($method);
+        }
+
         function offsetExists($offset) {
             return $this->__send_array__('offset_exists', func_get_args());
         }
@@ -117,6 +121,10 @@ namespace Phuby {
 
         function offsetUnset($offset) {
             return $this->__send_array__('offset_unset', func_get_args());
+        }
+
+        function respond_to($method) {
+            return !!$this->method($method) || ($respond_to_missing = $this->method('respond_to_missing') && $this->__call__($respond_to_missing));
         }
 
         protected function bind_instance_variables_to_properties($object) {
