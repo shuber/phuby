@@ -135,8 +135,11 @@ namespace Phuby {
         }
 
         function respond_to($method) {
-            return !!$this->method($method) || 
-                (($respond_to_missing = $this->method('respond_to_missing')) && $this->__call__($respond_to_missing, array($method)));
+            return !!$this->method($method) || $this->__send_array__('respond_to_missing', func_get_args());
+        }
+
+        function respond_to_missing($method) {
+            return false;
         }
 
         protected function bind_instance_variables_to_properties($object) {
