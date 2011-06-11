@@ -4,6 +4,7 @@ namespace Phuby\ObjectTest {
     class User extends \Phuby\Object {
         public $name;
         public $array = array(1, 2, 3);
+        function public_method() { return true; }
         protected function protected_method() { return true; }
         private function private_method() { return true; }
     }
@@ -23,6 +24,15 @@ namespace Phuby {
         function setup() {
             $this->admin = new ObjectTest\Admin;
             $this->user = new ObjectTest\User;
+        }
+
+        function test___call() {
+            ensure($this->user->__call('public_method'));
+            ensure($this->user->__call('protected_method'));
+            ensure($this->user->__call('private_method'));
+
+            $user = $this->user;
+            assert_throws('BadMethodCallException', function() use ($user) { $user->__call('invalid', array()); });
         }
 
         function test___call__() {

@@ -23,7 +23,7 @@ namespace Phuby {
             return $this->_eigenclass;
         }
 
-        function __call($method, $arguments) {
+        function __call($method, $arguments = array()) {
             return $this->__send_array__($method, $arguments);
         }
 
