@@ -25,7 +25,7 @@ namespace Phuby {
             $this->user = new ObjectTest\User;
         }
 
-        function test_protected___call__() {
+        function test___call__() {
             $user_class =  __CLASS__.NS.'User';
             $protected_method = new \ReflectionMethod($user_class, 'protected_method');
             $protected_method->setAccessible(true);
