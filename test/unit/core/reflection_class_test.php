@@ -54,7 +54,9 @@ namespace Phuby\Core {
             assert_array($methods);
             ensure(array_key_exists(ReflectionClass::INSTANCE_METHOD, $methods));
             ensure(array_key_exists(ReflectionClass::STATIC_METHOD, $methods));
-            ensure(is_a(reset(reset($methods)), 'ReflectionMethod'));
+
+            $first_method = reset($methods[ReflectionClass::INSTANCE_METHOD]);
+            ensure(is_a($first_method, 'ReflectionMethod'));
 
             assert_equal($methods[ReflectionClass::INSTANCE_METHOD], $method->invoke($reflection, ReflectionClass::INSTANCE_METHOD));
             assert_equal($methods[ReflectionClass::STATIC_METHOD], $method->invoke($reflection, ReflectionClass::STATIC_METHOD));

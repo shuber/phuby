@@ -7,6 +7,5 @@ namespace Phuby\Core {
     Environment::append_include_path(ROOT);
 
     set_error_handler(__CORE__.'Environment::error_handler');
-    Environment::append_error_handler(__CORE__.'ErrorHandler::non_static_method_call_error_handler');
     Environment::append_error_handler(__CORE__.'ErrorHandler::undefined_constant_error_handler');
 }

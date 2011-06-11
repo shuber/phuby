@@ -7,12 +7,6 @@ namespace Phuby\Core\ErrorHandlerTest {
 namespace Phuby\Core {
     class ErrorHandlerTest extends \ztest\UnitTestCase {
 
-        function test_static_non_static_method_call_error_handler() {
-            $handler = $this->handler('non_static_method_call_error_handler');
-            assert_equal(false, $handler());
-            assert_equal(null, $handler(ErrorHandler::NON_STATIC_METHOD_CALL));
-        }
-
         function test_static_undefined_constant_error_handler() {
             $handler = $this->handler('undefined_constant_error_handler');
             assert_equal(false, $handler());
