@@ -97,6 +97,11 @@ namespace Phuby {
 
             $user->instance_variable_set('invalid', true);
             assert_equal(true, $user->invalid);
+
+            $user->name = array();
+            $user->name['test'] = 'testing';
+            $name = $user->instance_variable_get('name');
+            assert_equal('testing', $name['test']);
         }
 
         function test___toString() {

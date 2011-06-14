@@ -13,10 +13,7 @@ namespace Phuby {
         static $keyword_methods = array('class', 'include', 'new');
 
         function __construct($object = null) {
-            if ($object && is_a($object, __CLASS__)) {
-                $object->_class_();
-                $this->_instance_variables = &$object->_instance_variables;
-            }
+            if ($object && is_a($object, __CLASS__)) $this->_instance_variables = &$object->_class_()->object()->_instance_variables;
             $this->bind_instance_variables_to_properties($object);
         }
 
@@ -33,9 +30,13 @@ namespace Phuby {
             return is_a($this, $method->class) ? $method->invokeArgs($this, $arguments) : $this->cast($method->class)->__call__($method, $arguments);
         }
 
-        function __get($property) {
-            return $this->instance_variable_defined($property) ?
-                $this->instance_variable_get($property, true) : $this->__send_array__(self::INSTANCE_VARIABLE_MISSING, array($property));
+        function &__get($property) {
+            if ($this->instance_variable_defined($property)) {
+                $value = &$this->instance_variable_get($property, true);
+            } else {
+                $value = $this->__send_array__(self::INSTANCE_VARIABLE_MISSING, array($property));
+            }
+            return $value;
         }
 
         /**
@@ -85,8 +86,13 @@ namespace Phuby {
             return array_key_exists($variable, $this->_instance_variables);
         }
 
-        function instance_variable_get($variable, $defined = false) {
-            if ($defined || $this->instance_variable_defined($variable)) return $this->_instance_variables[$variable];
+        function &instance_variable_get($variable, $defined = false) {
+            if ($defined || $this->instance_variable_defined($variable)) {
+                $value = &$this->_instance_variables[$variable];
+            } else {
+                $value = null;
+            }
+            return $value;
         }
 
         function instance_variable_isset($variable) {

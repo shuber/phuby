@@ -7,15 +7,15 @@ namespace Phuby {
         protected $_dependants = array();
         protected $_method_table;
         protected $_name;
-        protected $_parent;
+        protected $_superclass;
 
         static protected $_instances = array();
 
         function __construct($name) {
             if (class_exists($name)) {
-                $this->_method_table = new Core\MethodTable($this);
                 $this->_name = $name;
-                $this->_parent = get_parent_class($name);
+                $this->_method_table = new Core\MethodTable($this);
+                if ($parent = get_parent_class($name)) $this->_superclass = self::instance($parent);
                 parent::__construct();
             } else {
                 throw new \InvalidArgumentException("Undefined class $name");
@@ -30,7 +30,7 @@ namespace Phuby {
         function clear_ancestors_cache() {
             $this->_ancestors = null;
             $this->_method_table->clear_methods_cache();
-            foreach ($this->_dependants as $dependant) call_user_func(array($dependant, __METHOD__));
+            foreach ($this->_dependants as $dependant) $dependant->clear_ancestors_cache();
         }
 
         function method_table() {
@@ -46,13 +46,11 @@ namespace Phuby {
         }
 
         function superclass() {
-            if ($this->_parent) return self::instance($this->_parent);
+            return $this->_superclass;
         }
 
-        protected function build_ancestors_cache() {
-            $ancestors = array($this);
-            if ($superclass = $this->superclass()) $ancestors = array_merge($ancestors, $superclass->ancestors());
-            return $ancestors;
+        protected function add_dependant($object) {
+            $this->_dependants[] = $object;
         }
 
         protected function bind_instance_variables_to_properties($object) {
@@ -66,8 +64,26 @@ namespace Phuby {
             parent::bind_instance_variables_to_properties($object);
         }
 
+        protected function build_ancestors_cache() {
+            $ancestors = array($this);
+            if ($superclass = $this->superclass()) $ancestors = array_merge($ancestors, $superclass->ancestors());
+            return $ancestors;
+        }
+
+        protected function initialize_instance() {
+            if ($superclass = $this->superclass()) {
+                $superclass->add_dependant($this);
+                if ($superclass->respond_to('inherited')) $superclass->__send_array__('inherited', array($this));
+            }
+            if ($this->respond_to('initialize')) $this->__send_array__('initialize');
+        }
+
         static function instance($name) {
-            if (!isset(self::$_instances[$name])) self::$_instances[$name] = new self($name);
+            if (!isset(self::$_instances[$name])) {
+                $instance = new self($name);
+                self::$_instances[$name] = $instance;
+                $instance->initialize_instance();
+            }
             return self::$_instances[$name];
         }
 

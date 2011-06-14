@@ -24,6 +24,9 @@ namespace Phuby\Core {
             return $this->methods;
         }
 
+         /**
+         * [TODO] Recursively build from superclass
+        **/
         protected function build_methods_cache() {
             $methods = array();
             $last_ancestor = null;

@@ -55,6 +55,10 @@ namespace Phuby {
             ensure(is_null($object->superclass()));
         }
 
+        function test_protected_add_dependant() {
+            fail();
+        }
+
         function test_protected_bind_instance_variables_to_properties() {
             $class = $this->user_class_name;
             $value = $class::$table_name;
@@ -65,6 +69,10 @@ namespace Phuby {
 
             $this->user_class->table_name = $value;
             assert_all_equal($value, $class::$table_name, $this->user_class->table_name);
+        }
+
+        function test_protected_initialize_instance() {
+            fail();
         }
 
         function test_static_instance() {

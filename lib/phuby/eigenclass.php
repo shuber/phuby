@@ -4,10 +4,13 @@ namespace Phuby {
     class Eigenclass extends Klass {
 
         protected $_object;
+        protected $_reference;
 
         function __construct($object) {
-            $this->_object = $object;
             parent::__construct(get_class($object));
+            $this->_object = $object;
+            $this->_reference = self::instance($this->_name);
+            $this->_reference->add_dependant($this);
         }
 
         function object() {
@@ -15,7 +18,7 @@ namespace Phuby {
         }
 
         function reference() {
-            return self::instance($this->_name);
+            return $this->_reference;
         }
 
     }
