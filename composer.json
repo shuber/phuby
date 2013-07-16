@@ -1,0 +1,6 @@
+{
+    "name": "shuber/phuby",
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
+}

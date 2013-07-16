@@ -1,0 +1,15 @@
+<phpunit bootstrap="phuby.php"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  processIsolation="false"
+  stopOnFailure="false"
+  SyntaxCheck="false">
+
+  <testsuites>
+    <testsuite name="Phuby Tests">
+      <directory>test</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

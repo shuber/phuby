@@ -1,72 +1,40 @@
-# phuby (foo-bee)
+# phuby
 
-[rubyisms](http://www.ruby-lang.org/) in php
+### Features
 
+* autoloading with ruby naming conventions e.g. `test_case/phuby/basic_object.php` for `TestCase\Phuby\BasicObject`
+* mixins with support for `extend`, `include`, and `prepend`
+* optional parenthesis for method calls
+* everything inherits from `Phuby\Object` including classes
+* familiar `Object` methods like `initialize`, `method_missing`, `send`, `super` and new ones like `splat`
+* instance variables are private
 
-## Status
+### Todo
 
-Pre-alpha
-
-Code is stable and test backed, however the api may change as features are implemented or refactored
-
-
-## Dependencies
-
-* php 5.3+
-
-
-## Usage preview
-
-	require_once 'phuby/phuby.php';
-
-	namespace Person {
-	    class InstanceMethods {
-	        public $name;
-
-	        function initialize($name) {
-	            $this->name = $name;
-	        }
-
-	        function greet() {
-	            return 'Hello, my name is '.$this->name;
-	        }
-	    }
-
-	    class Surname {
-	        public $surname;
-
-	        function initialize($name, $surname = '') {
-	            $this->super($name);
-	            $this->surname = $surname;
-	        }
-
-	        function greet() {
-	            $greeting = $this->super;
-	            if ($this->surname) $greeting .= ' '.$this->surname;
-	            return $greeting;
-	        }
-	    }
-	}
-
-	namespace {
-	    function c($class) { return Klass::instance($class); }
-
-	    class Person extends Object { }
-	    c(Person)->include('Person\InstanceMethods');
-
-	    $tom = c(Person)->new('Tom');
-	    echo $tom->greet; // Hello, my name is Tom
-
-	    c(Person)->include('Person\Surname');
-
-	    $tom->surname = 'Jones';
-	    echo $tom->greet; // Hello, my name is Tom Jones
-
-	    $jane = c(Person)->new('Jane', 'Smith');
-	    echo $jane->greet; // Hello, my name is Jane Smith
-	}
-
-
-## Testing
-
-Phuby uses [ztest](http://github.com/jaz303/ztest) - simply download it to `phuby/test/ztest` (or anywhere else in your php `include_path`), then run `test/run`
+* append_features
+* method_added
+* method_removed
+* splat super
+* Anonymous classes initialized with blocks
+* Add phpunit tests
+* attr reader, writer, accessor
+* hooks
+  x method_missing
+  - method_added
+  - singleton_method_added
+  - method_removed
+  - singleton_method_removed
+  - method_undefined
+  - singleton_method_undefined
+  x inherited
+  - append_features
+  x included
+  - extend_object
+  x extended
+  - initialize_copy
+  - const_missing
+  - marshal_dump
+  - marshal_load
+  - coerce
+  - induced_from
+  - to_xxx

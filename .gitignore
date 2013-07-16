@@ -1,2 +1,3 @@
-test/sandbox
-test/ztest
+/sandbox.php
+/todo.txt
+/vendor
