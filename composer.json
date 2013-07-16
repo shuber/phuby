@@ -1,5 +1,8 @@
 {
     "name": "shuber/phuby",
+    "autoload": {
+        "files": ["phuby.php"]
+    },
     "require-dev": {
         "phpunit/phpunit": "*"
     }

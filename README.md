@@ -15,7 +15,7 @@
 * splat super
 * Anonymous classes initialized with blocks
 * Add phpunit tests
-* attr reader, writer, accessor
+* refine/using
 * hooks
   x method_missing
   - method_added
