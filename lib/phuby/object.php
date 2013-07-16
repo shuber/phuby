@@ -3,7 +3,7 @@
 namespace Phuby;
 
 class Object extends BasicObject {
-    static function initialized($class) {
-        $class->__include(__NAMESPACE__.'\Kernel');
+    static function initialized($self) {
+        $self->__include(__NAMESPACE__.'\Kernel');
     }
 }

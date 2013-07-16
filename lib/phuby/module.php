@@ -38,7 +38,8 @@ class Module extends Object {
             if ($ancestor->name() == $module)
                 return $this;
 
-        $this->includes[] = $module;
+        $this->append_features($module);
+
         if (method_exists($module, 'included'))
             call_user_func("$module::included", $this);
 
@@ -66,6 +67,10 @@ class Module extends Object {
         return $list;
     }
 
+    function append_features($module) {
+        $this->includes[] = $module;
+    }
+
     function define_method($method_name, $block) {
         $this->methods[$method_name] = new UnboundMethod($this->name, $method_name, $block);
         return $this->methods[$method_name];
@@ -76,11 +81,16 @@ class Module extends Object {
             if ($ancestor->name() == $module)
                 return $this;
 
-        array_unshift($this->prepends, $module);
-        if (method_exists($module, 'included'))
-            call_user_func("$module::included", $this);
+        $this->prepend_features($module);
+
+        if (method_exists($module, 'prepended'))
+            call_user_func("$module::prepended", $this);
 
         return $this;
+    }
+
+    function prepend_features($module) {
+        array_unshift($this->prepends, $module);
     }
 
     function instance_method($method_name, $include_ancestors = true) {

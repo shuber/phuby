@@ -11,9 +11,6 @@
 
 ### Todo
 
-* append_features
-* method_added
-* method_removed
 * splat super
 * Anonymous classes initialized with blocks
 * Add phpunit tests
@@ -26,9 +23,12 @@
   - singleton_method_removed
   - method_undefined
   - singleton_method_undefined
+  x initialized
   x inherited
-  - append_features
+  x append_features
+  x prepend_features
   x included
+  x prepended
   x extend_object
   x extended
   - initialize_copy
