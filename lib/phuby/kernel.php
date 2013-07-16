@@ -64,6 +64,11 @@ class Kernel {
         return $this->__splat__($method_name, $args);
     }
 
+    function tap($block) {
+        $block($this);
+        return $this;
+    }
+
     function to_s() {
         return $this->inspect();
     }
