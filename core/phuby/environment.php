@@ -26,10 +26,9 @@ class Environment {
         return implode(DIRECTORY_SEPARATOR, $parts).'.php';
     }
 
-    static function initialize() {
-        $core = dirname(__DIR__);
-        self::append_include_path($core);
-        self::append_include_path(dirname($core).'/stdlib');
+    static function initialize($root) {
+        self::append_include_path("$root/core");
+        self::append_include_path("$root/lib");
         spl_autoload_register(__CLASS__.'::autoload');
     }
 }
