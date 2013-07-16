@@ -80,23 +80,6 @@ class Module extends Object {
         return $this->methods[$method_name];
     }
 
-    function prepend($module) {
-        foreach ($this->ancestors() as $ancestor)
-            if ($ancestor->name() == $module)
-                return $this;
-
-        $this->prepend_features($module);
-
-        if (method_exists($module, 'prepended'))
-            call_user_func("$module::prepended", $this);
-
-        return $this;
-    }
-
-    function prepend_features($module) {
-        array_unshift($this->prepends, $module);
-    }
-
     function instance_method($method_name, $include_ancestors = true) {
         if ($include_ancestors) {
             foreach ($this->ancestors() as $ancestor)
@@ -126,10 +109,32 @@ class Module extends Object {
         return $this->name;
     }
 
+    function prepend($module) {
+        foreach ($this->ancestors() as $ancestor)
+            if ($ancestor->name() == $module)
+                return $this;
+
+        $this->prepend_features($module);
+
+        if (method_exists($module, 'prepended'))
+            call_user_func("$module::prepended", $this);
+
+        return $this;
+    }
+
+    function prepend_features($module) {
+        array_unshift($this->prepends, $module);
+    }
+
     function reflection() {
         if (!isset($this->reflection));
             $this->reflection = new \ReflectionClass($this->name);
         return $this->reflection;
+    }
+
+    function remove_method($method_name) {
+        unset($this->methods[$method_name]);
+        return $this;
     }
 
     function superclass() {
@@ -138,5 +143,12 @@ class Module extends Object {
 
     function to_s() {
         return $this->name;
+    }
+
+    // TODO: prepended modules will still respond to this method
+    function undef_method($method_name) {
+        $this->define_method($method_name, function() use ($method_name) {
+            throw new \BadMethodCallException("Undefined method $method_name for ".$this->__class()->name());
+        });
     }
 }

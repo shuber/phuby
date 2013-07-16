@@ -49,7 +49,11 @@ class Kernel {
     }
 
     function respond_to($method_name) {
-        return !!$this->method($method_name);
+        return !!$this->method($method_name) || $this->respond_to_missing($method_name);
+    }
+
+    function respond_to_missing($method_name) {
+        return false;
     }
 
     function send($method_name) {
