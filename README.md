@@ -8,6 +8,7 @@
 * everything inherits from `Phuby\Object` including classes
 * familiar `Object` methods like `initialize`, `method_missing`, `send`, `super` and new ones like `splat`
 * instance variables are private
+* attr accessors, readers, writers
 
 ### Todo
 
