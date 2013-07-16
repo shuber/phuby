@@ -29,7 +29,7 @@
   x inherited
   - append_features
   x included
-  - extend_object
+  x extend_object
   x extended
   - initialize_copy
   - const_missing

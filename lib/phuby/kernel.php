@@ -12,8 +12,14 @@ class Kernel {
                 return $this;
 
         $this->singleton_class()->__include($module);
-        if (method_exists($module, 'extended'))
-            call_user_func("$module::extended", $this);
+
+        if (is_a($this, __NAMESPACE__.'\Module')) {
+            if (method_exists($module, 'extended'))
+                call_user_func("$module::extended", $this);
+        } else {
+            if (method_exists($module, 'extend_object'))
+                call_user_func("$module::extend_object", $this);
+        }
 
         return $this;
     }
