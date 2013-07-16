@@ -18,6 +18,7 @@ class BasicObject {
     protected $__class__;
     protected $__id__;
     protected $__singleton_class__;
+    protected $__variables__ = array();
 
     function __construct() {
         $args = func_get_args();
@@ -75,6 +76,19 @@ class BasicObject {
     function instance_exec($args, $block) {
         $args = array_slice(0, -1, func_get_args());
         return $block->bindTo($this, $this)->invokeArgs($args);
+    }
+
+    function instance_variable_get($name) {
+        if (isset($this->__variables__[$name]))
+            return $this->__variables__[$name];
+    }
+
+    function instance_variable_set($name, $value) {
+        return $this->__variables__[$name] = $value;
+    }
+
+    function instance_variables() {
+        return $this->__variables__;
     }
 
     function singleton_class() {
