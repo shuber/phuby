@@ -27,7 +27,9 @@ class Environment {
     }
 
     static function initialize() {
-        self::append_include_path(dirname(__DIR__));
+        $core = dirname(__DIR__);
+        self::append_include_path($core);
+        self::append_include_path(dirname($core).'/stdlib');
         spl_autoload_register(__CLASS__.'::autoload');
     }
 }

@@ -2,5 +2,5 @@
 
 namespace Phuby;
 
-require_once 'lib/phuby/environment.php';
+require_once 'core/phuby/environment.php';
 Environment::initialize();
