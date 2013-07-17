@@ -3,22 +3,10 @@
 namespace Phuby;
 
 trait Core {
-    private static $constants = [];
-
-    static function __callStatic($method_name, $args) {
-        return self::const_get(get_called_class())->splat($method_name, $args);
-    }
-
-    static function const_get($name) {
-        if (!isset(self::$constants[$name]))
-            self::$constants[$name] = new Module($name);
-        return self::$constants[$name];
-    }
-
     protected $__class__;
     protected $__id__;
     protected $__singleton_class__;
-    protected $__variables__ = array();
+    protected $__variables__ = [];
 
     function __construct() {
         $args = func_get_args();
@@ -32,7 +20,7 @@ trait Core {
 
     function __class() {
         if (!isset($this->__class__))
-            $this->__class__ = self::const_get(get_class($this));
+            $this->__class__ = BasicObject::const_get(get_class($this));
         return $this->__class__;
     }
 
