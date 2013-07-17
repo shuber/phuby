@@ -6,6 +6,7 @@
 * catch errors and raise them as exceptions
 * Ruby conventions for method visibility
 * <strike>all classes inherit `Object`</strike>
+* <strike>classes may `use Phuby` instead of inheriting `Phuby\Object`</strike>
 * <strike>autoloading with ruby naming conventions</strike>
 * <strike>optional parenthesis for method calls</strike>
 * <strike>`__callStatic` delegates to `Module` instances</strike>

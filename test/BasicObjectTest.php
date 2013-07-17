@@ -2,7 +2,7 @@
 
 class BasicObjectTest extends PHPUnit_Framework_TestCase {
     /**
-     * @expectedException BadMethodCallException
+     * @expectedException Phuby\NoMethodError
      */
     function testSendWithInvalidMethodName() {
         $object = new Phuby\Object;
