@@ -137,6 +137,7 @@ TODO
 * <strike>`prepend`</strike>
 * <strike>`prepend_features`</strike>
 * <strike>`prepended`</strike>
+* <strike>`superclass`</strike>
 * <strike>`to_s`</strike>
 
 ## stdlib
