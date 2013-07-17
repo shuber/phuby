@@ -12,8 +12,12 @@ class BasicObject {
     }
 
     static function const_get($name) {
-        if (!isset(self::$constants[$name]))
-            self::$constants[$name] = new Module($name);
-        return self::$constants[$name];
+        if (isset(self::$constants[$name])) {
+            return self::$constants[$name];
+        } else if (class_exists($name)) {
+            return self::$constants[$name] = new Module($name);
+        } else {
+            throw new NameError("uninitialized constant $name");
+        }
     }
 }

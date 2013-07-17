@@ -38,6 +38,15 @@ TODO
 * <strike>`prepended`</strike>
 * <strike>`prepend_features`</strike>
 
+## errors
+
+* <strike>`ArgumentError`</strike>
+* <strike>`Exception`</strike>
+* <strike>`NameError`</strike>
+* <strike>`NoMethodError`</strike>
+* <strike>`RuntimeError`</strike>
+* <strike>`StandardError`</strike>
+
 ## core
 
 #### BasicObject
