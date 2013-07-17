@@ -10,6 +10,31 @@
 * <strike>optional parenthesis for method calls</strike>
 * <strike>`__callStatic` delegates to `Module` instances</strike>
 
+## hooks
+
+* `coerce`
+* `const_missing`
+* `induced_from`
+* `initialize_copy`
+* `marshal_dump`
+* `marshal_load`
+* `method_added`
+* `method_removed`
+* `method_undefined`
+* `singleton_method_added`
+* `singleton_method_removed`
+* `singleton_method_undefined`
+* `to_xxx`
+* <strike>`append_features`</strike>
+* <strike>`extend_object`</strike>
+* <strike>`extended`</strike>
+* <strike>`included`</strike>
+* <strike>`inherited`</strike>
+* <strike>`initialized`</strike>
+* <strike>`method_missing`</strike>
+* <strike>`prepended`</strike>
+* <strike>`prepend_features`</strike>
+
 ## core
 
 #### BasicObject
@@ -102,34 +127,9 @@
 * <strike>`prepended`</strike>
 * <strike>`to_s`</strike>
 
-#### Hooks
-
-* `coerce`
-* `const_missing`
-* `induced_from`
-* `initialize_copy`
-* `marshal_dump`
-* `marshal_load`
-* `method_added`
-* `method_removed`
-* `method_undefined`
-* `singleton_method_added`
-* `singleton_method_removed`
-* `singleton_method_undefined`
-* `to_xxx`
-* <strike>`append_features`</strike>
-* <strike>`extend_object`</strike>
-* <strike>`extended`</strike>
-* <strike>`included`</strike>
-* <strike>`inherited`</strike>
-* <strike>`initialized`</strike>
-* <strike>`method_missing`</strike>
-* <strike>`prepended`</strike>
-* <strike>`prepend_features`</strike>
-
 ## stdlib
 
 #### Base64
 
-* * <strike>`decode64`</strike>
-* * <strike>`encode64`</strike>
+* <strike>`decode64`</strike>
+* <strike>`encode64`</strike>
