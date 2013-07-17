@@ -116,6 +116,6 @@ class BasicObject {
     }
 
     private function method_missing($method_name, $args) {
-        throw new \BadMethodCallException("Undefined method $method_name for ".$this->__class()->name());
+        throw new NoMethodError("undefined method '$method_name' for ".$this->__class()->name());
     }
 }
