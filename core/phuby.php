@@ -4,6 +4,9 @@ trait Phuby {
     use Phuby\Core;
 
     static function initialized($self) {
-        $self->include(__TRAIT__.'\Kernel');
+        while ($superclass = $self->superclass())
+            $self = $superclass;
+
+        $self->__include(__TRAIT__.'\Object');
     }
 }
