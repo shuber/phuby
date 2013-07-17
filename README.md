@@ -77,6 +77,7 @@
 * `using`
 * <strike>`alias_method`</strike>
 * <strike>`alias_method_chain`</strike>
+* <strike>`allocate`</strike>
 * <strike>`ancestors`</strike>
 * <strike>`append_features`</strike>
 * <strike>`attr_accessor`</strike>
@@ -95,6 +96,7 @@
 * <strike>`instance_method`</strike>
 * <strike>`instance_methods`</strike>
 * <strike>`name`</strike>
+* <strike>`new`</strike>
 * <strike>`prepend`</strike>
 * <strike>`prepend_features`</strike>
 * <strike>`prepended`</strike>
