@@ -15,7 +15,9 @@ class BasicObject {
         if (isset(self::$constants[$name])) {
             return self::$constants[$name];
         } else if (class_exists($name)) {
-            return self::$constants[$name] = new Module($name);
+            self::$constants[$name] = new Module;
+            self::$constants[$name]->initialize($name);
+            return self::$constants[$name];
         } else {
             throw new NameError("uninitialized constant $name");
         }
