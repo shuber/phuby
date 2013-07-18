@@ -94,8 +94,6 @@ TODO
 #### Module
 
 * anonymous classes
-* `class_eval`
-* `class_exec`
 * `const_get`
 * `const_missing`
 * `const_set`
@@ -104,8 +102,6 @@ TODO
 * `method_added`
 * `method_removed`
 * `method_undefined`
-* `module_eval`
-* `module_exec`
 * `module_function`
 * `refine`
 * `remove_method`
@@ -119,6 +115,8 @@ TODO
 * <strike>`attr_accessor`</strike>
 * <strike>`attr_reader`</strike>
 * <strike>`attr_writer`</strike>
+* <strike>`class_eval`</strike>
+* <strike>`class_exec`</strike>
 * <strike>`const_get`</strike>
 * <strike>`define_method`</strike>
 * <strike>`extend`</strike>
@@ -132,6 +130,8 @@ TODO
 * <strike>`instance_method`</strike>
 * <strike>`instance_methods`</strike>
 * <strike>`method_defined`</strike>
+* <strike>`module_eval`</strike>
+* <strike>`module_exec`</strike>
 * <strike>`name`</strike>
 * <strike>`new`</strike>
 * <strike>`prepend`</strike>
