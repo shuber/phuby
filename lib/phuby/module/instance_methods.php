@@ -8,6 +8,10 @@ class InstanceMethods {
         $self->alias_method('class_exec', 'module_exec');
     }
 
+    function method_defined($method_name) {
+        return !!$this->instance_method($method_name);
+    }
+
     function module_eval($block) {
         return $block->bindTo($this, $this)->invoke();
     }
@@ -15,9 +19,5 @@ class InstanceMethods {
     function module_exec($args, $block) {
         $args = array_slice(0, -1, func_get_args());
         return $block->bindTo($this, $this)->invokeArgs($args);
-    }
-
-    function method_defined($method_name) {
-        return !!$this->instance_method($method_name);
     }
 }
