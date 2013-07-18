@@ -3,6 +3,10 @@
 namespace Phuby;
 
 trait Core {
+    static function __callStatic($method_name, $args) {
+        return BasicObject::const_get(get_called_class())->splat($method_name, $args);
+    }
+
     protected $__class__;
     protected $__id__;
     protected $__singleton_class__;
