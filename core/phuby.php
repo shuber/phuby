@@ -1,5 +1,10 @@
 <?php
 
+function Phuby($object) {
+    if (is_string($object) && class_exists($object))
+        return Phuby\BasicObject::const_get($object);
+}
+
 trait Phuby {
     use Phuby\Core;
 
