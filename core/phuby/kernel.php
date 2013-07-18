@@ -4,9 +4,6 @@ namespace Phuby;
 
 class Kernel {
     function extend($module) {
-        if ($module == 'self')
-            $module = $this->name();
-
         foreach ($this->singleton_class()->ancestors() as $ancestor)
             if ($ancestor->name() == $module)
                 return $this;
