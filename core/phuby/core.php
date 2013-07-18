@@ -58,12 +58,14 @@ trait Core {
     }
 
     function instance_eval($block) {
-        return $block->bindTo($this, $this)->invoke();
+        $singleton = $this->singleton_class();
+        return $block->bindTo($singleton, $singleton)->invoke();
     }
 
     function instance_exec($args, $block) {
         $args = array_slice(0, -1, func_get_args());
-        return $block->bindTo($this, $this)->invokeArgs($args);
+        $singleton = $this->singleton_class();
+        return $block->bindTo($singleton, $singleton)->invokeArgs($args);
     }
 
     function instance_variable_get($name) {
