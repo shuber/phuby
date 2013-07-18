@@ -102,7 +102,6 @@ TODO
 * `constants`
 * `freeze`
 * `method_added`
-* `method_defined`
 * `method_removed`
 * `method_undefined`
 * `module_eval`
@@ -132,6 +131,7 @@ TODO
 * <strike>`inspect`</strike>
 * <strike>`instance_method`</strike>
 * <strike>`instance_methods`</strike>
+* <strike>`method_defined`</strike>
 * <strike>`name`</strike>
 * <strike>`new`</strike>
 * <strike>`prepend`</strike>
