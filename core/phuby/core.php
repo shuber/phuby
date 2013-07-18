@@ -4,7 +4,7 @@ namespace Phuby;
 
 trait Core {
     static function __callStatic($method_name, $args) {
-        return BasicObject::const_get(get_called_class())->splat($method_name, $args);
+        return Module::const_get(get_called_class())->splat($method_name, $args);
     }
 
     protected $__class__;
@@ -24,7 +24,7 @@ trait Core {
 
     function __class() {
         if (!isset($this->__class__))
-            $this->__class__ = BasicObject::const_get(get_class($this));
+            $this->__class__ = Module::const_get(get_class($this));
         return $this->__class__;
     }
 

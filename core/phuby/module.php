@@ -3,12 +3,25 @@
 namespace Phuby;
 
 class Module extends Object {
+    private static $constants = [];
     private static $keywords = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor'];
 
     static function initialized($self) {
         $self->__include(__CLASS__.'\Accessor');
         $self->__include(__CLASS__.'\Alias');
         $self->__include(__CLASS__.'\InstanceMethods');
+    }
+
+    static function const_get($name) {
+        if (isset(self::$constants[$name])) {
+            return self::$constants[$name];
+        } else if (class_exists($name)) {
+            self::$constants[$name] = new self;
+            self::$constants[$name]->initialize($name);
+            return self::$constants[$name];
+        } else {
+            throw new NameError("uninitialized constant $name");
+        }
     }
 
     protected $name;
@@ -29,7 +42,7 @@ class Module extends Object {
         if (!$superclass) $superclass = get_parent_class($this->name);
         if ($superclass) {
             array_unshift($this->includes, $superclass);
-            $this->superclass = BasicObject::const_get($superclass);
+            $this->superclass = self::const_get($superclass);
         }
 
         if (method_exists($this->name, 'initialized'))
@@ -65,11 +78,11 @@ class Module extends Object {
 
     function ancestors(&$list = []) {
         foreach ($this->includes as $ancestor)
-            BasicObject::const_get($ancestor)->ancestors($list);
+            self::const_get($ancestor)->ancestors($list);
         if (!in_array($this, $list))
             array_unshift($list, $this);
         foreach ($this->prepends as $ancestor)
-            BasicObject::const_get($ancestor)->ancestors($list);
+            self::const_get($ancestor)->ancestors($list);
         return $list;
     }
 
@@ -97,9 +110,9 @@ class Module extends Object {
     function instance_methods($include_ancestors = true, $list = []) {
         if ($include_ancestors) {
             foreach ($includes as $module)
-                BasicObject::const_get($module)->instance_methods(true, $list);
+                self::const_get($module)->instance_methods(true, $list);
             foreach ($prepends as $module)
-                BasicObject::const_get($module)->instance_methods(true, $list);
+                self::const_get($module)->instance_methods(true, $list);
         }
         foreach (array_keys($this->methods) as $method_name)
             if (!in_array($method_name, $list))

@@ -2,7 +2,7 @@
 
 function Phuby($object) {
     if (is_string($object) && class_exists($object))
-        return Phuby\BasicObject::const_get($object);
+        return Phuby\Module::const_get($object);
 }
 
 trait Phuby {

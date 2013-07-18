@@ -26,7 +26,7 @@ class UnboundMethod extends Object {
     }
 
     function owner() {
-        return BasicObject::const_get($this->owner);
+        return Module::const_get($this->owner);
     }
 
     function to_proc() {
