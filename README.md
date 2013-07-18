@@ -1,5 +1,42 @@
 # phuby
 
+## usage
+
+You can integrate `Phuby` with your code in 3 ways:
+
+### 1) class inheritance
+
+    class Blog extends Phuby\Object { }
+
+### 2) traits
+
+This is useful when your class needs to inherit from an existing library and
+can't extend `Phuby\Object`.
+
+    class Blog extends ActiveRecord\Base {
+        use Phuby;
+    }
+
+### 3) TODO: the `Phuby` function
+
+* `string` becomes `Phuby\String`
+* `string` becomes `Phuby\Module` if it is a class name
+* `array` becomes `Phuby\Hash`
+* `array` becomes `Phuby\Array` if it has all numeric keys
+* `number` becomes some type of `Phuby\Numeric` (float or int)
+* `object` becomes a `Phuby\Proxy` which allows us to integrate `Phuby` into specific object instances
+
+For example:
+
+    echo Phuby('this is a sentence.')->upcase;
+
+    Phuby([1,2,3])->each(function($number) {
+      echo $number;
+    });
+
+    echo Phuby(7)->days->from_now;
+
+
 TODO
 
 ## general
@@ -94,7 +131,6 @@ TODO
 #### Module
 
 * anonymous classes
-* `const_get`
 * `const_missing`
 * `const_set`
 * `constants`
