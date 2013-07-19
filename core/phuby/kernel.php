@@ -4,21 +4,7 @@ namespace Phuby;
 
 class Kernel {
     function extend($module) {
-        foreach ($this->singleton_class()->ancestors() as $ancestor)
-            if ($ancestor->name() == $module)
-                return $this;
-
-        $this->singleton_class()->__include($module);
-
-        if (is_a($this, __NAMESPACE__.'\Module')) {
-            if (method_exists($module, 'extended'))
-                call_user_func("$module::extended", $this);
-        } else {
-            if (method_exists($module, 'extend_object'))
-                call_user_func("$module::extend_object", $this);
-        }
-
-        return $this;
+        return $this->__extend__($module);
     }
 
     function inspect() {

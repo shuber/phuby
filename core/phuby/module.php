@@ -52,6 +52,12 @@ class Module extends Object {
             call_user_func("$superclass::inherited", $this);
     }
 
+    function __extend__($module) {
+        if ($module == 'self')
+            $module = $this->name();
+        return parent::__extend__($module);
+    }
+
     function __include($module) {
         foreach ($this->ancestors() as $ancestor)
             if ($ancestor->name() == $module)

@@ -8,12 +8,6 @@ class InstanceMethods {
         $self->alias_method('class_exec', 'module_exec');
     }
 
-    function extend($module) {
-        if ($module == 'self')
-            $module = $this->name();
-        return $this->super($module);
-    }
-
     function method_defined($method_name) {
         return !!$this->instance_method($method_name);
     }
