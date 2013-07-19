@@ -56,14 +56,6 @@ trait Core {
         return $this->__id__;
     }
 
-    function __set($method_name, $args) {
-        return $this->__send__("$method_name=", $args);
-    }
-
-    function __toString() {
-        return $this->__send__('to_s');
-    }
-
     function __send__($method_name) {
         $args = array_slice(func_get_args(), 1);
         if ($method = $this->singleton_class()->instance_method($method_name)) {
@@ -74,9 +66,17 @@ trait Core {
         }
     }
 
+    function __set($method_name, $args) {
+        return $this->__send__("$method_name=", $args);
+    }
+
     function __splat__($method_name, $args) {
         array_unshift($args, $method_name);
         return call_user_func_array([$this, '__send__'], $args);
+    }
+
+    function __toString() {
+        return $this->__send__('to_s');
     }
 
     function instance_eval($block) {
