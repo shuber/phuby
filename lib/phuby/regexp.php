@@ -34,7 +34,7 @@ namespace Phuby\Regexp {
         function match($string) {
             $string = (string) $string;
             if (preg_match($this->regexp, $string, $matches))
-                return Phuby('Phuby\MatchData')->new($this, $matches);
+                return Phuby('Phuby\MatchData')->new($this, $string, $matches);
         }
     }
 }
