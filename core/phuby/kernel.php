@@ -3,6 +3,12 @@
 namespace Phuby;
 
 class Kernel {
+    static function initialized($self) {
+        $self->alias_method('[]', 'array_access_offset_get');
+        $self->alias_method('[]=', 'array_access_offset_set');
+    }
+    
+
     function extend($module) {
         return $this->__extend__($module);
     }
