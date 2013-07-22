@@ -17,16 +17,9 @@ can't extend `Phuby\Object`.
         use Phuby;
     }
 
-### 3) TODO: the `Phuby` function
+### 3) the `Phuby` function
 
-* `string` becomes `Phuby\String`
-* `string` becomes `Phuby\Module` if it is a class name
-* `array` becomes `Phuby\Hash`
-* `array` becomes `Phuby\Array` if it has all numeric keys
-* `number` becomes some type of `Phuby\Numeric` (float or int)
-* `object` becomes a `Phuby\Proxy` which allows us to integrate `Phuby` into specific object instances
-
-For example:
+This allows you to inject `Phuby` features into *any* object.
 
     echo Phuby('this is a sentence.')->upcase;
 
@@ -36,11 +29,17 @@ For example:
 
     echo Phuby(7)->days->from_now;
 
+* `string` becomes `Phuby\String`
+* `string` becomes `Phuby\Module` if it is a class name
+* `array` becomes `Phuby\Hash`
+* `array` becomes `Phuby\Array` if it has all numeric keys
+* `number` becomes some type of `Phuby\Numeric` (float or int)
+* `object` becomes a `Phuby\Proxy` which allows us to integrate `Phuby` into specific object instances
 
-TODO
 
-## general
+## todo
 
+### general
 * phpunit tests
 * catch errors and raise them as exceptions
 * Ruby conventions for method visibility
@@ -50,8 +49,15 @@ TODO
 * <strike>optional parenthesis for method calls</strike>
 * <strike>`__callStatic` delegates to `Module` instances</strike>
 
-## hooks
+### errors
+* <strike>`ArgumentError`</strike>
+* <strike>`Exception`</strike>
+* <strike>`NameError`</strike>
+* <strike>`NoMethodError`</strike>
+* <strike>`RuntimeError`</strike>
+* <strike>`StandardError`</strike>
 
+### hooks
 * `coerce`
 * `const_missing`
 * `induced_from`
@@ -75,19 +81,14 @@ TODO
 * <strike>`prepended`</strike>
 * <strike>`prepend_features`</strike>
 
-## errors
+### lib
 
-* <strike>`ArgumentError`</strike>
-* <strike>`Exception`</strike>
-* <strike>`NameError`</strike>
-* <strike>`NoMethodError`</strike>
-* <strike>`RuntimeError`</strike>
-* <strike>`StandardError`</strike>
-
-## core
+#### Array
+#### Base64
+* <strike>`decode64`</strike>
+* <strike>`encode64`</strike>
 
 #### BasicObject
-
 * `__splat__('__super__', $args)`
 * `__super__`
 * `equal`
@@ -107,10 +108,23 @@ TODO
 * <strike>`method_missing`</strike>
 * <strike>`singleton_class`</strike>
 
+#### Comparable
+#### Date
+#### Dir
+#### Encoding
+#### Enumerable
+#### Enumerator
+#### File
+#### Fixnum
+#### Float
+#### Hash
+#### IO
+#### Integer
 #### Kernel
-
 * `caller`
 * `super`
+* <strike>`[]`</strike>
+* <strike>`[]=`</strike>
 * <strike>`extend`</strike>
 * <strike>`inspect`</strike>
 * <strike>`is_a`</strike>
@@ -124,12 +138,34 @@ TODO
 * <strike>`tap`</strike>
 * <strike>`to_s`</strike>
 
-#### Object
+#### Marshal
+* <strike>`dump`</strike>
+* <strike>`load`</strike>
+* <strike>`restore`</strike>
 
-* <strike>`include Kernel`</strike>
+#### MatchData
+* ==
+* []
+* begin
+* end
+* eql?
+* hash
+* inspect
+* length
+* names
+* offset
+* post_match
+* pre_match
+* size
+* to_a
+* to_s
+* values_at
+* <strike>captures</strike>
+* <strike>regexp</strike>
+* <strike>string</strike>
 
+#### Math
 #### Module
-
 * anonymous classes
 * `const_missing`
 * `const_set`
@@ -176,9 +212,17 @@ TODO
 * <strike>`superclass`</strike>
 * <strike>`to_s`</strike>
 
-## stdlib
+#### Numeric
+#### Object
+* <strike>`include Kernel`</strike>
 
-#### Base64
-
-* <strike>`decode64`</strike>
-* <strike>`encode64`</strike>
+#### ObjectSpace
+#### Proc
+#### Random
+#### Range
+#### Regexp
+#### RegexpError
+#### StopIteration
+#### String
+#### Struct
+#### Time
