@@ -1,12 +1,7 @@
 <?php
 
 namespace Phuby {
-    class Regexp extends Object {
-        static function initialized($self) {
-            $self->extend(__CLASS__.'\ClassMethods');
-            $self->include(__CLASS__.'\InstanceMethods');
-        }
-    }
+    class Regexp extends Object { }
 }
 
 namespace Phuby\Regexp {

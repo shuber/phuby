@@ -9,7 +9,6 @@ class Module extends Object {
     static function initialized($self) {
         $self->__include(__CLASS__.'\Accessor');
         $self->__include(__CLASS__.'\Alias');
-        $self->__include(__CLASS__.'\InstanceMethods');
     }
 
     static function const_get($name) {
@@ -47,6 +46,12 @@ class Module extends Object {
 
         if (method_exists($this->name, 'initialized'))
             call_user_func("$this->name::initialized", $this);
+
+        if (class_exists("$this->name\ClassMethods"))
+            $this->__extend__("$this->name\ClassMethods");
+
+        if (class_exists("$this->name\InstanceMethods"))
+            $this->__include("$this->name\InstanceMethods");
 
         if ($superclass && method_exists($superclass, 'inherited'))
             call_user_func("$superclass::inherited", $this);
