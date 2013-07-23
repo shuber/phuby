@@ -6,11 +6,12 @@ class Kernel {
     static function initialized($self) {
         $self->alias_method('[]', 'array_access_offset_get');
         $self->alias_method('[]=', 'array_access_offset_set');
-    }
-    
-
-    function extend($module) {
-        return $this->__extend__($module);
+        $self->alias_method('caller', '__caller__');
+        $self->alias_method('extend', '__extend__');
+        $self->alias_method('object_id', '__id__');
+        $self->alias_method('send', '__send__');
+        $self->alias_method('splat', '__splat__');
+        $self->alias_method('to_s', 'inspect');
     }
 
     function inspect() {
@@ -34,10 +35,6 @@ class Kernel {
         return $this->singleton_class()->instance_methods();
     }
 
-    function object_id() {
-        return $this->__id__();
-    }
-
     function respond_to($method_name) {
         return !!$this->method($method_name) || $this->respond_to_missing($method_name);
     }
@@ -46,20 +43,8 @@ class Kernel {
         return false;
     }
 
-    function send($method_name) {
-        return call_user_func_array([$this, '__send__'], func_get_args());
-    }
-
-    function splat($method_name, $args) {
-        return $this->__splat__($method_name, $args);
-    }
-
     function tap($block) {
         $block($this);
         return $this;
-    }
-
-    function to_s() {
-        return $this->inspect();
     }
 }

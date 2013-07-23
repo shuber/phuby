@@ -5,7 +5,7 @@ namespace Phuby\Module;
 class Alias {
     function alias_method($new_name, $old_name) {
         $this->define_method($new_name, function() use ($old_name) {
-            return $this->splat($old_name, func_get_args());
+            return $this->__splat__($old_name, func_get_args());
         });
 
         return $this;

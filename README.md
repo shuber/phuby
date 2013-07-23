@@ -91,15 +91,14 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`encode64`</strike>
 
 #### BasicObject
-* `__splat__('__super__', $args)`
 * `equal`
 * `singleton_method_added`
 * `singleton_method_removed`
 * `singleton_method_undefined`
+* <strike>`__caller__`</strike>
 * <strike>`__id__`</strike>
 * <strike>`__send__`</strike>
 * <strike>`__splat__`</strike>
-* <strike>`__super__`</strike>
 * <strike>`__undefined__`</strike>
 * <strike>`class`</strike>
 * <strike>`initialize`</strike>
@@ -110,6 +109,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`instance_variables`</strike>
 * <strike>`method_missing`</strike>
 * <strike>`singleton_class`</strike>
+* <strike>`super`</strike>
 
 #### Comparable
 #### Date
@@ -173,10 +173,9 @@ This allows you to inject `Phuby` features into *any* object.
 #### IO
 #### Integer
 #### Kernel
-* `caller`
-* `super`
 * <strike>`[]`</strike>
 * <strike>`[]=`</strike>
+* <strike>`caller`</strike>
 * <strike>`extend`</strike>
 * <strike>`inspect`</strike>
 * <strike>`is_a`</strike>

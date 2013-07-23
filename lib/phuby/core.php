@@ -23,6 +23,15 @@ trait Core {
         return $this->__splat__($method_name, $args);
     }
 
+    function __caller__($ignore_methods = []) {
+        $backtrace = debug_backtrace(false);
+        $ignore_modules = [__CLASS__, __NAMESPACE__.'\Kernel', __NAMESPACE__.'\Method', __NAMESPACE__.'\Module\Alias'];
+
+        foreach ($backtrace as $index => $trace)
+            if (isset($trace['class']) && !in_array($trace['class'], $ignore_modules) && !in_array($trace['function'], $ignore_methods))
+                return array_merge(['index' => $index], $trace);
+    }
+
     function __class() {
         if (!isset($this->__class__))
             $this->__class__ = Module::const_get(get_class($this));
@@ -80,26 +89,6 @@ trait Core {
         return call_user_func_array([$this, '__send__'], $args);
     }
 
-    function __super__() {        
-        $args = func_get_args();
-        $backtrace = debug_backtrace(false, 2);
-        $last = array_pop($backtrace);
-        $method_name = $last['function'];
-
-        if (isset($last['class'])) {
-            $module = $last['class'];
-            foreach ($this->singleton_class()->ancestors() as $ancestor) {
-                if ($ancestor->name() == $module) {
-                    $found = true;
-                } else if (isset($found) && $method = $ancestor->instance_method($method_name)) {
-                    return $method->bind($this)->splat($args);
-                }
-            }
-        }
-
-        return $this->__undefined__(__FUNCTION__, $args);
-    }
-
     function __toString() {
         return $this->__send__('to_s');
     }
@@ -137,5 +126,22 @@ trait Core {
             $this->__singleton_class__ = new Module($this->__class()->name(), $this->__class()->name());
 
         return $this->__singleton_class__;
+    }
+
+    function super() {
+        $args = func_get_args();
+
+        if ($caller = $this->__caller__(['send', 'splat'])) {
+            $module = $caller['class'];
+            foreach ($this->singleton_class()->ancestors() as $ancestor) {
+                if ($ancestor->name() == $module) {
+                    $found = true;
+                } else if (isset($found) && $method = $ancestor->instance_method($caller['function'])) {
+                    return $method->bind($this)->splat($args);
+                }
+            }
+        }
+
+        return $this->__undefined__(__FUNCTION__, $args);
     }
 }
