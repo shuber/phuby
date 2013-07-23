@@ -13,6 +13,6 @@ class Enumerable extends Object implements \ArrayAccess, \Countable, \Iterator {
         $self->include(__CLASS__.'\Iterator');
     }
 
-    public $__enum__ = [];
+    public $__native__;
     public $__valid__;
 }
