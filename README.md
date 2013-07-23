@@ -44,6 +44,7 @@ This allows you to inject `Phuby` features into *any* object.
 * catch errors and raise them as exceptions
 * Ruby conventions for method visibility
 * `Phuby()` namespace resolution
+* `Phuby()` aliases e.g. Array => Arr
 * <strike>all classes inherit `Object`</strike>
 * <strike>classes may `use Phuby` instead of inheriting `Phuby\Object`</strike>
 * <strike>autoloading with ruby naming conventions</strike>
@@ -91,7 +92,6 @@ This allows you to inject `Phuby` features into *any* object.
 
 #### BasicObject
 * `__splat__('__super__', $args)`
-* `__super__`
 * `equal`
 * `singleton_method_added`
 * `singleton_method_removed`
@@ -99,6 +99,8 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`__id__`</strike>
 * <strike>`__send__`</strike>
 * <strike>`__splat__`</strike>
+* <strike>`__super__`</strike>
+* <strike>`__undefined__`</strike>
 * <strike>`class`</strike>
 * <strike>`initialize`</strike>
 * <strike>`instance_eval`</strike>
@@ -114,6 +116,55 @@ This allows you to inject `Phuby` features into *any* object.
 #### Dir
 #### Encoding
 #### Enumerable
+* `all?`
+* `any?`
+* `chunk`
+* `collect`
+* `collect_concat`
+* `count`
+* `cycle`
+* `detect`
+* `drop`
+* `drop_while`
+* `each_cons`
+* `each_entry`
+* `each_slice`
+* `each_with_index`
+* `each_with_object`
+* `entries`
+* `find`
+* `find_all`
+* `find_index`
+* `first`
+* `flat_map`
+* `grep`
+* `group_by`
+* `include?`
+* `inject`
+* `lazy`
+* `map`
+* `max`
+* `max_by`
+* `member?`
+* `min`
+* `min_by`
+* `minmax`
+* `minmax_by`
+* `none?`
+* `one?`
+* `partition`
+* `reduce`
+* `reject`
+* `reverse_each`
+* `select`
+* `slice_before`
+* `sort`
+* `sort_by`
+* `take`
+* `take_while`
+* `to_a`
+* `zip`
+
 #### Enumerator
 #### File
 #### Fixnum
@@ -145,25 +196,25 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`restore`</strike>
 
 #### MatchData
-* ==
-* []
-* begin
-* end
-* eql?
-* hash
-* inspect
-* length
-* names
-* offset
-* post_match
-* pre_match
-* size
-* to_a
-* to_s
-* values_at
-* <strike>captures</strike>
-* <strike>regexp</strike>
-* <strike>string</strike>
+* `==`
+* `[]`
+* `begin`
+* `end`
+* `eql?`
+* `hash`
+* `inspect`
+* `length`
+* `names`
+* `offset`
+* `post_match`
+* `pre_match`
+* `size`
+* `to_a`
+* `to_s`
+* `values_at`
+* <strike>`captures`</strike>
+* <strike>`regexp`</strike>
+* <strike>`string`</strike>
 
 #### Math
 #### Module

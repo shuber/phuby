@@ -80,6 +80,26 @@ trait Core {
         return call_user_func_array([$this, '__send__'], $args);
     }
 
+    function __super__() {        
+        $args = func_get_args();
+        $backtrace = debug_backtrace(false, 2);
+        $last = array_pop($backtrace);
+        $method_name = $last['function'];
+
+        if (isset($last['class'])) {
+            $module = $last['class'];
+            foreach ($this->singleton_class()->ancestors() as $ancestor) {
+                if ($ancestor->name() == $module) {
+                    $found = true;
+                } else if (isset($found) && $method = $ancestor->instance_method($method_name)) {
+                    return $method->bind($this)->splat($args);
+                }
+            }
+        }
+
+        return $this->__undefined__(__FUNCTION__, $args);
+    }
+
     function __toString() {
         return $this->__send__('to_s');
     }
@@ -117,25 +137,5 @@ trait Core {
             $this->__singleton_class__ = new Module($this->__class()->name(), $this->__class()->name());
 
         return $this->__singleton_class__;
-    }
-
-    protected function super() {
-        $args = func_get_args();
-        $backtrace = debug_backtrace(false, 11);
-        $last = array_pop($backtrace);
-        $method_name = $last['function'];
-
-        if (isset($last['class'])) {
-            $module = $last['class'];
-            foreach ($this->singleton_class()->ancestors() as $ancestor) {
-                if ($ancestor->name() == $module) {
-                    $found = true;
-                } else if (isset($found) && $method = $ancestor->instance_method($method_name)) {
-                    return $method->bind($this)->splat($args);
-                }
-            }
-        }
-
-        return $this->__undefined__(__FUNCTION__, $args);
     }
 }
