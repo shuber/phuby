@@ -11,7 +11,7 @@ namespace Phuby\MatchData {
         }
 
         function initialize($regexp, $string, $matches) {
-            $this->instance_variable_set('regexp', $string);
+            $this->instance_variable_set('regexp', $regexp);
             $this->instance_variable_set('string', $string);
             $this->instance_variable_set('captures', array_slice($matches, 1));
         }
