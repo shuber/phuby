@@ -23,11 +23,13 @@ namespace Phuby\Regexp {
         function initialize($regexp) {
             if (@preg_match($regexp, '') === false)
                 $regexp = "/$regexp/";
+
             $this->regexp = $regexp;
         }
 
         function match($string) {
             $string = (string) $string;
+
             if (preg_match($this->regexp, $string, $matches))
                 return Phuby('Phuby\MatchData')->new($this, $string, $matches);
         }

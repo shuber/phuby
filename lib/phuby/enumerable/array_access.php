@@ -14,6 +14,7 @@ class ArrayAccess {
     function array_access_offset_set($offset, $value) {
         if (is_null($offset))
             $offset = count($this->__native__);
+
         return $this->__native__[$offset] = $value;
     }
 

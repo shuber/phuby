@@ -1,6 +1,14 @@
 <?php
 
-namespace Phuby;
+require_once 'lib/bootstrap.php';
 
-require_once 'core/phuby/environment.php';
-Environment::initialize(__DIR__);
+trait Phuby {
+    use Phuby\Core;
+
+    static function initialized($self) {
+        while ($superclass = $self->superclass())
+            $self = $superclass;
+
+        $self->__include(__TRAIT__.'\Object');
+    }
+}

@@ -4,7 +4,29 @@ namespace Phuby;
 
 class Module extends Object {
     private static $constants = [];
-    private static $keywords = ['__halt_compiler', 'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do', 'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final', 'for', 'foreach', 'function', 'global', 'goto', 'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset', 'list', 'namespace', 'new', 'or', 'print', 'private', 'protected', 'public', 'require', 'require_once', 'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use', 'var', 'while', 'xor'];
+    private static $keywords = [
+        '__halt_compiler',
+        'abstract', 'and', 'array', 'as',
+        'break',
+        'callable', 'case', 'catch', 'class', 'clone', 'const', 'continue',
+        'declare', 'default', 'die', 'do',
+        'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach', 'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends',
+        'final', 'for', 'foreach', 'function',
+        'global', 'goto',
+        'if', 'implements', 'include', 'include_once', 'instanceof', 'insteadof', 'interface', 'isset',
+        'list',
+        'namespace', 'new',
+        'or',
+        'print', 'private', 'protected', 'public',
+        'require', 'require_once', 'return',
+        'static', 'switch',
+        'throw', 'trait', 'try',
+        'unset', 'use',
+        'var',
+        'while',
+        'yield',
+        'xor'
+    ];
 
     static function initialized($self) {
         $self->__include(__CLASS__.'\Accessor');
@@ -12,15 +34,16 @@ class Module extends Object {
     }
 
     static function const_get($name) {
-        if (isset(self::$constants[$name])) {
+        if (isset(self::$constants[$name]))
             return self::$constants[$name];
-        } else if (class_exists($name)) {
+
+        if (class_exists($name)) {
             self::$constants[$name] = new self;
             self::$constants[$name]->initialize($name);
             return self::$constants[$name];
-        } else {
-            throw new NameError("uninitialized constant $name");
         }
+
+        throw new NameError("uninitialized constant $name");
     }
 
     protected $name;
@@ -32,14 +55,13 @@ class Module extends Object {
 
     function initialize($name, $superclass = null) {
         $this->name = $name;
-
         $instance = $this->name == __CLASS__ ? $this : $this->allocate();
+
         foreach ($this->reflection()->getMethods() as $method)
             if (!$method->isStatic())
                 $this->define_method($method->getName(), $method->getClosure($instance));
 
-        if (!$superclass) $superclass = get_parent_class($this->name);
-        if ($superclass) {
+        if ($superclass || $superclass = get_parent_class($this->name)) {
             array_unshift($this->includes, $superclass);
             $this->superclass = self::const_get($superclass);
         }
@@ -60,6 +82,7 @@ class Module extends Object {
     function __extend__($module) {
         if ($module == 'self')
             $module = $this->name();
+
         return parent::__extend__($module);
     }
 
@@ -78,8 +101,10 @@ class Module extends Object {
 
     function __new() {
         $instance = $this->allocate();
+
         if ($method = $instance->method('initialize'))
             $method->splat(func_get_args());
+
         return $instance;
     }
 
@@ -90,10 +115,13 @@ class Module extends Object {
     function ancestors(&$list = []) {
         foreach ($this->includes as $ancestor)
             self::const_get($ancestor)->ancestors($list);
+
         if (!in_array($this, $list))
             array_unshift($list, $this);
+
         foreach ($this->prepends as $ancestor)
             self::const_get($ancestor)->ancestors($list);
+
         return $list;
     }
 
@@ -102,8 +130,7 @@ class Module extends Object {
     }
 
     function define_method($method_name, $block) {
-        $this->methods[$method_name] = new UnboundMethod($this->name, $method_name, $block);
-        return $this->methods[$method_name];
+        return $this->methods[$method_name] = new UnboundMethod($this->name, $method_name, $block);
     }
 
     function instance_method($method_name, $include_ancestors = true) {
@@ -122,12 +149,15 @@ class Module extends Object {
         if ($include_ancestors) {
             foreach ($includes as $module)
                 self::const_get($module)->instance_methods(true, $list);
+
             foreach ($prepends as $module)
                 self::const_get($module)->instance_methods(true, $list);
         }
+
         foreach (array_keys($this->methods) as $method_name)
             if (!in_array($method_name, $list))
                 $list[] = $method_name;
+
         return $list;
     }
 
@@ -155,6 +185,7 @@ class Module extends Object {
     function reflection() {
         if (!isset($this->reflection));
             $this->reflection = new \ReflectionClass($this->name);
+
         return $this->reflection;
     }
 
@@ -174,7 +205,7 @@ class Module extends Object {
     // TODO: prepended modules will still respond to this method
     function undef_method($method_name) {
         $this->define_method($method_name, function() use ($method_name) {
-            throw new \BadMethodCallException("Undefined method $method_name for ".$this->__class()->name());
+            return $this->__undefined__($method_name);
         });
     }
 }

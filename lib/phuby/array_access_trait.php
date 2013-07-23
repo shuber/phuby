@@ -1,8 +1,8 @@
 <?php
 
-namespace Phuby\Traits;
+namespace Phuby;
 
-trait ArrayAccess {
+trait ArrayAccessTrait {
     function offsetExists($offset) {
         return $this->__send__('array_access_offset_exists', $offset);
     }

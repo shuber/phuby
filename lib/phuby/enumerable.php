@@ -3,9 +3,9 @@
 namespace Phuby;
 
 class Enumerable extends Object implements \ArrayAccess, \Countable, \Iterator {
-    use Traits\ArrayAccess;
-    use Traits\Countable;
-    use Traits\Iterator;
+    use ArrayAccessTrait;
+    use CountableTrait;
+    use IteratorTrait;
 
     static function initialized($self) {
         $self->include(__CLASS__.'\ArrayAccess');

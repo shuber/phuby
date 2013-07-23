@@ -7,6 +7,7 @@ class Alias {
         $this->define_method($new_name, function() use ($old_name) {
             return $this->splat($old_name, func_get_args());
         });
+
         return $this;
     }
 

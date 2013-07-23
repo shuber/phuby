@@ -19,6 +19,7 @@ class Kernel {
 
     function is_a($module) {
         $module = (string) $module;
+
         foreach ($this->singleton_class()->ancestors() as $ancestor)
             if ($ancestor->name() == $module)
                 return true;

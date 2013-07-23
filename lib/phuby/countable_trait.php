@@ -1,8 +1,8 @@
 <?php
 
-namespace Phuby\Traits;
+namespace Phuby;
 
-trait Countable {
+trait CountableTrait {
     function count() {
         return $this->__send__('countable_count');
     }

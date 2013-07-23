@@ -1,8 +1,8 @@
 <?php
 
-namespace Phuby\Traits;
+namespace Phuby;
 
-trait Iterator {
+trait IteratorTrait {
     function current() {
         return $this->__send__('iterator_current');
     }

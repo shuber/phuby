@@ -14,6 +14,7 @@ trait Core {
 
     function __construct() {
         $args = func_get_args();
+
         if (!empty($args))
             call_user_func_array([$this, 'initialize'], $args);
     }
@@ -25,6 +26,7 @@ trait Core {
     function __class() {
         if (!isset($this->__class__))
             $this->__class__ = Module::const_get(get_class($this));
+
         return $this->__class__;
     }
 
@@ -53,16 +55,19 @@ trait Core {
     function __id__() {
         if (!isset($this->__id__))
             $this->__id__ = spl_object_hash($this);
+
         return $this->__id__;
     }
 
     function __send__($method_name) {
         $args = array_slice(func_get_args(), 1);
+
         if ($method = $this->singleton_class()->instance_method($method_name)) {
             return $method->bind($this)->splat($args);
-        } else {
-            $method = $this->singleton_class()->instance_method('method_missing');
+        } else if ($method = $this->singleton_class()->instance_method('method_missing')) {
             return $method->bind($this)->call($method_name, $args);
+        } else {
+            return $this->__undefined__($method_name);
         }
     }
 
@@ -77,6 +82,10 @@ trait Core {
 
     function __toString() {
         return $this->__send__('to_s');
+    }
+
+    function __undefined__($method_name) {
+        throw new NoMethodError("undefined method '$method_name' for ".$this->__class()->name());
     }
 
     function instance_eval($block) {
@@ -106,6 +115,7 @@ trait Core {
     function singleton_class() {
         if (!isset($this->__singleton_class__))
             $this->__singleton_class__ = new Module($this->__class()->name(), $this->__class()->name());
+
         return $this->__singleton_class__;
     }
 
@@ -114,6 +124,7 @@ trait Core {
         $backtrace = debug_backtrace(false, 11);
         $last = array_pop($backtrace);
         $method_name = $last['function'];
+
         if (isset($last['class'])) {
             $module = $last['class'];
             foreach ($this->singleton_class()->ancestors() as $ancestor) {
@@ -124,10 +135,7 @@ trait Core {
                 }
             }
         }
-        return $this->method_missing(__FUNCTION__, $args);
-    }
 
-    private function method_missing($method_name, $args) {
-        throw new NoMethodError("undefined method '$method_name' for ".$this->__class()->name());
+        return $this->__undefined__(__FUNCTION__, $args);
     }
 }

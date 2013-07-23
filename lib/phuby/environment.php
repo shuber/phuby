@@ -11,27 +11,26 @@ class Environment {
 
     static function autoload($class) {
         $filename = self::filename($class);
+
         if ($file = stream_resolve_include_path($filename))
             include $file;
     }
 
     static function filename($class) {
         $namespaces = array_filter(preg_split('#\\\\|::#', $class));
+
         $parts = array_map(function($namespace) {
             $part = preg_replace('/([A-Z]+)([A-Z][a-z])/', '\1_\2', $namespace);
             $part = preg_replace('/([a-z\d])([A-Z])/', '\1_\2', $part);
             $part = preg_replace('/[^A-Z^a-z^0-9]+/', '_', $part);
             return strtolower($part);
         }, $namespaces);
+
         return implode(DIRECTORY_SEPARATOR, $parts).'.php';
     }
 
     static function initialize($root) {
-        self::append_include_path("$root/core");
-        self::append_include_path("$root/lib");
+        self::append_include_path($root);
         spl_autoload_register(__CLASS__.'::autoload');
-
-        // TODO: why doesn't the Phuby trait autoload?
-        require_once "$root/core/".self::filename(__NAMESPACE__);
     }
 }

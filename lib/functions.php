@@ -4,7 +4,7 @@ function Phuby($object, $lookup_class = true) {
     if ($lookup_class && is_string($object) && class_exists($object))
         return Phuby\Module::const_get($object);
 
-    // if (is_numeric_array($object))
+    // if (Phuby\Enumerable::numeric($object))
     //     return Phuby\Array::__new($object);
 
     if (is_array($object))
@@ -16,16 +16,5 @@ function Phuby($object, $lookup_class = true) {
         case 'object':  return Phuby\Proxy::__new($object);
         case 'string':  return Phuby\String::__new($object);
         default:        return $object;
-    }
-}
-
-trait Phuby {
-    use Phuby\Core;
-
-    static function initialized($self) {
-        while ($superclass = $self->superclass())
-            $self = $superclass;
-
-        $self->__include(__TRAIT__.'\Object');
     }
 }
