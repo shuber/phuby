@@ -43,6 +43,7 @@ This allows you to inject `Phuby` features into *any* object.
 * phpunit tests
 * catch errors and raise them as exceptions
 * Ruby conventions for method visibility
+* `Phuby()` namespace resolution
 * <strike>all classes inherit `Object`</strike>
 * <strike>classes may `use Phuby` instead of inheriting `Phuby\Object`</strike>
 * <strike>autoloading with ruby naming conventions</strike>
@@ -226,3 +227,7 @@ This allows you to inject `Phuby` features into *any* object.
 #### String
 #### Struct
 #### Time
+
+## notes
+
+I'm trying a new method coding style in this project. Usually I try to structure methods so that they have as few `return` statements or endpoints as possible (usually 1). This time I'm using guard style conditions at the beginning of methods and I'm starting to see the beauty of how readable and simple the source code reads. I'm using many `if` and `return` statements in favor of `else` and `if else`. `if` expressions are never written inline and the statements are separated by newlines. Bracket `{ }` are only added to `if` and `foreach` loops if necessary. It makes source code files longer but everything is condensed horizontally and naturally less than 80 characters most of the time. It makes me appreciate the python source code white spacing more.
