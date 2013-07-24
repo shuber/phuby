@@ -91,7 +91,6 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`encode64`</strike>
 
 #### BasicObject
-* `equal`
 * `singleton_method_added`
 * `singleton_method_removed`
 * `singleton_method_undefined`
@@ -101,6 +100,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`__splat__`</strike>
 * <strike>`__undefined__`</strike>
 * <strike>`class`</strike>
+* <strike>`equal?`</strike>
 * <strike>`initialize`</strike>
 * <strike>`instance_eval`</strike>
 * <strike>`instance_exec`</strike>
@@ -178,12 +178,13 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`caller`</strike>
 * <strike>`extend`</strike>
 * <strike>`inspect`</strike>
-* <strike>`is_a`</strike>
+* <strike>`is_a?`</strike>
+* <strike>`kind_of?`</strike>
 * <strike>`method`</strike>
 * <strike>`methods`</strike>
 * <strike>`object_id`</strike>
-* <strike>`respond_to`</strike>
-* <strike>`respond_to_missing`</strike>
+* <strike>`respond_to?`</strike>
+* <strike>`respond_to_missing?`</strike>
 * <strike>`send`</strike>
 * <strike>`splat`</strike>
 * <strike>`tap`</strike>
@@ -252,7 +253,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`inspect`</strike>
 * <strike>`instance_method`</strike>
 * <strike>`instance_methods`</strike>
-* <strike>`method_defined`</strike>
+* <strike>`method_defined?`</strike>
 * <strike>`module_eval`</strike>
 * <strike>`module_exec`</strike>
 * <strike>`name`</strike>

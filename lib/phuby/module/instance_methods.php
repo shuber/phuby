@@ -6,9 +6,10 @@ class InstanceMethods {
     static function initialized($self) {
         $self->alias_method('class_eval', 'module_eval');
         $self->alias_method('class_exec', 'module_exec');
+        $self->alias_method('method_defined?', 'method_defined_query');
     }
 
-    function method_defined($method_name) {
+    function method_defined_query($method_name) {
         return !!$this->instance_method($method_name);
     }
 
