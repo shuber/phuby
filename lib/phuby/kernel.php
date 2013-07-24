@@ -18,6 +18,10 @@ class Kernel {
         $self->alias_method('to_s', 'inspect');
     }
 
+    function dup() {
+        return clone $this;
+    }
+
     function inspect() {
         return '<'.$this->__class()->name().':'.$this->object_id().'>';
     }

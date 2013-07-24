@@ -176,6 +176,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`[]`</strike>
 * <strike>`[]=`</strike>
 * <strike>`caller`</strike>
+* <strike>`dup`</strike>
 * <strike>`extend`</strike>
 * <strike>`inspect`</strike>
 * <strike>`is_a?`</strike>
