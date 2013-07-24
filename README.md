@@ -247,6 +247,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`extend_object`</strike>
 * <strike>`extended`</strike>
 * <strike>`include`</strike>
+* <strike>`include?`</strike>
 * <strike>`included`</strike>
 * <strike>`inherited`</strike>
 * <strike>`initialized`</strike>

@@ -6,7 +6,16 @@ class InstanceMethods {
     static function initialized($self) {
         $self->alias_method('class_eval', 'module_eval');
         $self->alias_method('class_exec', 'module_exec');
+        $self->alias_method('include?', 'include_query');
         $self->alias_method('method_defined?', 'method_defined_query');
+    }
+
+    function include_query($module) {
+        foreach ($this->ancestors() as $ancestor)
+            if ($ancestor->name() == $module)
+                return true;
+
+        return false;
     }
 
     function method_defined_query($method_name) {
