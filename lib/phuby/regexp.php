@@ -17,14 +17,14 @@ namespace Phuby\Regexp {
 
     class InstanceMethods {
         static function initialized($self) {
-            $self->attr_accessor('regexp');
+            $self->attr_reader('regexp');
         }
 
         function initialize($regexp) {
             if (@preg_match($regexp, '') === false)
                 $regexp = "/$regexp/";
 
-            $this->regexp = $regexp;
+            $this->{'@regexp'} = $regexp;
         }
 
         function match($string) {

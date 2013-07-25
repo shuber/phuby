@@ -13,14 +13,14 @@ class Accessor {
     function attr_reader($name) {
         foreach (func_get_args() as $name)
             $this->define_method($name, function() use ($name) {
-                return $this->instance_variable_get($name);
+                return $this->{"@$name"};
             });
     }
 
     function attr_writer($name) {
         foreach (func_get_args() as $name)
             $this->define_method("$name=", function($value) use ($name) {
-                return $this->instance_variable_set($name, $value);
+                return $this->{"@$name"} = $value;
             });
     }
 }
