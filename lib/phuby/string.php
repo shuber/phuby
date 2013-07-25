@@ -38,6 +38,11 @@ namespace Phuby\String {
             }
         }
 
+        function clear() {
+            $this->{'@native'} = '';
+            return $this;
+        }
+
         function downcase() {
             return $this->dup->tap('downcase!');
         }
