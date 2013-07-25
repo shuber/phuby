@@ -65,6 +65,7 @@ trait Core {
         } else {
             $value = $this->__send__($method_name);
         }
+
         return $value;
     }
 
@@ -87,11 +88,15 @@ trait Core {
         }
     }
 
-    function __set($method_name, $args) {
-        if (!preg_match('/^@(.+)/', $method_name, $matches))
-            return $this->__send__("$method_name=", $args);
+    function &__set($method_name, $args) {
+        if (preg_match('/^@(.+)/', $method_name, $matches)) {
+            $this->__instance_variables__[$matches[1]] = $args;
+            $value = &$this->__instance_variables__[$matches[1]];
+        } else {
+            $value = $this->__send__("$method_name=", $args);
+        }
 
-        return $this->__instance_variables__[$matches[1]] = $args;
+        return $value;
     }
 
     function __splat__($method_name, $args) {
