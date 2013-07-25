@@ -3,12 +3,13 @@
 namespace Phuby;
 
 class Method extends Object {
-    protected $unbound;
-    protected $receiver;
+    static function initialized($self) {
+        $self->attr_reader('receiver');
+    }
 
     function initialize($unbound, $receiver) {
-        $this->unbound = $unbound;
-        $this->receiver = $receiver;
+        $this->{'@unbound'} = $unbound;
+        $this->{'@receiver'} = $receiver;
     }
 
     function call($args = null) {
@@ -16,11 +17,7 @@ class Method extends Object {
     }
 
     function inspect() {
-        return '<'.get_called_class().': '.get_class($this->receiver).'#'.$this->unbound->name().'>';
-    }
-
-    function receiver() {
-        return $this->receiver;
+        return '<'.get_called_class().': '.get_class($this->{'@receiver'}).'#'.$this->{'@unbound'}->name().'>';
     }
 
     function splat($args) {
@@ -28,10 +25,10 @@ class Method extends Object {
     }
 
     function to_proc() {
-        return $this->unbound->to_proc()->bindTo($this->receiver);
+        return $this->{'@unbound'}->to_proc()->bindTo($this->{'@receiver'});
     }
 
     function unbind() {
-        return $this->unbound;
+        return $this->{'@unbound'};
     }
 }
