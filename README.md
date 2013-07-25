@@ -279,7 +279,6 @@ This allows you to inject `Phuby` features into *any* object.
 #### StopIteration
 #### String
 * `%`
-* `*`
 * `+`
 * `<=>`
 * `==`
@@ -336,7 +335,6 @@ This allows you to inject `Phuby` features into *any* object.
 * `ord`
 * `partition`
 * `prepend`
-* `replace`
 * `rindex`
 * `rjust`
 * `rpartition`
@@ -368,16 +366,19 @@ This allows you to inject `Phuby` features into *any* object.
 * `unpack`
 * `upto`
 * `valid_encoding?`
+* <strike>`*`</strike>
 * <strike>`<<`</strike>
 * <strike>`capitalize`</strike>
 * <strike>`capitalize!`</strike>
 * <strike>`clear`</strike>
 * <strike>`concat`</strike>
+* <strike>`copy`</strike>
 * <strike>`downcase`</strike>
 * <strike>`downcase!`</strike>
 * <strike>`empty?`</strike>
 * <strike>`lstrip`</strike>
 * <strike>`lstrip!`</strike>
+* <strike>`replace`</strike>
 * <strike>`reverse`</strike>
 * <strike>`reverse!`</strike>
 * <strike>`rstrip`</strike>

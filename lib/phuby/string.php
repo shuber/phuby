@@ -11,6 +11,7 @@ namespace Phuby\String {
 
     class InstanceMethods {
         static function initialized($self) {
+            $self->alias_method('*', 'copy');
             $self->alias_method('<<', 'concat');
             $self->alias_method('capitalize!', 'capitalize_bang');
             $self->alias_method('downcase!', 'downcase_bang');
@@ -52,6 +53,17 @@ namespace Phuby\String {
             return $this;
         }
 
+        function copy($integer = 1) {
+            if ($integer < 0)
+                throw new \Phuby\ArgumentError('$integer must be greater that or equal to 0');
+
+            $copy = '';
+            for ($i = 0; $i < $integer; $i++)
+                $copy .= $this->{'@native'};
+
+            return $this->dup->replace($copy);
+        }
+
         function downcase() {
             return $this->dup->tap('downcase!');
         }
@@ -80,6 +92,11 @@ namespace Phuby\String {
                 $this->{'@native'} = $stripped;
                 return $this;
             }
+        }
+
+        function replace($other) {
+            $this->{'@native'} = $other;
+            return $this;
         }
 
         function reverse() {
