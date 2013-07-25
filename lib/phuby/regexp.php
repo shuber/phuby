@@ -8,10 +8,15 @@ namespace Phuby\Regexp {
     class ClassMethods {
         static function initialized($self) {
             $self->alias_method('quote', 'escape');
+            $self->alias_method('valid?', 'valid_query');
         }
 
         function escape($string, $delimiter = null) {
             return preg_quote($string, $delimiter);
+        }
+
+        function valid_query($regexp) {
+            return @preg_match($regexp, '') !== false;
         }
     }
 
@@ -21,7 +26,7 @@ namespace Phuby\Regexp {
         }
 
         function initialize($regexp) {
-            if (@preg_match($regexp, '') === false)
+            if (!$this->class->{'valid?'}($regexp))
                 $regexp = "/$regexp/";
 
             $this->{'@regexp'} = $regexp;
