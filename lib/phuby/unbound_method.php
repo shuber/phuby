@@ -3,14 +3,14 @@
 namespace Phuby;
 
 class UnboundMethod extends Object {
-    protected $owner;
-    protected $name;
-    protected $block;
+    static function initialized($self) {
+        $self->attr_reader('name');
+    }
 
     function initialize($owner, $name, $block) {
-        $this->owner = $owner;
-        $this->name = $name;
-        $this->block = $block;
+        $this->{'@owner'} = $owner;
+        $this->{'@name'} = $name;
+        $this->{'@block'} = $block;
     }
 
     function bind($receiver) {
@@ -18,18 +18,18 @@ class UnboundMethod extends Object {
     }
 
     function inspect() {
-        return '<'.get_called_class().": $this->owner#$this->name>";
+        return '<'.get_called_class().': '.$this->{'@owner'}.'#'.$this->{'@name'}.'>';
     }
 
     function name() {
-        return $this->name;
+        return $this->{'@name'};
     }
 
     function owner() {
-        return Module::const_get($this->owner);
+        return Module::const_get($this->{'@owner'});
     }
 
     function to_proc() {
-        return $this->block;
+        return $this->{'@block'};
     }
 }
