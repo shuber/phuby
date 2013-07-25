@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Phuby by shuber</title>
+    <title>phuby by shuber</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
@@ -16,8 +16,8 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header">Phuby</h1>
-        <p class="header">rubyisms in php</p>
+        <h1 class="header">phuby</h1>
+        <p class="header">ruby ported to php</p>
 
         <ul>
           <li class="download"><a class="buttons" href="https://github.com/shuber/phuby/zipball/master">Download ZIP</a></li>
@@ -30,37 +30,637 @@
 
       </header>
       <section>
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+        <h1>
+<a name="phuby" class="anchor" href="#phuby"><span class="octicon octicon-link"></span></a>phuby</h1>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p>A port of <a href="http://www.ruby-lang.org/">ruby</a> 2.0 to native <a href="http://php.net/">php</a> 5.4+</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>features</h2>
+
+<ul>
+<li>mixins with <code>include</code>, <code>extend</code>, <code>prepend</code> and their associated callbacks</li>
+<li>
+<code>Object</code> and <code>Kernel</code> methods including <code>super</code>, <code>send</code>, <code>respond_to?</code>, <code>method_missing</code>
+</li>
+<li>
+<code>Module</code> methods including <code>alias_method</code>, <code>define_method</code>, and <code>attr</code> accessors</li>
+<li>support for methods with special characters like <code>?</code> using this syntax <code>$this-&gt;{'empty?'}</code>
+</li>
+<li>instance variables are private and accessed with <code>$this-&gt;{'@name'}</code>
+</li>
+<li>[incomplete] class variables are supported as well <code>$this-&gt;{'@@name'}</code>
+</li>
+<li>ported core library including <code>BasicObject</code>, <code>Kernel</code>, <code>Object</code>, <code>Module</code>, <code>Method</code>, <code>UnboundMethod</code>
+</li>
+<li>[incomplete] ported standard library including <code>Array</code>, <code>Hash</code>, <code>String</code>, <code>Enumerable</code>, <code>Comparable</code>
+</li>
+<li>ruby style namespace resolution thru the <code>Phuby</code> function</li>
+<li>autoloading with ruby <code>underscore</code> naming conventions</li>
+<li>parenthesis are optional for method calls with no arguments</li>
+<li>everything is an object, including classes</li>
+</ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>usage</h2>
+
+<p>You can integrate <code>Phuby</code> with your code in 3 ways:</p>
+
+<h3>
+<a name="1-class-inheritance" class="anchor" href="#1-class-inheritance"><span class="octicon octicon-link"></span></a>1) class inheritance</h3>
+
+<pre><code>class Blog extends Phuby\Object { }
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h3>
+<a name="2-traits" class="anchor" href="#2-traits"><span class="octicon octicon-link"></span></a>2) traits</h3>
+
+<p>This is useful when your class needs to inherit from an existing library and
+can't extend <code>Phuby\Object</code>.</p>
+
+<pre><code>class Blog extends ActiveRecord\Base {
+    use Phuby;
+}
+</code></pre>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="3-the-phuby-function" class="anchor" href="#3-the-phuby-function"><span class="octicon octicon-link"></span></a>3) the <code>Phuby</code> function</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>This allows you to inject <code>Phuby</code> features into <em>any</em> object.</p>
+
+<pre><code>echo Phuby('this is a sentence.')-&gt;upcase;
+
+Phuby([1,2,3])-&gt;each(function($number) {
+  echo $number;
+});
+
+echo Phuby(7)-&gt;days-&gt;from_now;
+</code></pre>
+
+<ul>
+<li>
+<code>string</code> becomes <code>Phuby\String</code>
+</li>
+<li>
+<code>string</code> becomes <code>Phuby\Module</code> if it is a class name</li>
+<li>
+<code>array</code> becomes <code>Phuby\Hash</code>
+</li>
+<li>
+<code>array</code> becomes <code>Phuby\Array</code> if it has all numeric keys</li>
+<li>
+<code>number</code> becomes some type of <code>Phuby\Numeric</code> (float or int)</li>
+<li>
+<code>object</code> becomes a <code>Phuby\Proxy</code> which allows us to integrate <code>Phuby</code> into specific object instances</li>
+</ul><h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>todo</h2>
 
 <h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<a name="general" class="anchor" href="#general"><span class="octicon octicon-link"></span></a>general</h3>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li>phpunit tests</li>
+<li>catch errors and raise them as exceptions</li>
+<li>Ruby conventions for method visibility</li>
+<li>
+<code>Phuby()</code> namespace resolution</li>
+<li>
+<code>Phuby()</code> aliases e.g. Array =&gt; Arr</li>
+<li>✓ all classes inherit <code>Object</code>
+</li>
+<li>✓ classes may <code>use Phuby</code> instead of inheriting <code>Phuby\Object</code>
+</li>
+<li>✓ autoloading with ruby naming conventions</li>
+<li>✓ optional parenthesis for method calls</li>
+<li>✓ <code>__callStatic</code> delegates to <code>Module</code> instances</li>
+</ul><h3>
+<a name="errors" class="anchor" href="#errors"><span class="octicon octicon-link"></span></a>errors</h3>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<ul>
+<li>✓ <code>ArgumentError</code>
+</li>
+<li>✓ <code>Exception</code>
+</li>
+<li>✓ <code>NameError</code>
+</li>
+<li>✓ <code>NoMethodError</code>
+</li>
+<li>✓ <code>RuntimeError</code>
+</li>
+<li>✓ <code>StandardError</code>
+</li>
+</ul><h3>
+<a name="hooks" class="anchor" href="#hooks"><span class="octicon octicon-link"></span></a>hooks</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<ul>
+<li><code>coerce</code></li>
+<li><code>const_missing</code></li>
+<li><code>marshal_dump</code></li>
+<li><code>marshal_load</code></li>
+<li><code>method_added</code></li>
+<li><code>method_removed</code></li>
+<li><code>method_undefined</code></li>
+<li><code>singleton_method_added</code></li>
+<li><code>singleton_method_removed</code></li>
+<li><code>singleton_method_undefined</code></li>
+<li><code>to_xxx</code></li>
+<li>✓ <code>append_features</code>
+</li>
+<li>✓ <code>extend_object</code>
+</li>
+<li>✓ <code>extended</code>
+</li>
+<li>✓ <code>included</code>
+</li>
+<li>✓ <code>inherited</code>
+</li>
+<li>✓ <code>initialize_copy</code>
+</li>
+<li>✓ <code>initialized</code>
+</li>
+<li>✓ <code>method_missing</code>
+</li>
+<li>✓ <code>prepended</code>
+</li>
+<li>✓ <code>prepend_features</code>
+</li>
+</ul><h3>
+<a name="lib" class="anchor" href="#lib"><span class="octicon octicon-link"></span></a>lib</h3>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<h4>
+<a name="array" class="anchor" href="#array"><span class="octicon octicon-link"></span></a>Array</h4>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<h4>
+<a name="base64" class="anchor" href="#base64"><span class="octicon octicon-link"></span></a>Base64</h4>
+
+<ul>
+<li>✓ <code>decode64</code>
+</li>
+<li>✓ <code>encode64</code>
+</li>
+</ul><h4>
+<a name="basicobject" class="anchor" href="#basicobject"><span class="octicon octicon-link"></span></a>BasicObject</h4>
+
+<ul>
+<li><code>singleton_method_added</code></li>
+<li><code>singleton_method_removed</code></li>
+<li><code>singleton_method_undefined</code></li>
+<li>✓ <code>__caller__</code>
+</li>
+<li>✓ <code>__id__</code>
+</li>
+<li>✓ <code>__send__</code>
+</li>
+<li>✓ <code>__splat__</code>
+</li>
+<li>✓ <code>__undefined__</code>
+</li>
+<li>✓ <code>class</code>
+</li>
+<li>✓ <code>equal?</code>
+</li>
+<li>✓ <code>initialize</code>
+</li>
+<li>✓ <code>instance_eval</code>
+</li>
+<li>✓ <code>instance_exec</code>
+</li>
+<li>✓ <code>instance_variable_get</code>
+</li>
+<li>✓ <code>instance_variable_set</code>
+</li>
+<li>✓ <code>instance_variables</code>
+</li>
+<li>✓ <code>method_missing</code>
+</li>
+<li>✓ <code>singleton_class</code>
+</li>
+<li>✓ <code>super</code>
+</li>
+</ul><h4>
+<a name="comparable" class="anchor" href="#comparable"><span class="octicon octicon-link"></span></a>Comparable</h4>
+
+<h4>
+<a name="date" class="anchor" href="#date"><span class="octicon octicon-link"></span></a>Date</h4>
+
+<h4>
+<a name="dir" class="anchor" href="#dir"><span class="octicon octicon-link"></span></a>Dir</h4>
+
+<h4>
+<a name="encoding" class="anchor" href="#encoding"><span class="octicon octicon-link"></span></a>Encoding</h4>
+
+<h4>
+<a name="enumerable" class="anchor" href="#enumerable"><span class="octicon octicon-link"></span></a>Enumerable</h4>
+
+<ul>
+<li><code>all?</code></li>
+<li><code>any?</code></li>
+<li><code>chunk</code></li>
+<li><code>collect</code></li>
+<li><code>collect_concat</code></li>
+<li><code>count</code></li>
+<li><code>cycle</code></li>
+<li><code>detect</code></li>
+<li><code>drop</code></li>
+<li><code>drop_while</code></li>
+<li><code>each_cons</code></li>
+<li><code>each_entry</code></li>
+<li><code>each_slice</code></li>
+<li><code>each_with_index</code></li>
+<li><code>each_with_object</code></li>
+<li><code>entries</code></li>
+<li><code>find</code></li>
+<li><code>find_all</code></li>
+<li><code>find_index</code></li>
+<li><code>first</code></li>
+<li><code>flat_map</code></li>
+<li><code>grep</code></li>
+<li><code>group_by</code></li>
+<li><code>include?</code></li>
+<li><code>inject</code></li>
+<li><code>lazy</code></li>
+<li><code>map</code></li>
+<li><code>max</code></li>
+<li><code>max_by</code></li>
+<li><code>member?</code></li>
+<li><code>min</code></li>
+<li><code>min_by</code></li>
+<li><code>minmax</code></li>
+<li><code>minmax_by</code></li>
+<li><code>none?</code></li>
+<li><code>one?</code></li>
+<li><code>partition</code></li>
+<li><code>reduce</code></li>
+<li><code>reject</code></li>
+<li><code>reverse_each</code></li>
+<li><code>select</code></li>
+<li><code>slice_before</code></li>
+<li><code>sort</code></li>
+<li><code>sort_by</code></li>
+<li><code>take</code></li>
+<li><code>take_while</code></li>
+<li><code>to_a</code></li>
+<li><code>zip</code></li>
+</ul><h4>
+<a name="enumerator" class="anchor" href="#enumerator"><span class="octicon octicon-link"></span></a>Enumerator</h4>
+
+<h4>
+<a name="file" class="anchor" href="#file"><span class="octicon octicon-link"></span></a>File</h4>
+
+<h4>
+<a name="fixnum" class="anchor" href="#fixnum"><span class="octicon octicon-link"></span></a>Fixnum</h4>
+
+<h4>
+<a name="float" class="anchor" href="#float"><span class="octicon octicon-link"></span></a>Float</h4>
+
+<h4>
+<a name="hash" class="anchor" href="#hash"><span class="octicon octicon-link"></span></a>Hash</h4>
+
+<h4>
+<a name="io" class="anchor" href="#io"><span class="octicon octicon-link"></span></a>IO</h4>
+
+<h4>
+<a name="integer" class="anchor" href="#integer"><span class="octicon octicon-link"></span></a>Integer</h4>
+
+<h4>
+<a name="kernel" class="anchor" href="#kernel"><span class="octicon octicon-link"></span></a>Kernel</h4>
+
+<ul>
+<li>✓ <code>[]</code>
+</li>
+<li>✓ <code>[]=</code>
+</li>
+<li>✓ <code>caller</code>
+</li>
+<li>✓ <code>dup</code>
+</li>
+<li>✓ <code>extend</code>
+</li>
+<li>✓ <code>inspect</code>
+</li>
+<li>✓ <code>is_a?</code>
+</li>
+<li>✓ <code>kind_of?</code>
+</li>
+<li>✓ <code>method</code>
+</li>
+<li>✓ <code>methods</code>
+</li>
+<li>✓ <code>object_id</code>
+</li>
+<li>✓ <code>respond_to?</code>
+</li>
+<li>✓ <code>respond_to_missing?</code>
+</li>
+<li>✓ <code>send</code>
+</li>
+<li>✓ <code>splat</code>
+</li>
+<li>✓ <code>tap</code>
+</li>
+<li>✓ <code>to_s</code>
+</li>
+</ul><h4>
+<a name="marshal" class="anchor" href="#marshal"><span class="octicon octicon-link"></span></a>Marshal</h4>
+
+<ul>
+<li>✓ <code>dump</code>
+</li>
+<li>✓ <code>load</code>
+</li>
+<li>✓ <code>restore</code>
+</li>
+</ul><h4>
+<a name="matchdata" class="anchor" href="#matchdata"><span class="octicon octicon-link"></span></a>MatchData</h4>
+
+<ul>
+<li><code>==</code></li>
+<li><code>[]</code></li>
+<li><code>begin</code></li>
+<li><code>end</code></li>
+<li><code>eql?</code></li>
+<li><code>hash</code></li>
+<li><code>inspect</code></li>
+<li><code>length</code></li>
+<li><code>names</code></li>
+<li><code>offset</code></li>
+<li><code>post_match</code></li>
+<li><code>pre_match</code></li>
+<li><code>size</code></li>
+<li><code>to_a</code></li>
+<li><code>to_s</code></li>
+<li><code>values_at</code></li>
+<li>✓ <code>captures</code>
+</li>
+<li>✓ <code>regexp</code>
+</li>
+<li>✓ <code>string</code>
+</li>
+</ul><h4>
+<a name="math" class="anchor" href="#math"><span class="octicon octicon-link"></span></a>Math</h4>
+
+<h4>
+<a name="module" class="anchor" href="#module"><span class="octicon octicon-link"></span></a>Module</h4>
+
+<ul>
+<li>anonymous classes</li>
+<li><code>const_missing</code></li>
+<li><code>const_set</code></li>
+<li><code>constants</code></li>
+<li><code>freeze</code></li>
+<li><code>method_added</code></li>
+<li><code>method_removed</code></li>
+<li><code>method_undefined</code></li>
+<li><code>module_function</code></li>
+<li><code>refine</code></li>
+<li><code>remove_method</code></li>
+<li><code>undef_method</code></li>
+<li><code>using</code></li>
+<li>✓ <code>alias_method</code>
+</li>
+<li>✓ <code>alias_method_chain</code>
+</li>
+<li>✓ <code>allocate</code>
+</li>
+<li>✓ <code>ancestors</code>
+</li>
+<li>✓ <code>append_features</code>
+</li>
+<li>✓ <code>attr_accessor</code>
+</li>
+<li>✓ <code>attr_reader</code>
+</li>
+<li>✓ <code>attr_writer</code>
+</li>
+<li>✓ <code>class_eval</code>
+</li>
+<li>✓ <code>class_exec</code>
+</li>
+<li>✓ <code>const_get</code>
+</li>
+<li>✓ <code>define_method</code>
+</li>
+<li>✓ <code>extend</code>
+</li>
+<li>✓ <code>extend_object</code>
+</li>
+<li>✓ <code>extended</code>
+</li>
+<li>✓ <code>include</code>
+</li>
+<li>✓ <code>include?</code>
+</li>
+<li>✓ <code>included</code>
+</li>
+<li>✓ <code>inherited</code>
+</li>
+<li>✓ <code>initialized</code>
+</li>
+<li>✓ <code>inspect</code>
+</li>
+<li>✓ <code>instance_method</code>
+</li>
+<li>✓ <code>instance_methods</code>
+</li>
+<li>✓ <code>method_defined?</code>
+</li>
+<li>✓ <code>module_eval</code>
+</li>
+<li>✓ <code>module_exec</code>
+</li>
+<li>✓ <code>name</code>
+</li>
+<li>✓ <code>new</code>
+</li>
+<li>✓ <code>prepend</code>
+</li>
+<li>✓ <code>prepend_features</code>
+</li>
+<li>✓ <code>prepended</code>
+</li>
+<li>✓ <code>superclass</code>
+</li>
+<li>✓ <code>to_s</code>
+</li>
+</ul><h4>
+<a name="numeric" class="anchor" href="#numeric"><span class="octicon octicon-link"></span></a>Numeric</h4>
+
+<h4>
+<a name="object" class="anchor" href="#object"><span class="octicon octicon-link"></span></a>Object</h4>
+
+<ul>
+<li>✓ <code>include Kernel</code>
+</li>
+</ul><h4>
+<a name="objectspace" class="anchor" href="#objectspace"><span class="octicon octicon-link"></span></a>ObjectSpace</h4>
+
+<h4>
+<a name="proc" class="anchor" href="#proc"><span class="octicon octicon-link"></span></a>Proc</h4>
+
+<h4>
+<a name="random" class="anchor" href="#random"><span class="octicon octicon-link"></span></a>Random</h4>
+
+<h4>
+<a name="range" class="anchor" href="#range"><span class="octicon octicon-link"></span></a>Range</h4>
+
+<h4>
+<a name="regexp" class="anchor" href="#regexp"><span class="octicon octicon-link"></span></a>Regexp</h4>
+
+<h4>
+<a name="regexperror" class="anchor" href="#regexperror"><span class="octicon octicon-link"></span></a>RegexpError</h4>
+
+<h4>
+<a name="stopiteration" class="anchor" href="#stopiteration"><span class="octicon octicon-link"></span></a>StopIteration</h4>
+
+<h4>
+<a name="string" class="anchor" href="#string"><span class="octicon octicon-link"></span></a>String</h4>
+
+<ul>
+<li><code>%</code></li>
+<li><code>+</code></li>
+<li><code>&lt;=&gt;</code></li>
+<li><code>==</code></li>
+<li><code>=~</code></li>
+<li><code>[]</code></li>
+<li><code>[]=</code></li>
+<li><code>ascii_only?</code></li>
+<li><code>b</code></li>
+<li><code>bytes</code></li>
+<li><code>bytesize</code></li>
+<li><code>byteslice</code></li>
+<li><code>casecmp</code></li>
+<li><code>center</code></li>
+<li><code>chars</code></li>
+<li><code>chomp</code></li>
+<li><code>chomp!</code></li>
+<li><code>chop</code></li>
+<li><code>chop!</code></li>
+<li><code>chr</code></li>
+<li><code>codepoints</code></li>
+<li><code>count</code></li>
+<li><code>crypt</code></li>
+<li><code>delete</code></li>
+<li><code>delete!</code></li>
+<li><code>dump</code></li>
+<li><code>each_byte</code></li>
+<li><code>each_char</code></li>
+<li><code>each_codepoint</code></li>
+<li><code>each_line</code></li>
+<li><code>encode</code></li>
+<li><code>encode!</code></li>
+<li><code>encoding</code></li>
+<li><code>end_with?</code></li>
+<li><code>eql?</code></li>
+<li><code>force_encoding</code></li>
+<li><code>getbyte</code></li>
+<li><code>gsub</code></li>
+<li><code>gsub!</code></li>
+<li><code>hash</code></li>
+<li><code>hex</code></li>
+<li><code>include?</code></li>
+<li><code>index</code></li>
+<li><code>initialize_copy</code></li>
+<li><code>insert</code></li>
+<li><code>inspect</code></li>
+<li><code>intern</code></li>
+<li><code>length</code></li>
+<li><code>lines</code></li>
+<li><code>ljust</code></li>
+<li><code>match</code></li>
+<li><code>next</code></li>
+<li><code>next!</code></li>
+<li><code>oct</code></li>
+<li><code>ord</code></li>
+<li><code>partition</code></li>
+<li><code>rindex</code></li>
+<li><code>rjust</code></li>
+<li><code>rpartition</code></li>
+<li><code>scan</code></li>
+<li><code>scrub</code></li>
+<li><code>scrub!</code></li>
+<li><code>setbyte</code></li>
+<li><code>slice</code></li>
+<li><code>slice!</code></li>
+<li><code>split</code></li>
+<li><code>squeeze</code></li>
+<li><code>squeeze!</code></li>
+<li><code>start_with?</code></li>
+<li><code>sub</code></li>
+<li><code>sub!</code></li>
+<li><code>succ</code></li>
+<li><code>succ!</code></li>
+<li><code>sum</code></li>
+<li><code>swapcase</code></li>
+<li><code>swapcase!</code></li>
+<li><code>to_c</code></li>
+<li><code>to_f</code></li>
+<li><code>to_i</code></li>
+<li><code>to_r</code></li>
+<li><code>to_sym</code></li>
+<li><code>tr</code></li>
+<li><code>tr!</code></li>
+<li><code>tr_s!</code></li>
+<li><code>unpack</code></li>
+<li><code>upto</code></li>
+<li><code>valid_encoding?</code></li>
+<li>✓ <code>*</code>
+</li>
+<li>✓ <code>&lt;&lt;</code>
+</li>
+<li>✓ <code>capitalize</code>
+</li>
+<li>✓ <code>capitalize!</code>
+</li>
+<li>✓ <code>clear</code>
+</li>
+<li>✓ <code>concat</code>
+</li>
+<li>✓ <code>copy</code>
+</li>
+<li>✓ <code>downcase</code>
+</li>
+<li>✓ <code>downcase!</code>
+</li>
+<li>✓ <code>empty?</code>
+</li>
+<li>✓ <code>lstrip</code>
+</li>
+<li>✓ <code>lstrip!</code>
+</li>
+<li>✓ <code>prepend</code>
+</li>
+<li>✓ <code>replace</code>
+</li>
+<li>✓ <code>reverse</code>
+</li>
+<li>✓ <code>reverse!</code>
+</li>
+<li>✓ <code>rstrip</code>
+</li>
+<li>✓ <code>rstrip!</code>
+</li>
+<li>✓ <code>size</code>
+</li>
+<li>✓ <code>strip</code>
+</li>
+<li>✓ <code>strip!</code>
+</li>
+<li>✓ <code>to_s</code>
+</li>
+<li>✓ <code>to_str</code>
+</li>
+<li>✓ <code>upcase</code>
+</li>
+<li>✓ <code>upcase!</code>
+</li>
+</ul><h4>
+<a name="struct" class="anchor" href="#struct"><span class="octicon octicon-link"></span></a>Struct</h4>
+
+<h4>
+<a name="time" class="anchor" href="#time"><span class="octicon octicon-link"></span></a>Time</h4>
+
+<h2>
+<a name="notes" class="anchor" href="#notes"><span class="octicon octicon-link"></span></a>notes</h2>
+
+<p>Usually I try to structure methods so that they have as few <code>return</code> statements or endpoints as possible (1 ideally). In this project I'm using guard style conditions at the beginning of methods and I'm starting to see the beauty of how readable and simple the source code reads. I'm using many <code>if</code> and <code>return</code> statements in favor of <code>else</code> and <code>if else</code>. <code>if</code> expressions are never written inline and the statements are separated by newlines. Brackets <code>{ }</code> are only added to <code>if</code> and <code>foreach</code> loops if necessary. It makes source code files longer but everything is condensed horizontally and naturally less than 80 characters most of the time. It makes me appreciate the enforced whitespace in python more.</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
