@@ -35,7 +35,7 @@ class Kernel {
     }
 
     function instance_variables() {
-        return array_keys($this->__instance_variables__);
+        return array_keys($this->__phuby__);
     }
 
     function is_a_query($module) {

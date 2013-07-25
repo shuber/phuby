@@ -7,7 +7,7 @@ trait Core {
         return Module::const_get(get_called_class())->splat($method_name, $args);
     }
 
-    protected $__instance_variables__ = [];
+    private $__phuby__ = [];
 
     function __construct() {
         $args = func_get_args();
@@ -61,7 +61,7 @@ trait Core {
 
     function &__get($method_name) {
         if (preg_match('/^@(.+)/', $method_name, $matches)) {
-            $value = &$this->__instance_variables__[$matches[1]];
+            $value = &$this->__phuby__[$matches[1]];
         } else {
             $value = $this->__send__($method_name);
         }
@@ -90,8 +90,8 @@ trait Core {
 
     function &__set($method_name, $args) {
         if (preg_match('/^@(.+)/', $method_name, $matches)) {
-            $this->__instance_variables__[$matches[1]] = $args;
-            $value = &$this->__instance_variables__[$matches[1]];
+            $this->__phuby__[$matches[1]] = $args;
+            $value = &$this->__phuby__[$matches[1]];
         } else {
             $value = $this->__send__("$method_name=", $args);
         }
