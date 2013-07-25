@@ -24,7 +24,7 @@ trait Core {
     }
 
     function __caller__($ignore_methods = []) {
-        $backtrace = debug_backtrace(false);
+        $backtrace = debug_backtrace();
         $ignore_modules = [__CLASS__, __NAMESPACE__.'\Kernel', __NAMESPACE__.'\Method', __NAMESPACE__.'\Module\Alias'];
 
         foreach ($backtrace as $index => $trace)
@@ -37,6 +37,11 @@ trait Core {
             $this->__class__ = Module::const_get(get_class($this));
 
         return $this->__class__;
+    }
+
+    function __clone() {
+        if ($this->singleton_class()->instance_method('initialize_copy'))
+            $this->__send__('initialize_copy', $this->__caller__()['object']);
     }
 
     function __extend__($module) {

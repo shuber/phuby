@@ -62,8 +62,6 @@ This allows you to inject `Phuby` features into *any* object.
 ### hooks
 * `coerce`
 * `const_missing`
-* `induced_from`
-* `initialize_copy`
 * `marshal_dump`
 * `marshal_load`
 * `method_added`
@@ -78,6 +76,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`extended`</strike>
 * <strike>`included`</strike>
 * <strike>`inherited`</strike>
+* <strike>`initialize_copy`</strike>
 * <strike>`initialized`</strike>
 * <strike>`method_missing`</strike>
 * <strike>`prepended`</strike>
