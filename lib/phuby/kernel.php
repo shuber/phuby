@@ -26,6 +26,18 @@ class Kernel {
         return '<'.$this->__class()->name().':'.$this->object_id().'>';
     }
 
+    function instance_variable_get($name) {
+        return $this->{$name};
+    }
+
+    function instance_variable_set($name, $value) {
+        return $this->{$name} = $value;
+    }
+
+    function instance_variables() {
+        return array_keys($this->__instance_variables__);
+    }
+
     function is_a_query($module) {
         $module = (string) $module;
 

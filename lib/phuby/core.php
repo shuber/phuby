@@ -7,10 +7,7 @@ trait Core {
         return Module::const_get(get_called_class())->splat($method_name, $args);
     }
 
-    protected $__class__;
-    protected $__id__;
-    protected $__singleton_class__;
-    protected $__variables__ = [];
+    protected $__instance_variables__ = [];
 
     function __construct() {
         $args = func_get_args();
@@ -33,10 +30,10 @@ trait Core {
     }
 
     function __class() {
-        if (!isset($this->__class__))
-            $this->__class__ = Module::const_get(get_class($this));
+        if (!isset($this->{'@__class__'}))
+            $this->{'@__class__'} = Module::const_get(get_class($this));
 
-        return $this->__class__;
+        return $this->{'@__class__'};
     }
 
     function __clone() {
@@ -64,7 +61,7 @@ trait Core {
 
     function &__get($method_name) {
         if (preg_match('/^@(.+)/', $method_name, $matches)) {
-            $value = &$this->__variables__[$matches[1]];
+            $value = &$this->__instance_variables__[$matches[1]];
         } else {
             $value = $this->__send__($method_name);
         }
@@ -72,10 +69,10 @@ trait Core {
     }
 
     function __id__() {
-        if (!isset($this->__id__))
-            $this->__id__ = spl_object_hash($this);
+        if (!isset($this->{'@__id__'}))
+            $this->{'@__id__'} = spl_object_hash($this);
 
-        return $this->__id__;
+        return $this->{'@__id__'};
     }
 
     function __send__($method_name) {
@@ -94,7 +91,7 @@ trait Core {
         if (!preg_match('/^@(.+)/', $method_name, $matches))
             return $this->__send__("$method_name=", $args);
 
-        return $this->__variables__[$matches[1]] = $args;
+        return $this->__instance_variables__[$matches[1]] = $args;
     }
 
     function __splat__($method_name, $args) {
@@ -121,24 +118,11 @@ trait Core {
         return $block->bindTo($singleton, $singleton)->invokeArgs($args);
     }
 
-    function instance_variable_get($name) {
-        if (isset($this->__variables__[$name]))
-            return $this->__variables__[$name];
-    }
-
-    function instance_variable_set($name, $value) {
-        return $this->__variables__[$name] = $value;
-    }
-
-    function instance_variables() {
-        return $this->__variables__;
-    }
-
     function singleton_class() {
-        if (!isset($this->__singleton_class__))
-            $this->__singleton_class__ = new Module($this->__class()->name(), $this->__class()->name());
+        if (!$this->{'@__singleton_class__'})
+            $this->{'@__singleton_class__'} = new Module($this->__class()->name(), $this->__class()->name());
 
-        return $this->__singleton_class__;
+        return $this->{'@__singleton_class__'};
     }
 
     function super() {
