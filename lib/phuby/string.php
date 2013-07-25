@@ -94,6 +94,12 @@ namespace Phuby\String {
             }
         }
 
+        function prepend($other) {
+            $other = (string) $other;
+            $this->{'@native'} = $other.$this->{'@native'};
+            return $this;
+        }
+
         function replace($other) {
             $this->{'@native'} = $other;
             return $this;

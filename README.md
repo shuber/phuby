@@ -334,7 +334,6 @@ This allows you to inject `Phuby` features into *any* object.
 * `oct`
 * `ord`
 * `partition`
-* `prepend`
 * `rindex`
 * `rjust`
 * `rpartition`
@@ -378,6 +377,7 @@ This allows you to inject `Phuby` features into *any* object.
 * <strike>`empty?`</strike>
 * <strike>`lstrip`</strike>
 * <strike>`lstrip!`</strike>
+* <strike>`prepend`</strike>
 * <strike>`replace`</strike>
 * <strike>`reverse`</strike>
 * <strike>`reverse!`</strike>
