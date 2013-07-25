@@ -4,21 +4,21 @@ namespace Phuby\Enumerable;
 
 class ArrayAccess {
     function array_access_offset_exists($offset) {
-        return isset($this->__native__[$offset]);
+        return isset($this->{'@native'}[$offset]);
     }
 
     function array_access_offset_get($offset) {
-        return $this->__native__[$offset];
+        return $this->{'@native'}[$offset];
     }
 
     function array_access_offset_set($offset, $value) {
         if (is_null($offset))
-            $offset = count($this->__native__);
+            $offset = count($this->{'@native'});
 
-        return $this->__native__[$offset] = $value;
+        return $this->{'@native'}[$offset] = $value;
     }
 
     function array_access_offset_unset($offset) {
-        unset($this->__native__[$offset]);
+        unset($this->{'@native'}[$offset]);
     }
 }

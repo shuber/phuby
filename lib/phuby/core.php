@@ -57,12 +57,13 @@ trait Core {
         return $this;
     }
 
-    function __get($method_name) {
-        if (!preg_match('/^@(.+)/', $method_name, $matches))
-            return $this->__send__($method_name);
-
-        if (isset($this->__variables__[$matches[1]]))
-            return $this->__variables__[$matches[1]];
+    function &__get($method_name) {
+        if (preg_match('/^@(.+)/', $method_name, $matches)) {
+            $value = &$this->__variables__[$matches[1]];
+        } else {
+            $value = $this->__send__($method_name);
+        }
+        return $value;
     }
 
     function __id__() {

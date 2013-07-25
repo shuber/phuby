@@ -4,22 +4,22 @@ namespace Phuby\Enumerable;
 
 class Iterator {
     function iterator_current() {
-        return current($this->__native__);
+        return current($this->{'@native'});
     }
 
     function iterator_key() {
-        return key($this->__native__);
+        return key($this->{'@native'});
     }
 
     function iterator_next() {
-        $this->__valid__ = (next($this->__native__) !== false);
+        $this->{'@valid'} = (next($this->{'@native'}) !== false);
     }
 
     function iterator_rewind() {
-        $this->__valid__ = (reset($this->__native__) !== false);
+        $this->{'@valid'} = (reset($this->{'@native'}) !== false);
     }
 
     function iterator_valid() {
-        return $this->__valid__;
+        return $this->{'@valid'};
     }
 }

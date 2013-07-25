@@ -10,7 +10,7 @@ class InstanceMethods {
     }
 
     function initialize($native = []) {
-        $this->__native__ = $native;
+        $this->{'@native'} = $native;
     }
 
     function all($block) {
@@ -74,6 +74,6 @@ class InstanceMethods {
     }
 
     function to_ary() {
-        return $this->__native__;
+        return $this->{'@native'};
     }
 }

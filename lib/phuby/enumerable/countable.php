@@ -4,6 +4,6 @@ namespace Phuby\Enumerable;
 
 class Countable {
     function countable_count() {
-        return count($this->__native__);
+        return count($this->{'@native'});
     }
 }
