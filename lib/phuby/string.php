@@ -13,6 +13,10 @@ namespace Phuby\String {
         static function initialized($self) {
             $self->alias_method('capitalize!', 'capitalize_bang');
             $self->alias_method('downcase!', 'downcase_bang');
+            $self->alias_method('empty?', 'empty_query');
+            $self->alias_method('lstrip!', 'lstrip_bang');
+            $self->alias_method('rstrip!', 'rstrip_bang');
+            $self->alias_method('strip!', 'strip_bang');
             $self->alias_method('upcase!', 'upcase_bang');
         }
 
@@ -42,6 +46,53 @@ namespace Phuby\String {
 
             if ($downcased != $this->{'@native'}) {
                 $this->{'@native'} = $downcased;
+                return $this;
+            }
+        }
+
+        function empty_query() {
+            return $this->size > 0;
+        }
+
+        function lstrip() {
+            return $this->dup->tap('lstrip!');
+        }
+
+        function lstrip_bang() {
+            $stripped = ltrim($this->{'@native'});
+
+            if ($stripped != $this->{'@native'}) {
+                $this->{'@native'} = $stripped;
+                return $this;
+            }
+        }
+
+        function rstrip() {
+            return $this->dup->tap('rstrip!');
+        }
+
+        function rstrip_bang() {
+            $stripped = rtrim($this->{'@native'});
+
+            if ($stripped != $this->{'@native'}) {
+                $this->{'@native'} = $stripped;
+                return $this;
+            }
+        }
+
+        function size() {
+            return strlen($this->{'@native'});
+        }
+
+        function strip() {
+            return $this->dup->tap('strip!');
+        }
+
+        function strip_bang() {
+            $stripped = trim($this->{'@native'});
+
+            if ($stripped != $this->{'@native'}) {
+                $this->{'@native'} = $stripped;
                 return $this;
             }
         }
