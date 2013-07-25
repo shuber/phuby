@@ -1,9 +1,7 @@
 <?php
 
 namespace Phuby {
-    class String extends Object {
-        public $__native__;
-    }
+    class String extends Object { }
 }
 
 namespace Phuby\String {
@@ -14,10 +12,12 @@ namespace Phuby\String {
     class InstanceMethods {
         static function initialized($self) {
             $self->alias_method('capitalize!', 'capitalize_bang');
+            $self->alias_method('downcase!', 'downcase_bang');
+            $self->alias_method('upcase!', 'upcase_bang');
         }
 
         function initialize($native = '') {
-            $this->__native__ = (string) $native;
+            $this->{'@native'} = (string) $native;
         }
 
         function capitalize() {
@@ -25,10 +25,23 @@ namespace Phuby\String {
         }
 
         function capitalize_bang() {
-            $capitalized = ucfirst($this->__native__);
+            $capitalized = ucfirst($this->{'@native'});
 
-            if ($capitalized != $this->__native__) {
-                $this->__native__ = $capitalized;
+            if ($capitalized != $this->{'@native'}) {
+                $this->{'@native'} = $capitalized;
+                return $this;
+            }
+        }
+
+        function downcase() {
+            return $this->dup->tap('downcase!');
+        }
+
+        function downcase_bang() {
+            $downcased = strtolower($this->{'@native'});
+
+            if ($downcased != $this->{'@native'}) {
+                $this->{'@native'} = $downcased;
                 return $this;
             }
         }
@@ -38,7 +51,20 @@ namespace Phuby\String {
         }
 
         function to_str() {
-                return $this->__native__;
+                return $this->{'@native'};
+        }
+
+        function upcase() {
+            return $this->dup->tap('upcase!');
+        }
+
+        function upcase_bang() {
+            $upcased = strtoupper($this->{'@native'});
+
+            if ($upcased != $this->{'@native'}) {
+                $this->{'@native'} = $upcased;
+                return $this;
+            }
         }
     }
 }

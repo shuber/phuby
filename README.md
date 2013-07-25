@@ -292,8 +292,6 @@ This allows you to inject `Phuby` features into *any* object.
 * `bytes`
 * `bytesize`
 * `byteslice`
-* `capitalize`
-* `capitalize!`
 * `casecmp`
 * `center`
 * `chars`
@@ -378,18 +376,20 @@ This allows you to inject `Phuby` features into *any* object.
 * `to_f`
 * `to_i`
 * `to_r`
-* `to_s`
 * `to_str`
 * `to_sym`
 * `tr`
 * `tr!`
-* `tr_s`
 * `tr_s!`
 * `unpack`
-* `upcase`
-* `upcase!`
 * `upto`
 * `valid_encoding?`
+* <strike>`capitalize`</strike>
+* <strike>`capitalize!`</strike>
+* <strike>`to_s`</strike>
+* <strike>`to_str`</strike>
+* <strike>`upcase`</strike>
+* <strike>`upcase!`</strike>
 
 #### Struct
 #### Time
