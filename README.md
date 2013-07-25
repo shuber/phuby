@@ -281,7 +281,6 @@ This allows you to inject `Phuby` features into *any* object.
 * `%`
 * `*`
 * `+`
-* `<<`
 * `<=>`
 * `==`
 * `=~`
@@ -301,7 +300,6 @@ This allows you to inject `Phuby` features into *any* object.
 * `chop!`
 * `chr`
 * `codepoints`
-* `concat`
 * `count`
 * `crypt`
 * `delete`
@@ -370,9 +368,11 @@ This allows you to inject `Phuby` features into *any* object.
 * `unpack`
 * `upto`
 * `valid_encoding?`
+* <strike>`<<`</strike>
 * <strike>`capitalize`</strike>
 * <strike>`capitalize!`</strike>
 * <strike>`clear`</strike>
+* <strike>`concat`</strike>
 * <strike>`downcase`</strike>
 * <strike>`downcase!`</strike>
 * <strike>`empty?`</strike>

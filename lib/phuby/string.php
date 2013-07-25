@@ -11,6 +11,7 @@ namespace Phuby\String {
 
     class InstanceMethods {
         static function initialized($self) {
+            $self->alias_method('<<', 'concat');
             $self->alias_method('capitalize!', 'capitalize_bang');
             $self->alias_method('downcase!', 'downcase_bang');
             $self->alias_method('empty?', 'empty_query');
@@ -40,6 +41,14 @@ namespace Phuby\String {
 
         function clear() {
             $this->{'@native'} = '';
+            return $this;
+        }
+
+        function concat($object) {
+            if (is_int($object))
+                $object = chr($object);
+
+            $this->{'@native'} .= (string) $object;
             return $this;
         }
 
