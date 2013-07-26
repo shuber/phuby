@@ -53,7 +53,7 @@ class Module extends Object {
         $this->{'@methods'} = [];
         $this->{'@reflection'} = new \ReflectionClass($name);
 
-        $instance = $name == __CLASS__ ? $this : new $name;
+        $instance = $this->allocate();
 
         foreach ($this->{'@reflection'}->getMethods() as $method)
             if (!$method->isStatic())
@@ -95,6 +95,10 @@ class Module extends Object {
             call_user_func("$module::included", $this);
 
         return $this;
+    }
+
+    function allocate() {
+        return $this->{'@reflection'}->newInstanceWithoutConstructor();
     }
 
     function ancestors(&$list = []) {
