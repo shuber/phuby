@@ -185,8 +185,4 @@ class Module extends Object {
 
         return $this->{'@reflection'};
     }
-
-    function superclass() {
-        return $this->{'@superclass'};
-    }
 }

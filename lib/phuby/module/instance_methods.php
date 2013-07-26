@@ -37,6 +37,10 @@ class InstanceMethods {
         return $this;
     }
 
+    function superclass() {
+        return $this->{'@superclass'};
+    }
+
     // TODO: prepended modules will still respond to this method
     function undef_method($method_name) {
         $this->define_method($method_name, function() use ($method_name) {
