@@ -47,11 +47,11 @@ class Module extends Object {
     }
 
     function initialize($name, $superclass = null) {
+        $this->{'@name'} = $name;
         $this->{'@includes'} = [];
         $this->{'@methods'} = [];
         $this->{'@prepends'} = [];
 
-        $this->{'@name'} = $name;
         $instance = $name == __CLASS__ ? $this : $this->allocate();
 
         foreach ($this->reflection()->getMethods() as $method)
