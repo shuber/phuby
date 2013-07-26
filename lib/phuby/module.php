@@ -53,8 +53,9 @@ class Module extends Object {
         $this->{'@prepends'} = [];
 
         $instance = $name == __CLASS__ ? $this : $this->allocate();
+        $this->{'@reflection'} = new \ReflectionClass($name);
 
-        foreach ($this->reflection()->getMethods() as $method)
+        foreach ($this->{'@reflection'}->getMethods() as $method)
             if (!$method->isStatic())
                 $this->define_method($method->getName(), $method->getClosure($instance));
 
@@ -152,12 +153,5 @@ class Module extends Object {
 
     function prepend_features($module) {
         array_unshift($this->{'@prepends'}, $module);
-    }
-
-    function reflection() {
-        if (!$this->{'@reflection'});
-            $this->{'@reflection'} = new \ReflectionClass($this->name());
-
-        return $this->{'@reflection'};
     }
 }
