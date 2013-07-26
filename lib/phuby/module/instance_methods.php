@@ -11,6 +11,15 @@ class InstanceMethods {
         $self->alias_method('to_s', 'name');
     }
 
+    function __new() {
+        $instance = $this->allocate();
+
+        if ($method = $instance->method('initialize'))
+            $method->splat(func_get_args());
+
+        return $instance;
+    }
+
     function include_query($module) {
         foreach ($this->ancestors() as $ancestor)
             if ($ancestor->name() == $module)

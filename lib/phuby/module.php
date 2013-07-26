@@ -96,15 +96,6 @@ class Module extends Object {
         return $this;
     }
 
-    function __new() {
-        $instance = $this->allocate();
-
-        if ($method = $instance->method('initialize'))
-            $method->splat(func_get_args());
-
-        return $instance;
-    }
-
     function allocate() {
         return new $this->{'@name'};
     }
