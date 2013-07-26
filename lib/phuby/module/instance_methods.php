@@ -28,6 +28,22 @@ class InstanceMethods {
         return false;
     }
 
+    function instance_methods($include_ancestors = true, $list = []) {
+        if ($include_ancestors) {
+            foreach ($this->{'@includes'} as $module)
+                self::const_get($module)->instance_methods(true, $list);
+
+            foreach ($this->{'@prepends'} as $module)
+                self::const_get($module)->instance_methods(true, $list);
+        }
+
+        foreach (array_keys($this->{'@methods'}) as $method_name)
+            if (!in_array($method_name, $list))
+                $list[] = $method_name;
+
+        return $list;
+    }
+
     function method_defined_query($method_name) {
         return !!$this->instance_method($method_name);
     }
