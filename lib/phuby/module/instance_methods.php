@@ -20,6 +20,10 @@ class InstanceMethods {
         return $instance;
     }
 
+    function allocate() {
+        return new $this->{'@name'};
+    }
+
     function include_query($module) {
         foreach ($this->ancestors() as $ancestor)
             if ($ancestor->name() == $module)

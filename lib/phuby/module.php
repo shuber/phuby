@@ -49,11 +49,11 @@ class Module extends Object {
     function initialize($name, $superclass = null) {
         $this->{'@name'} = $name;
         $this->{'@includes'} = [];
-        $this->{'@methods'} = [];
         $this->{'@prepends'} = [];
-
-        $instance = $name == __CLASS__ ? $this : $this->allocate();
+        $this->{'@methods'} = [];
         $this->{'@reflection'} = new \ReflectionClass($name);
+
+        $instance = $name == __CLASS__ ? $this : new $name;
 
         foreach ($this->{'@reflection'}->getMethods() as $method)
             if (!$method->isStatic())
@@ -95,10 +95,6 @@ class Module extends Object {
             call_user_func("$module::included", $this);
 
         return $this;
-    }
-
-    function allocate() {
-        return new $this->{'@name'};
     }
 
     function ancestors(&$list = []) {
