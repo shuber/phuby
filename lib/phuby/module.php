@@ -195,10 +195,6 @@ class Module extends Object {
         return $this->{'@superclass'};
     }
 
-    function to_s() {
-        return $this->name();
-    }
-
     // TODO: prepended modules will still respond to this method
     function undef_method($method_name) {
         $this->define_method($method_name, function() use ($method_name) {

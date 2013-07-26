@@ -8,6 +8,7 @@ class InstanceMethods {
         $self->alias_method('class_exec', 'module_exec');
         $self->alias_method('include?', 'include_query');
         $self->alias_method('method_defined?', 'method_defined_query');
+        $self->alias_method('to_s', 'name');
     }
 
     function include_query($module) {
