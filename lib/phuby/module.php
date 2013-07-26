@@ -46,34 +46,31 @@ class Module extends Object {
         throw new NameError("uninitialized constant $name");
     }
 
-    protected $name;
-    protected $methods = [];
-    protected $includes = [];
-    protected $prepends = [];
-    protected $reflection;
-    protected $superclass;
-
     function initialize($name, $superclass = null) {
-        $this->name = $name;
-        $instance = $this->name == __CLASS__ ? $this : $this->allocate();
+        $this->{'@includes'} = [];
+        $this->{'@methods'} = [];
+        $this->{'@prepends'} = [];
+
+        $this->{'@name'} = $name;
+        $instance = $name == __CLASS__ ? $this : $this->allocate();
 
         foreach ($this->reflection()->getMethods() as $method)
             if (!$method->isStatic())
                 $this->define_method($method->getName(), $method->getClosure($instance));
 
-        if ($superclass || $superclass = get_parent_class($this->name)) {
-            array_unshift($this->includes, $superclass);
-            $this->superclass = self::const_get($superclass);
+        if ($superclass || $superclass = get_parent_class($name)) {
+            array_unshift($this->{'@includes'}, $superclass);
+            $this->{'@superclass'} = self::const_get($superclass);
         }
 
-        if (method_exists($this->name, 'initialized'))
-            call_user_func("$this->name::initialized", $this);
+        if (method_exists($name, 'initialized'))
+            call_user_func("$name::initialized", $this);
 
-        if (class_exists("$this->name\ClassMethods"))
-            $this->__extend__("$this->name\ClassMethods");
+        if (class_exists("$name\ClassMethods"))
+            $this->__extend__("$name\ClassMethods");
 
-        if (class_exists("$this->name\InstanceMethods"))
-            $this->__include("$this->name\InstanceMethods");
+        if (class_exists("$name\InstanceMethods"))
+            $this->__include("$name\InstanceMethods");
 
         if ($superclass && method_exists($superclass, 'inherited'))
             call_user_func("$superclass::inherited", $this);
@@ -109,28 +106,28 @@ class Module extends Object {
     }
 
     function allocate() {
-        return new $this->name;
+        return new $this->{'@name'};
     }
 
     function ancestors(&$list = []) {
-        foreach ($this->includes as $ancestor)
+        foreach ($this->{'@includes'} as $ancestor)
             self::const_get($ancestor)->ancestors($list);
 
         if (!in_array($this, $list))
             array_unshift($list, $this);
 
-        foreach ($this->prepends as $ancestor)
+        foreach ($this->{'@prepends'} as $ancestor)
             self::const_get($ancestor)->ancestors($list);
 
         return $list;
     }
 
     function append_features($module) {
-        $this->includes[] = $module;
+        $this->{'@includes'}[] = $module;
     }
 
     function define_method($method_name, $block) {
-        return $this->methods[$method_name] = new UnboundMethod($this->name, $method_name, $block);
+        return $this->{'@methods'}[$method_name] = new UnboundMethod($this->name(), $method_name, $block);
     }
 
     function instance_method($method_name, $include_ancestors = true) {
@@ -138,23 +135,23 @@ class Module extends Object {
             foreach ($this->ancestors() as $ancestor)
                 if ($method = $ancestor->instance_method($method_name, false))
                     return $method;
-        } else if (isset($this->methods[$method_name])) {
-            return $this->methods[$method_name];
-        } else if (in_array($method_name, self::$keywords) && isset($this->methods["__$method_name"])) {
-            return $this->methods["__$method_name"];
+        } else if (isset($this->{'@methods'}[$method_name])) {
+            return $this->{'@methods'}[$method_name];
+        } else if (in_array($method_name, self::$keywords) && isset($this->{'@methods'}["__$method_name"])) {
+            return $this->{'@methods'}["__$method_name"];
         }
     }
 
     function instance_methods($include_ancestors = true, $list = []) {
         if ($include_ancestors) {
-            foreach ($includes as $module)
+            foreach ($this->{'@includes'} as $module)
                 self::const_get($module)->instance_methods(true, $list);
 
-            foreach ($prepends as $module)
+            foreach ($this->{'@prepends'} as $module)
                 self::const_get($module)->instance_methods(true, $list);
         }
 
-        foreach (array_keys($this->methods) as $method_name)
+        foreach (array_keys($this->{'@methods'}) as $method_name)
             if (!in_array($method_name, $list))
                 $list[] = $method_name;
 
@@ -162,7 +159,7 @@ class Module extends Object {
     }
 
     function name() {
-        return $this->name;
+        return $this->{'@name'};
     }
 
     function prepend($module) {
@@ -179,27 +176,27 @@ class Module extends Object {
     }
 
     function prepend_features($module) {
-        array_unshift($this->prepends, $module);
+        array_unshift($this->{'@prepends'}, $module);
     }
 
     function reflection() {
-        if (!isset($this->reflection));
-            $this->reflection = new \ReflectionClass($this->name);
+        if (!$this->{'@reflection'});
+            $this->{'@reflection'} = new \ReflectionClass($this->name());
 
-        return $this->reflection;
+        return $this->{'@reflection'};
     }
 
     function remove_method($method_name) {
-        unset($this->methods[$method_name]);
+        unset($this->{'@methods'}[$method_name]);
         return $this;
     }
 
     function superclass() {
-        return $this->superclass;
+        return $this->{'@superclass'};
     }
 
     function to_s() {
-        return $this->name;
+        return $this->name();
     }
 
     // TODO: prepended modules will still respond to this method
