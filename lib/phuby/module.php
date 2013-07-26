@@ -186,11 +186,6 @@ class Module extends Object {
         return $this->{'@reflection'};
     }
 
-    function remove_method($method_name) {
-        unset($this->{'@methods'}[$method_name]);
-        return $this;
-    }
-
     function superclass() {
         return $this->{'@superclass'};
     }

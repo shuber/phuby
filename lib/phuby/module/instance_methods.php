@@ -32,6 +32,11 @@ class InstanceMethods {
         return $block->bindTo($this, $this)->invokeArgs($args);
     }
 
+    function remove_method($method_name) {
+        unset($this->{'@methods'}[$method_name]);
+        return $this;
+    }
+
     // TODO: prepended modules will still respond to this method
     function undef_method($method_name) {
         $this->define_method($method_name, function() use ($method_name) {
