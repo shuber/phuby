@@ -31,4 +31,11 @@ class InstanceMethods {
         $args = array_slice(0, -1, func_get_args());
         return $block->bindTo($this, $this)->invokeArgs($args);
     }
+
+    // TODO: prepended modules will still respond to this method
+    function undef_method($method_name) {
+        $this->define_method($method_name, function() use ($method_name) {
+            return $this->__undefined__($method_name);
+        });
+    }
 }
