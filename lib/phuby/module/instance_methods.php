@@ -4,6 +4,8 @@ namespace Phuby\Module;
 
 class InstanceMethods {
     static function initialized($self) {
+        $self->attr_reader('superclass');
+
         $self->alias_method('class_eval', 'module_eval');
         $self->alias_method('class_exec', 'module_exec');
         $self->alias_method('include?', 'include_query');
@@ -60,10 +62,6 @@ class InstanceMethods {
     function remove_method($method_name) {
         unset($this->{'@methods'}[$method_name]);
         return $this;
-    }
-
-    function superclass() {
-        return $this->{'@superclass'};
     }
 
     // TODO: prepended modules will still respond to this method
