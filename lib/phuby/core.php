@@ -30,7 +30,7 @@ trait Core {
     }
 
     function __class() {
-        if (!isset($this->{'@__class__'}))
+        if (!$this->{'@__class__'})
             $this->{'@__class__'} = Module::const_get(get_class($this));
 
         return $this->{'@__class__'};
@@ -60,8 +60,14 @@ trait Core {
     }
 
     function &__get($method_name) {
+        $value = null;
+
         if (preg_match('/^@(.+)/', $method_name, $matches)) {
-            $value = &$this->__phuby__[$matches[1]];
+            if (isset($this->__phuby__[$matches[1]]))
+                $value = &$this->__phuby__[$matches[1]];
+        } else if (preg_match('/^\$(.+)/', $method_name, $matches)) {
+            if (isset($GLOBALS[$matches[1]]))
+                $value = $GLOBALS[$matches[1]];
         } else {
             $value = $this->__send__($method_name);
         }
@@ -70,7 +76,7 @@ trait Core {
     }
 
     function __id__() {
-        if (!isset($this->{'@__id__'}))
+        if (!$this->{'@__id__'})
             $this->{'@__id__'} = spl_object_hash($this);
 
         return $this->{'@__id__'};
@@ -92,6 +98,9 @@ trait Core {
         if (preg_match('/^@(.+)/', $method_name, $matches)) {
             $this->__phuby__[$matches[1]] = $args;
             $value = &$this->__phuby__[$matches[1]];
+        } else if (preg_match('/^\$(.+)/', $method_name, $matches)) {
+            $GLOBALS[$matches[1]] = $args;
+            $value = &$GLOBALS[$matches[1]];
         } else {
             $value = $this->__send__("$method_name=", $args);
         }

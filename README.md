@@ -10,9 +10,10 @@ A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/)
 * support for methods with special characters like `?` using this syntax `$this->{'empty?'}`
 * instance variables are private and accessed with `$this->{'@name'}`
 * [incomplete] class variables are supported as well `$this->{'@@name'}`
+* even global variables are supported `$this->{'$redis'}`
 * ported core library including `BasicObject`, `Kernel`, `Object`, `Module`, `Method`, `UnboundMethod`
 * [incomplete] ported standard library including `Array`, `Hash`, `String`, `Enumerable`, `Comparable`
-* ruby style namespace resolution thru the `Phuby` function
+* [incomplete] ruby style namespace resolution thru the `Phuby` function
 * autoloading with ruby `underscore` naming conventions
 * parenthesis are optional for method calls with no arguments
 * everything is an object, including classes
