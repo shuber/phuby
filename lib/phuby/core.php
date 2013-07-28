@@ -16,7 +16,7 @@ trait Core {
             call_user_func_array([$this, 'initialize'], $args);
     }
 
-    function __call($method_name, $args) {
+    function __call($method_name, $args = []) {
         if ($method = $this->singleton_class()->instance_method($method_name)) {
             return $method->bind($this)->splat($args);
         } else if ($method = $this->singleton_class()->instance_method('method_missing')) {
@@ -44,7 +44,7 @@ trait Core {
 
     function __clone() {
         if ($this->singleton_class()->instance_method('initialize_copy'))
-            $this->__send__('initialize_copy', $this->__caller__()['object']);
+            $this->__call('initialize_copy', [$this->__caller__()['object']]);
     }
 
     function __extend__($module) {
@@ -75,7 +75,7 @@ trait Core {
             if (isset($GLOBALS[$matches[1]]))
                 $value = $GLOBALS[$matches[1]];
         } else {
-            $value = $this->__send__($method_name);
+            $value = $this->__call($method_name);
         }
 
         return $value;
@@ -112,14 +112,14 @@ trait Core {
             $GLOBALS[$matches[1]] = $args;
             $value = &$GLOBALS[$matches[1]];
         } else {
-            $value = $this->__send__("$method_name=", $args);
+            $value = $this->__call("$method_name=", [$args]);
         }
 
         return $value;
     }
 
     function __toString() {
-        return $this->__send__('to_s');
+        return $this->__call('to_s');
     }
 
     function __undefined__($method_name) {

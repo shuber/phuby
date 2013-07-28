@@ -4,6 +4,6 @@ namespace Phuby;
 
 trait IteratorAggregateTrait {
     function getIterator() {
-        return $this->__send__('iterator_aggregate_get_iterator');
+        return $this->__call('iterator_aggregate_get_iterator');
     }
 }

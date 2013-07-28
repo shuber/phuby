@@ -66,7 +66,7 @@ class Kernel {
     function tap($block) {
         if (is_string($block))
             $block = function($object) use ($block) {
-                $object->__send__($block);
+                $object->__call($block);
             };
 
         $block($this);
