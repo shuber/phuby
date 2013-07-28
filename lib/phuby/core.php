@@ -73,7 +73,7 @@ trait Core {
                 $value = &$this->__phuby__[$matches[1]];
         } else if (preg_match('/^\$(.+)/', $method_name, $matches)) {
             if (isset($GLOBALS[$matches[1]]))
-                $value = $GLOBALS[$matches[1]];
+                $value = &$GLOBALS[$matches[1]];
         } else {
             $value = $this->__call($method_name);
         }
