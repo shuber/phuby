@@ -68,11 +68,20 @@ trait Core {
     function &__get($method_name) {
         $value = null;
 
-        if (preg_match('/^@(.+)/', $method_name, $matches)) {
-            if (isset($this->__phuby__[$matches[1]]))
+        if (preg_match('/^@@(.+)/', $method_name, $matches)) {
+            $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+            if ($this->__isset($method_name)) {
+                foreach ($module->heritage() as $module)
+                    if (isset($module->__phuby__[$method_name]))
+                        $value = &$module->__phuby__[$method_name];
+            } else {
+                throw new NameError("uninitialized class variable '$method_name' for ".$module->name());
+            }
+        } else if (preg_match('/^@(.+)/', $method_name, $matches)) {
+            if ($this->__isset($method_name))
                 $value = &$this->__phuby__[$matches[1]];
         } else if (preg_match('/^\$(.+)/', $method_name, $matches)) {
-            if (isset($GLOBALS[$matches[1]]))
+            if ($this->__isset($method_name))
                 $value = &$GLOBALS[$matches[1]];
         } else {
             $value = $this->__call($method_name);
@@ -89,12 +98,16 @@ trait Core {
     }
 
     function __isset($method_name) {
-        if (preg_match('/^([\@\$])(.+)/', $method_name, $matches)) {
+        if (preg_match('/^(@@|@|\$)(.+)/', $method_name, $matches))
             switch($matches[1]) {
                 case '@': return isset($this->__phuby__[$matches[2]]);
                 case '$': return isset($GLOBALS[$matches[2]]);
+                case '@@':
+                    $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+                    foreach ($module->heritage() as $module)
+                        if (isset($module->__phuby__[$method_name]))
+                            return true;
             }
-        }
 
         return false;
     }
@@ -105,7 +118,14 @@ trait Core {
     }
 
     function &__set($method_name, $args) {
-        if (preg_match('/^@(.+)/', $method_name, $matches)) {
+        if (preg_match('/^@@(.+)/', $method_name, $matches)) {
+            $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+            foreach (array_reverse($module->heritage()) as $module)
+                if ($module->__isset($method_name))
+                    break;
+            $module->__phuby__[$method_name] = $args;
+            $value = &$module->__phuby__[$method_name];
+        } else if (preg_match('/^@(.+)/', $method_name, $matches)) {
             $this->__phuby__[$matches[1]] = $args;
             $value = &$this->__phuby__[$matches[1]];
         } else if (preg_match('/^\$(.+)/', $method_name, $matches)) {
@@ -127,10 +147,15 @@ trait Core {
     }
 
     function __unset($method_name) {
-        if (preg_match('/^([\@\$])(.+)/', $method_name, $matches)) {
+        if (preg_match('/^(@@|@|\$)(.+)/', $method_name, $matches)) {
             switch($matches[1]) {
                 case '@': unset($this->__phuby__[$matches[2]]);
                 case '$': unset($GLOBALS[$matches[2]]);
+                case '@@':
+                    $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+                    foreach ($module->heritage() as $module)
+                        if (isset($module->__phuby__[$method_name]))
+                            unset($module->__phuby__[$method_name]);
             }
         }
     }
