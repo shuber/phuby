@@ -82,6 +82,17 @@ trait Core {
         return $this->{'@__id__'};
     }
 
+    function __isset($method_name) {
+        if (preg_match('/^([\@\$])(.+)/', $method_name, $matches)) {
+            switch($matches[1]) {
+                case '@': return isset($this->__phuby__[$matches[2]]);
+                case '$': return isset($GLOBALS[$matches[2]]);
+            }
+        }
+
+        return false;
+    }
+
     function __send__($method_name) {
         $args = array_slice(func_get_args(), 1);
 
@@ -119,6 +130,15 @@ trait Core {
 
     function __undefined__($method_name) {
         throw new NoMethodError("undefined method '$method_name' for ".$this->__class()->name());
+    }
+
+    function __unset($method_name) {
+        if (preg_match('/^([\@\$])(.+)/', $method_name, $matches)) {
+            switch($matches[1]) {
+                case '@': unset($this->__phuby__[$matches[2]]);
+                case '$': unset($GLOBALS[$matches[2]]);
+            }
+        }
     }
 
     function instance_eval($block) {
