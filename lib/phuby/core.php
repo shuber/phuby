@@ -17,7 +17,13 @@ trait Core {
     }
 
     function __call($method_name, $args) {
-        return $this->__splat__($method_name, $args);
+        if ($method = $this->singleton_class()->instance_method($method_name)) {
+            return $method->bind($this)->splat($args);
+        } else if ($method = $this->singleton_class()->instance_method('method_missing')) {
+            return $method->bind($this)->call($method_name, $args);
+        } else {
+            return $this->__undefined__($method_name);
+        }
     }
 
     function __caller__($ignore_methods = []) {
@@ -95,14 +101,7 @@ trait Core {
 
     function __send__($method_name) {
         $args = array_slice(func_get_args(), 1);
-
-        if ($method = $this->singleton_class()->instance_method($method_name)) {
-            return $method->bind($this)->splat($args);
-        } else if ($method = $this->singleton_class()->instance_method('method_missing')) {
-            return $method->bind($this)->call($method_name, $args);
-        } else {
-            return $this->__undefined__($method_name);
-        }
+        return $this->__call($method_name, $args);
     }
 
     function &__set($method_name, $args) {
@@ -117,11 +116,6 @@ trait Core {
         }
 
         return $value;
-    }
-
-    function __splat__($method_name, $args) {
-        array_unshift($args, $method_name);
-        return call_user_func_array([$this, '__send__'], $args);
     }
 
     function __toString() {

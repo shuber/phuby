@@ -14,7 +14,7 @@ class Kernel {
         $self->alias_method('respond_to?', 'respond_to_query');
         $self->alias_method('respond_to_missing?', 'respond_to_missing_query');
         $self->alias_method('send', '__send__');
-        $self->alias_method('splat', '__splat__');
+        $self->alias_method('splat', '__call');
         $self->alias_method('to_s', 'inspect');
     }
 
