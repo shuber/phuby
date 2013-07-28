@@ -122,6 +122,18 @@ class Module extends Object {
         return $this->{'@methods'}[$method_name] = new UnboundMethod($this->name(), $method_name, $block);
     }
 
+    function heritage() {
+        $module = $this;
+        $heritage = [$module];
+
+        while ($superclass = $module->{'@superclass'}) {
+            $module = $superclass;
+            $heritage[] = $module;
+        }
+
+        return $heritage;
+    }
+
     function instance_method($method_name, $include_ancestors = true) {
         if ($include_ancestors) {
             foreach ($this->ancestors() as $ancestor)
