@@ -34,9 +34,20 @@ namespace Phuby\Regexp {
 
         function match($string) {
             $string = (string) $string;
+            $this->{'$&'} = null;
 
-            if (preg_match($this->regexp, $string, $matches))
-                return Phuby('Phuby\MatchData')->new($this, $string, $matches);
+            if (preg_match($this->regexp, $string, $matches)) {
+                $match = Phuby('Phuby\MatchData')->new($this, $string, $matches);
+
+                $this->{'$&'} = $string;
+                $this->{'$~'} = $match;
+
+                foreach ($matches as $index => $value)
+                    if ($index > 0)
+                        $this->{"$$index"} = $value;
+
+                return $match;
+            }
         }
     }
 }
