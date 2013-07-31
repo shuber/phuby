@@ -22,7 +22,7 @@ A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/)
 
 ## installation
 
-If you're using `Composer` simply require the `shuber-phuby` package.
+If you're using `composer` simply require the `shuber-phuby` package.
 
 Otherwise you can download the `phuby` tar/zip or `git clone` this
 repository somewhere in your php include path.

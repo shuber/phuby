@@ -46,7 +46,7 @@ class Module extends Object {
         throw new NameError("uninitialized constant $name");
     }
 
-    function initialize($name = null, $superclass = null) {
+    function initialize($name = null, $superclass = null, $block = null) {
         if (!$name) {
             $class = 'Anonymous_'.uniqid();
             $namespace = __NAMESPACE__.'\Compiled';
@@ -74,6 +74,9 @@ class Module extends Object {
 
         if (method_exists($name, 'initialized'))
             call_user_func("$name::initialized", $this);
+
+        if ($block)
+            $block($this);
 
         if (class_exists("$name\ClassMethods"))
             $this->__extend__("$name\ClassMethods");
