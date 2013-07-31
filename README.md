@@ -2,9 +2,10 @@
 
 A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/) 5.4+
 
+
 ## features
 
-* mixins with `include`, `extend`, `prepend` and their associated callbacks
+* runtime mixins with `include`, `extend`, `prepend` and their associated callbacks
 * `Object` and `Kernel` methods including `super`, `send`, `respond_to?`, `method_missing`
 * `Module` methods including `alias_method`, `define_method`, and `attr` accessors
 * support for methods with special characters like `?` using this syntax `$this->{'empty?'}`
@@ -17,6 +18,17 @@ A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/)
 * autoloading with ruby `underscore` naming conventions
 * parenthesis are optional for method calls with no arguments
 * everything is an object, including classes
+
+
+## installation
+
+If you're using `Composer` simply require the `shuber-phuby` package.
+
+Otherwise you can download the `phuby` tar/zip or `git clone` this
+repository somewhere in your php include path.
+
+Then inside of your php files you can `require 'phuby/phuby.php'` to load the library.
+
 
 ## usage
 
@@ -104,84 +116,12 @@ This allows you to inject `Phuby` features into *any* object.
 
 #### Array
 #### Base64
-* ✓ `decode64`
-* ✓ `encode64`
-
 #### BasicObject
-* `singleton_method_added`
-* `singleton_method_removed`
-* `singleton_method_undefined`
-* ✓ `__caller__`
-* ✓ `__id__`
-* ✓ `__send__`
-* ✓ `__splat__`
-* ✓ `__undefined__`
-* ✓ `class`
-* ✓ `equal?`
-* ✓ `initialize`
-* ✓ `instance_eval`
-* ✓ `instance_exec`
-* ✓ `instance_variable_get`
-* ✓ `instance_variable_set`
-* ✓ `instance_variables`
-* ✓ `method_missing`
-* ✓ `singleton_class`
-* ✓ `super`
-
 #### Comparable
 #### Date
 #### Dir
 #### Encoding
 #### Enumerable
-* `all?`
-* `any?`
-* `chunk`
-* `collect`
-* `collect_concat`
-* `count`
-* `cycle`
-* `detect`
-* `drop`
-* `drop_while`
-* `each_cons`
-* `each_entry`
-* `each_slice`
-* `each_with_index`
-* `each_with_object`
-* `entries`
-* `find`
-* `find_all`
-* `find_index`
-* `first`
-* `flat_map`
-* `grep`
-* `group_by`
-* `include?`
-* `inject`
-* `lazy`
-* `map`
-* `max`
-* `max_by`
-* `member?`
-* `min`
-* `min_by`
-* `minmax`
-* `minmax_by`
-* `none?`
-* `one?`
-* `partition`
-* `reduce`
-* `reject`
-* `reverse_each`
-* `select`
-* `slice_before`
-* `sort`
-* `sort_by`
-* `take`
-* `take_while`
-* `to_a`
-* `zip`
-
 #### Enumerator
 #### File
 #### Fixnum
@@ -190,103 +130,12 @@ This allows you to inject `Phuby` features into *any* object.
 #### IO
 #### Integer
 #### Kernel
-* ✓ `[]`
-* ✓ `[]=`
-* ✓ `caller`
-* ✓ `dup`
-* ✓ `extend`
-* ✓ `inspect`
-* ✓ `is_a?`
-* ✓ `kind_of?`
-* ✓ `method`
-* ✓ `methods`
-* ✓ `object_id`
-* ✓ `respond_to?`
-* ✓ `respond_to_missing?`
-* ✓ `send`
-* ✓ `splat`
-* ✓ `tap`
-* ✓ `to_s`
-
 #### Marshal
-* ✓ `dump`
-* ✓ `load`
-* ✓ `restore`
-
 #### MatchData
-* `==`
-* `[]`
-* `begin`
-* `end`
-* `eql?`
-* `hash`
-* `inspect`
-* `length`
-* `names`
-* `offset`
-* `post_match`
-* `pre_match`
-* `size`
-* `to_a`
-* `to_s`
-* `values_at`
-* ✓ `captures`
-* ✓ `regexp`
-* ✓ `string`
-
 #### Math
 #### Module
-* anonymous classes
-* `const_missing`
-* `const_set`
-* `constants`
-* `freeze`
-* `method_added`
-* `method_removed`
-* `method_undefined`
-* `module_function`
-* `refine`
-* `remove_method`
-* `undef_method`
-* `using`
-* ✓ `alias_method`
-* ✓ `alias_method_chain`
-* ✓ `allocate`
-* ✓ `ancestors`
-* ✓ `append_features`
-* ✓ `attr_accessor`
-* ✓ `attr_reader`
-* ✓ `attr_writer`
-* ✓ `class_eval`
-* ✓ `class_exec`
-* ✓ `const_get`
-* ✓ `define_method`
-* ✓ `extend`
-* ✓ `extend_object`
-* ✓ `extended`
-* ✓ `include`
-* ✓ `include?`
-* ✓ `included`
-* ✓ `inherited`
-* ✓ `initialized`
-* ✓ `inspect`
-* ✓ `instance_method`
-* ✓ `instance_methods`
-* ✓ `method_defined?`
-* ✓ `module_eval`
-* ✓ `module_exec`
-* ✓ `name`
-* ✓ `new`
-* ✓ `prepend`
-* ✓ `prepend_features`
-* ✓ `prepended`
-* ✓ `superclass`
-* ✓ `to_s`
-
 #### Numeric
 #### Object
-* ✓ `include Kernel`
-
 #### ObjectSpace
 #### Proc
 #### Random
@@ -295,121 +144,9 @@ This allows you to inject `Phuby` features into *any* object.
 #### RegexpError
 #### StopIteration
 #### String
-* `%`
-* `+`
-* `<=>`
-* `==`
-* `=~`
-* `[]`
-* `[]=`
-* `ascii_only?`
-* `b`
-* `bytes`
-* `bytesize`
-* `byteslice`
-* `casecmp`
-* `center`
-* `chars`
-* `chomp`
-* `chomp!`
-* `chop`
-* `chop!`
-* `chr`
-* `codepoints`
-* `count`
-* `crypt`
-* `delete`
-* `delete!`
-* `dump`
-* `each_byte`
-* `each_char`
-* `each_codepoint`
-* `each_line`
-* `encode`
-* `encode!`
-* `encoding`
-* `end_with?`
-* `eql?`
-* `force_encoding`
-* `getbyte`
-* `gsub`
-* `gsub!`
-* `hash`
-* `hex`
-* `include?`
-* `index`
-* `initialize_copy`
-* `insert`
-* `inspect`
-* `intern`
-* `length`
-* `lines`
-* `ljust`
-* `match`
-* `next`
-* `next!`
-* `oct`
-* `ord`
-* `partition`
-* `rindex`
-* `rjust`
-* `rpartition`
-* `scan`
-* `scrub`
-* `scrub!`
-* `setbyte`
-* `slice`
-* `slice!`
-* `split`
-* `squeeze`
-* `squeeze!`
-* `start_with?`
-* `sub`
-* `sub!`
-* `succ`
-* `succ!`
-* `sum`
-* `swapcase`
-* `swapcase!`
-* `to_c`
-* `to_f`
-* `to_i`
-* `to_r`
-* `to_sym`
-* `tr`
-* `tr!`
-* `tr_s!`
-* `unpack`
-* `upto`
-* `valid_encoding?`
-* ✓ `*`
-* ✓ `<<`
-* ✓ `capitalize`
-* ✓ `capitalize!`
-* ✓ `clear`
-* ✓ `concat`
-* ✓ `copy`
-* ✓ `downcase`
-* ✓ `downcase!`
-* ✓ `empty?`
-* ✓ `lstrip`
-* ✓ `lstrip!`
-* ✓ `prepend`
-* ✓ `replace`
-* ✓ `reverse`
-* ✓ `reverse!`
-* ✓ `rstrip`
-* ✓ `rstrip!`
-* ✓ `size`
-* ✓ `strip`
-* ✓ `strip!`
-* ✓ `to_s`
-* ✓ `to_str`
-* ✓ `upcase`
-* ✓ `upcase!`
-
 #### Struct
 #### Time
+
 
 ## notes
 
