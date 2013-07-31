@@ -14,9 +14,9 @@ A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/)
 * even global variables are supported `$this->{'$redis'}`
 * ported core library including `BasicObject`, `Kernel`, `Object`, `Module`, `Method`, `UnboundMethod`
 * [incomplete] ported standard library including `Array`, `Hash`, `String`, `Enumerable`, `Comparable`
-* [incomplete] ruby style namespace resolution thru the `Phuby` function
 * autoloading with ruby `underscore` naming conventions
-* parenthesis are optional for method calls with no arguments
+* ruby style namespace resolution
+* optional parenthesis for method calls with no arguments
 * everything is an object, including classes
 
 

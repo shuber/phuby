@@ -71,6 +71,27 @@ trait Core {
     function &__get($method_name) {
         $value = null;
 
+        if (preg_match('/^[A-Z]/', $method_name)) {
+            foreach ($this->singleton_class()->ancestors() as $module) {
+                $namespaces = array_slice(explode('\\', $module->name()), 0, -1);
+
+                if (!$namespaces[0])
+                    unset($namespaces[0]);
+
+                while (!empty($namespaces)) {
+                    $namespace = implode('\\', $namespaces);
+                    $class = $namespace.'\\'.$method_name;
+
+                    if (class_exists($class)) {
+                        $constant = Module::const_get($class);
+                        return $constant;
+                    }
+
+                    array_pop($namespaces);
+                }
+            }
+        }
+
         if (preg_match('/^@@(.+)/', $method_name, $matches)) {
             $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
             if ($this->__isset($method_name)) {
