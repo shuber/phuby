@@ -46,7 +46,15 @@ class Module extends Object {
         throw new NameError("uninitialized constant $name");
     }
 
-    function initialize($name, $superclass = null) {
+    function initialize($name = null, $superclass = null) {
+        if (!$name) {
+            $class = 'Anonymous_'.uniqid();
+            $namespace = __NAMESPACE__.'\Compiled';
+            $name = "$namespace\\$class";
+            $definition = "namespace $namespace { class $class extends \\".__NAMESPACE__.'\\Object { } }';
+            eval($definition);
+        }
+
         $this->{'@name'} = $name;
         $this->{'@includes'} = [];
         $this->{'@prepends'} = [];
@@ -75,13 +83,6 @@ class Module extends Object {
 
         if ($superclass && method_exists($superclass, 'inherited'))
             call_user_func("$superclass::inherited", $this);
-    }
-
-    function __extend__($module) {
-        if ($module == 'self')
-            $module = $this->name();
-
-        return parent::__extend__($module);
     }
 
     function __include($module) {

@@ -48,6 +48,9 @@ trait Core {
     }
 
     function __extend__($module) {
+        if ($module == 'self' && is_a($this, __NAMESPACE__.'\Module'))
+            $module = $this->name();
+
         foreach ($this->singleton_class()->ancestors() as $ancestor)
             if ($ancestor->name() == $module)
                 return $this;
@@ -173,7 +176,7 @@ trait Core {
 
     function singleton_class() {
         if (!$this->{'@__singleton_class__'})
-            $this->{'@__singleton_class__'} = new Module($this->__class()->name(), $this->__class()->name());
+            $this->{'@__singleton_class__'} = new Module(null, $this->__class()->name());
 
         return $this->{'@__singleton_class__'};
     }
