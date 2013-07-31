@@ -39,7 +39,7 @@
 <a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>features</h2>
 
 <ul>
-<li>mixins with <code>include</code>, <code>extend</code>, <code>prepend</code> and their associated callbacks</li>
+<li>runtime mixins with <code>include</code>, <code>extend</code>, <code>prepend</code> and their associated callbacks</li>
 <li>
 <code>Object</code> and <code>Kernel</code> methods including <code>super</code>, <code>send</code>, <code>respond_to?</code>, <code>method_missing</code>
 </li>
@@ -49,17 +49,29 @@
 </li>
 <li>instance variables are private and accessed with <code>$this-&gt;{'@name'}</code>
 </li>
-<li>[incomplete] class variables are supported as well <code>$this-&gt;{'@@name'}</code>
+<li>class variables are supported as well <code>$this-&gt;{'@@name'}</code>
+</li>
+<li>even global variables are supported <code>$this-&gt;{'$redis'}</code>
 </li>
 <li>ported core library including <code>BasicObject</code>, <code>Kernel</code>, <code>Object</code>, <code>Module</code>, <code>Method</code>, <code>UnboundMethod</code>
 </li>
 <li>[incomplete] ported standard library including <code>Array</code>, <code>Hash</code>, <code>String</code>, <code>Enumerable</code>, <code>Comparable</code>
 </li>
-<li>ruby style namespace resolution thru the <code>Phuby</code> function</li>
+<li>[incomplete] ruby style namespace resolution thru the <code>Phuby</code> function</li>
 <li>autoloading with ruby <code>underscore</code> naming conventions</li>
 <li>parenthesis are optional for method calls with no arguments</li>
 <li>everything is an object, including classes</li>
 </ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>installation</h2>
+
+<p>If you're using <code>Composer</code> simply require the <code>shuber-phuby</code> package.</p>
+
+<p>Otherwise you can download the <code>phuby</code> tar/zip or <code>git clone</code> this
+repository somewhere in your php include path.</p>
+
+<p>Then inside of your php files you can <code>require 'phuby/phuby.php'</code> to load the library.</p>
+
+<h2>
 <a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>usage</h2>
 
 <p>You can integrate <code>Phuby</code> with your code in 3 ways:</p>
@@ -191,51 +203,10 @@ echo Phuby(7)-&gt;days-&gt;from_now;
 <h4>
 <a name="base64" class="anchor" href="#base64"><span class="octicon octicon-link"></span></a>Base64</h4>
 
-<ul>
-<li>✓ <code>decode64</code>
-</li>
-<li>✓ <code>encode64</code>
-</li>
-</ul><h4>
+<h4>
 <a name="basicobject" class="anchor" href="#basicobject"><span class="octicon octicon-link"></span></a>BasicObject</h4>
 
-<ul>
-<li><code>singleton_method_added</code></li>
-<li><code>singleton_method_removed</code></li>
-<li><code>singleton_method_undefined</code></li>
-<li>✓ <code>__caller__</code>
-</li>
-<li>✓ <code>__id__</code>
-</li>
-<li>✓ <code>__send__</code>
-</li>
-<li>✓ <code>__splat__</code>
-</li>
-<li>✓ <code>__undefined__</code>
-</li>
-<li>✓ <code>class</code>
-</li>
-<li>✓ <code>equal?</code>
-</li>
-<li>✓ <code>initialize</code>
-</li>
-<li>✓ <code>instance_eval</code>
-</li>
-<li>✓ <code>instance_exec</code>
-</li>
-<li>✓ <code>instance_variable_get</code>
-</li>
-<li>✓ <code>instance_variable_set</code>
-</li>
-<li>✓ <code>instance_variables</code>
-</li>
-<li>✓ <code>method_missing</code>
-</li>
-<li>✓ <code>singleton_class</code>
-</li>
-<li>✓ <code>super</code>
-</li>
-</ul><h4>
+<h4>
 <a name="comparable" class="anchor" href="#comparable"><span class="octicon octicon-link"></span></a>Comparable</h4>
 
 <h4>
@@ -250,56 +221,7 @@ echo Phuby(7)-&gt;days-&gt;from_now;
 <h4>
 <a name="enumerable" class="anchor" href="#enumerable"><span class="octicon octicon-link"></span></a>Enumerable</h4>
 
-<ul>
-<li><code>all?</code></li>
-<li><code>any?</code></li>
-<li><code>chunk</code></li>
-<li><code>collect</code></li>
-<li><code>collect_concat</code></li>
-<li><code>count</code></li>
-<li><code>cycle</code></li>
-<li><code>detect</code></li>
-<li><code>drop</code></li>
-<li><code>drop_while</code></li>
-<li><code>each_cons</code></li>
-<li><code>each_entry</code></li>
-<li><code>each_slice</code></li>
-<li><code>each_with_index</code></li>
-<li><code>each_with_object</code></li>
-<li><code>entries</code></li>
-<li><code>find</code></li>
-<li><code>find_all</code></li>
-<li><code>find_index</code></li>
-<li><code>first</code></li>
-<li><code>flat_map</code></li>
-<li><code>grep</code></li>
-<li><code>group_by</code></li>
-<li><code>include?</code></li>
-<li><code>inject</code></li>
-<li><code>lazy</code></li>
-<li><code>map</code></li>
-<li><code>max</code></li>
-<li><code>max_by</code></li>
-<li><code>member?</code></li>
-<li><code>min</code></li>
-<li><code>min_by</code></li>
-<li><code>minmax</code></li>
-<li><code>minmax_by</code></li>
-<li><code>none?</code></li>
-<li><code>one?</code></li>
-<li><code>partition</code></li>
-<li><code>reduce</code></li>
-<li><code>reject</code></li>
-<li><code>reverse_each</code></li>
-<li><code>select</code></li>
-<li><code>slice_before</code></li>
-<li><code>sort</code></li>
-<li><code>sort_by</code></li>
-<li><code>take</code></li>
-<li><code>take_while</code></li>
-<li><code>to_a</code></li>
-<li><code>zip</code></li>
-</ul><h4>
+<h4>
 <a name="enumerator" class="anchor" href="#enumerator"><span class="octicon octicon-link"></span></a>Enumerator</h4>
 
 <h4>
@@ -323,173 +245,25 @@ echo Phuby(7)-&gt;days-&gt;from_now;
 <h4>
 <a name="kernel" class="anchor" href="#kernel"><span class="octicon octicon-link"></span></a>Kernel</h4>
 
-<ul>
-<li>✓ <code>[]</code>
-</li>
-<li>✓ <code>[]=</code>
-</li>
-<li>✓ <code>caller</code>
-</li>
-<li>✓ <code>dup</code>
-</li>
-<li>✓ <code>extend</code>
-</li>
-<li>✓ <code>inspect</code>
-</li>
-<li>✓ <code>is_a?</code>
-</li>
-<li>✓ <code>kind_of?</code>
-</li>
-<li>✓ <code>method</code>
-</li>
-<li>✓ <code>methods</code>
-</li>
-<li>✓ <code>object_id</code>
-</li>
-<li>✓ <code>respond_to?</code>
-</li>
-<li>✓ <code>respond_to_missing?</code>
-</li>
-<li>✓ <code>send</code>
-</li>
-<li>✓ <code>splat</code>
-</li>
-<li>✓ <code>tap</code>
-</li>
-<li>✓ <code>to_s</code>
-</li>
-</ul><h4>
+<h4>
 <a name="marshal" class="anchor" href="#marshal"><span class="octicon octicon-link"></span></a>Marshal</h4>
 
-<ul>
-<li>✓ <code>dump</code>
-</li>
-<li>✓ <code>load</code>
-</li>
-<li>✓ <code>restore</code>
-</li>
-</ul><h4>
+<h4>
 <a name="matchdata" class="anchor" href="#matchdata"><span class="octicon octicon-link"></span></a>MatchData</h4>
 
-<ul>
-<li><code>==</code></li>
-<li><code>[]</code></li>
-<li><code>begin</code></li>
-<li><code>end</code></li>
-<li><code>eql?</code></li>
-<li><code>hash</code></li>
-<li><code>inspect</code></li>
-<li><code>length</code></li>
-<li><code>names</code></li>
-<li><code>offset</code></li>
-<li><code>post_match</code></li>
-<li><code>pre_match</code></li>
-<li><code>size</code></li>
-<li><code>to_a</code></li>
-<li><code>to_s</code></li>
-<li><code>values_at</code></li>
-<li>✓ <code>captures</code>
-</li>
-<li>✓ <code>regexp</code>
-</li>
-<li>✓ <code>string</code>
-</li>
-</ul><h4>
+<h4>
 <a name="math" class="anchor" href="#math"><span class="octicon octicon-link"></span></a>Math</h4>
 
 <h4>
 <a name="module" class="anchor" href="#module"><span class="octicon octicon-link"></span></a>Module</h4>
 
-<ul>
-<li>anonymous classes</li>
-<li><code>const_missing</code></li>
-<li><code>const_set</code></li>
-<li><code>constants</code></li>
-<li><code>freeze</code></li>
-<li><code>method_added</code></li>
-<li><code>method_removed</code></li>
-<li><code>method_undefined</code></li>
-<li><code>module_function</code></li>
-<li><code>refine</code></li>
-<li><code>remove_method</code></li>
-<li><code>undef_method</code></li>
-<li><code>using</code></li>
-<li>✓ <code>alias_method</code>
-</li>
-<li>✓ <code>alias_method_chain</code>
-</li>
-<li>✓ <code>allocate</code>
-</li>
-<li>✓ <code>ancestors</code>
-</li>
-<li>✓ <code>append_features</code>
-</li>
-<li>✓ <code>attr_accessor</code>
-</li>
-<li>✓ <code>attr_reader</code>
-</li>
-<li>✓ <code>attr_writer</code>
-</li>
-<li>✓ <code>class_eval</code>
-</li>
-<li>✓ <code>class_exec</code>
-</li>
-<li>✓ <code>const_get</code>
-</li>
-<li>✓ <code>define_method</code>
-</li>
-<li>✓ <code>extend</code>
-</li>
-<li>✓ <code>extend_object</code>
-</li>
-<li>✓ <code>extended</code>
-</li>
-<li>✓ <code>include</code>
-</li>
-<li>✓ <code>include?</code>
-</li>
-<li>✓ <code>included</code>
-</li>
-<li>✓ <code>inherited</code>
-</li>
-<li>✓ <code>initialized</code>
-</li>
-<li>✓ <code>inspect</code>
-</li>
-<li>✓ <code>instance_method</code>
-</li>
-<li>✓ <code>instance_methods</code>
-</li>
-<li>✓ <code>method_defined?</code>
-</li>
-<li>✓ <code>module_eval</code>
-</li>
-<li>✓ <code>module_exec</code>
-</li>
-<li>✓ <code>name</code>
-</li>
-<li>✓ <code>new</code>
-</li>
-<li>✓ <code>prepend</code>
-</li>
-<li>✓ <code>prepend_features</code>
-</li>
-<li>✓ <code>prepended</code>
-</li>
-<li>✓ <code>superclass</code>
-</li>
-<li>✓ <code>to_s</code>
-</li>
-</ul><h4>
+<h4>
 <a name="numeric" class="anchor" href="#numeric"><span class="octicon octicon-link"></span></a>Numeric</h4>
 
 <h4>
 <a name="object" class="anchor" href="#object"><span class="octicon octicon-link"></span></a>Object</h4>
 
-<ul>
-<li>✓ <code>include Kernel</code>
-</li>
-</ul><h4>
+<h4>
 <a name="objectspace" class="anchor" href="#objectspace"><span class="octicon octicon-link"></span></a>ObjectSpace</h4>
 
 <h4>
@@ -513,145 +287,7 @@ echo Phuby(7)-&gt;days-&gt;from_now;
 <h4>
 <a name="string" class="anchor" href="#string"><span class="octicon octicon-link"></span></a>String</h4>
 
-<ul>
-<li><code>%</code></li>
-<li><code>+</code></li>
-<li><code>&lt;=&gt;</code></li>
-<li><code>==</code></li>
-<li><code>=~</code></li>
-<li><code>[]</code></li>
-<li><code>[]=</code></li>
-<li><code>ascii_only?</code></li>
-<li><code>b</code></li>
-<li><code>bytes</code></li>
-<li><code>bytesize</code></li>
-<li><code>byteslice</code></li>
-<li><code>casecmp</code></li>
-<li><code>center</code></li>
-<li><code>chars</code></li>
-<li><code>chomp</code></li>
-<li><code>chomp!</code></li>
-<li><code>chop</code></li>
-<li><code>chop!</code></li>
-<li><code>chr</code></li>
-<li><code>codepoints</code></li>
-<li><code>count</code></li>
-<li><code>crypt</code></li>
-<li><code>delete</code></li>
-<li><code>delete!</code></li>
-<li><code>dump</code></li>
-<li><code>each_byte</code></li>
-<li><code>each_char</code></li>
-<li><code>each_codepoint</code></li>
-<li><code>each_line</code></li>
-<li><code>encode</code></li>
-<li><code>encode!</code></li>
-<li><code>encoding</code></li>
-<li><code>end_with?</code></li>
-<li><code>eql?</code></li>
-<li><code>force_encoding</code></li>
-<li><code>getbyte</code></li>
-<li><code>gsub</code></li>
-<li><code>gsub!</code></li>
-<li><code>hash</code></li>
-<li><code>hex</code></li>
-<li><code>include?</code></li>
-<li><code>index</code></li>
-<li><code>initialize_copy</code></li>
-<li><code>insert</code></li>
-<li><code>inspect</code></li>
-<li><code>intern</code></li>
-<li><code>length</code></li>
-<li><code>lines</code></li>
-<li><code>ljust</code></li>
-<li><code>match</code></li>
-<li><code>next</code></li>
-<li><code>next!</code></li>
-<li><code>oct</code></li>
-<li><code>ord</code></li>
-<li><code>partition</code></li>
-<li><code>rindex</code></li>
-<li><code>rjust</code></li>
-<li><code>rpartition</code></li>
-<li><code>scan</code></li>
-<li><code>scrub</code></li>
-<li><code>scrub!</code></li>
-<li><code>setbyte</code></li>
-<li><code>slice</code></li>
-<li><code>slice!</code></li>
-<li><code>split</code></li>
-<li><code>squeeze</code></li>
-<li><code>squeeze!</code></li>
-<li><code>start_with?</code></li>
-<li><code>sub</code></li>
-<li><code>sub!</code></li>
-<li><code>succ</code></li>
-<li><code>succ!</code></li>
-<li><code>sum</code></li>
-<li><code>swapcase</code></li>
-<li><code>swapcase!</code></li>
-<li><code>to_c</code></li>
-<li><code>to_f</code></li>
-<li><code>to_i</code></li>
-<li><code>to_r</code></li>
-<li><code>to_sym</code></li>
-<li><code>tr</code></li>
-<li><code>tr!</code></li>
-<li><code>tr_s!</code></li>
-<li><code>unpack</code></li>
-<li><code>upto</code></li>
-<li><code>valid_encoding?</code></li>
-<li>✓ <code>*</code>
-</li>
-<li>✓ <code>&lt;&lt;</code>
-</li>
-<li>✓ <code>capitalize</code>
-</li>
-<li>✓ <code>capitalize!</code>
-</li>
-<li>✓ <code>clear</code>
-</li>
-<li>✓ <code>concat</code>
-</li>
-<li>✓ <code>copy</code>
-</li>
-<li>✓ <code>downcase</code>
-</li>
-<li>✓ <code>downcase!</code>
-</li>
-<li>✓ <code>empty?</code>
-</li>
-<li>✓ <code>lstrip</code>
-</li>
-<li>✓ <code>lstrip!</code>
-</li>
-<li>✓ <code>prepend</code>
-</li>
-<li>✓ <code>replace</code>
-</li>
-<li>✓ <code>reverse</code>
-</li>
-<li>✓ <code>reverse!</code>
-</li>
-<li>✓ <code>rstrip</code>
-</li>
-<li>✓ <code>rstrip!</code>
-</li>
-<li>✓ <code>size</code>
-</li>
-<li>✓ <code>strip</code>
-</li>
-<li>✓ <code>strip!</code>
-</li>
-<li>✓ <code>to_s</code>
-</li>
-<li>✓ <code>to_str</code>
-</li>
-<li>✓ <code>upcase</code>
-</li>
-<li>✓ <code>upcase!</code>
-</li>
-</ul><h4>
+<h4>
 <a name="struct" class="anchor" href="#struct"><span class="octicon octicon-link"></span></a>Struct</h4>
 
 <h4>
