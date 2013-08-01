@@ -23,7 +23,7 @@ class Kernel {
     }
 
     function inspect() {
-        return '<'.$this->__class()->name().':'.$this->object_id().'>';
+        return '#<'.$this->__class()->name().':'.$this->object_id().'>';
     }
 
     function instance_variable_get($name) {
