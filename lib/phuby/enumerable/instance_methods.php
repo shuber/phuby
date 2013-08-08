@@ -179,6 +179,14 @@ class InstanceMethods {
         });
     }
 
+    function reject($block) {
+        $block = function($object) use ($block) {
+            return !!$block($object);
+        };
+
+        return $this->select($block);
+    }
+
     function select($block) {
         $matches = $this->Ary->new;
 
