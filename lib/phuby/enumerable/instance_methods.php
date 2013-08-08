@@ -121,6 +121,21 @@ class InstanceMethods {
             return reset($this->{'@native'});
     }
 
+    function group_by($block) {
+        $grouped = [];
+
+        foreach ($this->{'@native'} as $object) {
+            $value = $block($object);
+
+            if (!isset($grouped[$value]))
+                $grouped[$value] = [];
+
+            $grouped[$value][] = $object;
+        }
+
+        return $this->Ary->new($grouped);
+    }
+
     function include_query($object) {
         foreach ($this as $value)
             if ($object == $value)
