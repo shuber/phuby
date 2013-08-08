@@ -93,6 +93,16 @@ class InstanceMethods {
         }
     }
 
+    function each_slice($number, $block) {
+        if ($number < 1)
+            throw new \Phuby\ArgumentException('invalid slice size');
+
+        $chunks = array_chunk($this->to_a->{'@native'}, $number);
+
+        foreach ($chunks as $chunk)
+            $block($this->Ary->new($chunk));
+    }
+
     function find_all($block) {
         $matches = $this->Array->new;
 
