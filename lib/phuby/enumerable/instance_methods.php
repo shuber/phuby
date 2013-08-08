@@ -7,6 +7,7 @@ class InstanceMethods {
         $self->alias_method('all?', 'all_query');
         $self->alias_method('any?', 'any_query');
         $self->alias_method('collect', 'map');
+        $self->alias_method('entries', 'to_a');
         $self->alias_method('find', 'detect');
         $self->alias_method('find_all', 'select');
         $self->alias_method('include?', 'include_query');
