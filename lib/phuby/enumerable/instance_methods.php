@@ -55,6 +55,27 @@ class InstanceMethods {
         return $this;
     }
 
+    function find_all($block) {
+        $matches = $this->Array->new;
+
+        foreach ($this->{'@native'} as $object)
+            if ($block($object))
+                $matches[] = $object;
+
+        return $matches;
+    }
+
+    function find_index($block) {
+        if (!is_callable($block))
+            $block = function ($object) use ($block) {
+                return $block == $object;
+            };
+
+        foreach ($this->{'@native'} as $index => $object)
+            if ($block($object))
+                return $index;
+    }
+
     function first() {
         if (!empty($this->{'@native'}))
             return reset($this->{'@native'});
