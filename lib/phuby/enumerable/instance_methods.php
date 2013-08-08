@@ -8,6 +8,7 @@ class InstanceMethods {
         $self->alias_method('any?', 'any_query');
         $self->alias_method('collect', 'map');
         $self->alias_method('find', 'detect');
+        $self->alias_method('find_all', 'select');
         $self->alias_method('include?', 'include_query');
         $self->alias_method('member_query', 'include_query');
         $self->alias_method('member?', 'member_query');
@@ -104,16 +105,6 @@ class InstanceMethods {
             $block($this->Ary->new($chunk));
     }
 
-    function find_all($block) {
-        $matches = $this->Array->new;
-
-        foreach ($this->{'@native'} as $object)
-            if ($block($object))
-                $matches[] = $object;
-
-        return $matches;
-    }
-
     function find_index($block) {
         if (!is_callable($block))
             $block = function ($object) use ($block) {
@@ -186,6 +177,16 @@ class InstanceMethods {
             $partitions[$index][] = $object;
             return $partitions; 
         });
+    }
+
+    function select($block) {
+        $matches = $this->Ary->new;
+
+        foreach ($this->{'@native'} as $object)
+            if ($block($object))
+                $matches[] = $object;
+
+        return $matches;
     }
 
     function to_a() {
