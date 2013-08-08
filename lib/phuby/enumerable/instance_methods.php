@@ -12,6 +12,7 @@ class InstanceMethods {
         $self->alias_method('member_query', 'include_query');
         $self->alias_method('member?', 'member_query');
         $self->alias_method('none?', 'none_query');
+        $self->alias_method('one?', 'one_query');
         $self->alias_method('reduce', 'inject');
     }
 
@@ -157,6 +158,26 @@ class InstanceMethods {
             if ($block($object, $key))
                 return false;
         });
+    }
+
+    function one_query($block = null) {
+        if (!$block)
+            $block = function($object) {
+                return !!$object;
+            };
+
+        $match = false;
+
+        foreach ($this->{'@native'} as $object)
+            if ($block($object))
+                if ($match) {
+                    $match = false;
+                    break;
+                } else {
+                    $match = true;
+                }
+
+        return $match;
     }
 
     function partition($block) {
