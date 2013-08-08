@@ -4,8 +4,8 @@ function Phuby($object, $lookup_class = true) {
     if ($lookup_class && is_string($object) && class_exists($object))
         return Phuby\Module::const_get($object);
 
-    // if (Phuby\Enumerable::numeric($object))
-    //     return Phuby\Array::__new($object);
+    if (Phuby\Enumerable::numeric($object))
+        return Phuby\Ary::__new($object);
 
     if (is_array($object))
         return Phuby\Hash::__new($object);
