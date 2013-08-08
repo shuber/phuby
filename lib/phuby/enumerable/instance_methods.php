@@ -4,8 +4,13 @@ namespace Phuby\Enumerable;
 
 class InstanceMethods {
     static function initialized($self) {
+        $self->alias_method('all?', 'all_query');
+        $self->alias_method('any?', 'any_query');
         $self->alias_method('collect', 'map');
-        $self->alias_method('member', 'includes');
+        $self->alias_method('include?', 'include_query');
+        $self->alias_method('member_query', 'include_query');
+        $self->alias_method('member?', 'member_query');
+        $self->alias_method('none?', 'none_query');
         $self->alias_method('reduce', 'inject');
     }
 
@@ -13,14 +18,18 @@ class InstanceMethods {
         $this->{'@native'} = $native;
     }
 
-    function all($block) {
-        return $this->none(function($object, $key) use ($block) {
+    function all_query($block) {
+        return $this->{'none?'}(function($object, $key) use ($block) {
             return !$block($object, $key);
         });
     }
 
-    function any($block) {
-        return !$this->none($block);
+    function any_query($block) {
+        return !$this->{'none?'}($block);
+    }
+
+    function count() {
+        return count($this->{'@native'});
     }
 
     function each($block) {
@@ -31,7 +40,12 @@ class InstanceMethods {
         return $this;
     }
 
-    function includes($object) {
+    function first() {
+        if (!empty($this->{'@native'}))
+            return reset($this->{'@native'});
+    }
+
+    function include_query($object) {
         foreach ($this as $value)
             if ($object == $value)
                 return true;
@@ -54,7 +68,7 @@ class InstanceMethods {
         });
     }
 
-    function none($block) {
+    function none_query($block) {
         return !!$this->each(function ($key, $object) {
             if ($block($object, $key))
                 return false;
@@ -69,11 +83,11 @@ class InstanceMethods {
         });
     }
 
-    function size() {
-        return count($this);
+    function to_a() {
+        return $this->Array(array_values($this->{'@native'}));
     }
 
     function to_ary() {
-        return $this->{'@native'};
+        return $this->to_a->{'@native'};
     }
 }
