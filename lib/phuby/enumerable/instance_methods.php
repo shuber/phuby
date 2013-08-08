@@ -53,7 +53,7 @@ class InstanceMethods {
 
         $native = array_slice(array_values($this->{'@native'}), $number);
 
-        return $this->Array->new($native);
+        return $this->Ary->new($native);
     }
 
     function drop_while($block) {
@@ -62,7 +62,7 @@ class InstanceMethods {
         if ($index = $this->find_index($block))
             $native = array_slice($native, $index);
 
-        return $this->Array->new($native);
+        return $this->Ary->new($native);
     }
 
     function each($block) {
@@ -89,7 +89,7 @@ class InstanceMethods {
             }
 
             if ($count == $number)
-                $block($this->Array->new($elements));
+                $block($this->Ary->new($elements));
         }
     }
 
@@ -158,7 +158,7 @@ class InstanceMethods {
     }
 
     function to_a() {
-        return $this->Array(array_values($this->{'@native'}));
+        return $this->Ary(array_values($this->{'@native'}));
     }
 
     function to_ary() {
