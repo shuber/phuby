@@ -51,7 +51,7 @@ class InstanceMethods {
         if ($number < 0)
             throw new \Phuby\ArgumentError('attempt to drop negative size');
 
-        $native = array_slice(array_values($this->{'@native'}), $number));
+        $native = array_slice(array_values($this->{'@native'}), $number);
 
         return $this->Array->new($native);
     }
@@ -71,6 +71,26 @@ class InstanceMethods {
                 return $value;
 
         return $this;
+    }
+
+    function each_cons($number, $block) {
+        if ($number < 1)
+            throw new \Phuby\ArgumentError('invalid size');
+
+        $elements = [];
+
+        foreach ($this->{'@native'} as $object) {
+            $elements[] = $object;
+            $count = count($elements);
+
+            if ($count > $number) {
+                array_shift($elements);
+                $count--;
+            }
+
+            if ($count == $number)
+                $block($this->Array->new($elements));
+        }
     }
 
     function find_all($block) {
