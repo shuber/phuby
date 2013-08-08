@@ -47,6 +47,24 @@ class InstanceMethods {
             return $ifnone;
     }
 
+    function drop($number) {
+        if ($number < 0)
+            throw new \Phuby\ArgumentError('attempt to drop negative size');
+
+        $native = array_slice(array_values($this->{'@native'}), $number));
+
+        return $this->Array->new($native);
+    }
+
+    function drop_while($block) {
+        $native = array_values($this->{'@native'});
+
+        if ($index = $this->find_index($block))
+            $native = array_slice($native, $index);
+
+        return $this->Array->new($native);
+    }
+
     function each($block) {
         foreach ($this as $key => $object)
             if (!is_null($value = $block($key, $object)))
