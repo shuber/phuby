@@ -7,6 +7,7 @@ class InstanceMethods {
         $self->alias_method('all?', 'all_query');
         $self->alias_method('any?', 'any_query');
         $self->alias_method('collect', 'map');
+        $self->alias_method('find', 'detect');
         $self->alias_method('include?', 'include_query');
         $self->alias_method('member_query', 'include_query');
         $self->alias_method('member?', 'member_query');
@@ -30,6 +31,20 @@ class InstanceMethods {
 
     function count() {
         return count($this->{'@native'});
+    }
+
+    function detect($callback) {
+        if (func_num_args() > 1) {
+            $ifnone = $callback;
+            $callback = func_get_arg(1);
+        }
+
+        foreach ($this->{'@native'} as $object)
+            if ($callback($object))
+                return $object;
+
+        if (isset($ifnone))
+            return $ifnone;
     }
 
     function each($block) {
