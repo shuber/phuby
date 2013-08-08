@@ -1,5 +1,11 @@
 {
     "name": "shuber/phuby",
+    "authors": [{
+        "name": "Sean Huber",
+        "email": "shuber@huberry.com",
+        "homepage": "https://github.com/shuber",
+        "role": "Developer"
+    }]
     "autoload": {
         "files": ["phuby.php"]
     },
