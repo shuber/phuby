@@ -47,14 +47,14 @@ can't extend `Phuby\Object`.
         use Phuby;
     }
 
-### 3) the `Phuby` function
+### 3) the `Phuby` function (like [jQuery](http://jquery.com/)'s `$` function)
 
 This allows you to inject `Phuby` features into *any* object.
 
     echo Phuby('this is a sentence.')->upcase;
 
-    Phuby([1,2,3])->each(function($number) {
-      echo $number;
+    $evens = Phuby([1,2,3,4,5])->select(function($number) {
+      return $number % 2 == 0;
     });
 
     echo Phuby(7)->days->from_now;
