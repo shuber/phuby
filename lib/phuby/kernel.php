@@ -70,6 +70,7 @@ class Kernel {
             };
 
         $block($this);
+
         return $this;
     }
 }

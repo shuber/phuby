@@ -5,6 +5,7 @@ namespace Phuby;
 class Marshal {
     static function initialized($self) {
         $self->extend('self');
+
         $self->alias_method('restore', 'load');
     }
 

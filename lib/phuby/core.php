@@ -17,13 +17,13 @@ trait Core {
     }
 
     function __call($method_name, $args = []) {
-        if ($method = $this->singleton_class()->instance_method($method_name)) {
+        if ($method = $this->singleton_class()->instance_method($method_name))
             return $method->bind($this)->splat($args);
-        } else if ($method = $this->singleton_class()->instance_method('method_missing')) {
+
+        if ($method = $this->singleton_class()->instance_method('method_missing'))
             return $method->bind($this)->call($method_name, $args);
-        } else {
-            return $this->__undefined__($method_name);
-        }
+
+        return $this->__undefined__($method_name);
     }
 
     function __caller__($ignore_methods = []) {
@@ -60,9 +60,8 @@ trait Core {
         if (is_a($this, __NAMESPACE__.'\Module')) {
             if (method_exists($module, 'extended'))
                 call_user_func("$module::extended", $this);
-        } else {
-            if (method_exists($module, 'extend_object'))
-                call_user_func("$module::extend_object", $this);
+        } else if (method_exists($module, 'extend_object')) {
+            call_user_func("$module::extend_object", $this);
         }
 
         return $this;
@@ -94,6 +93,7 @@ trait Core {
 
         if (preg_match('/^@@(.+)/', $method_name, $matches)) {
             $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+
             if ($this->__isset($method_name)) {
                 foreach ($module->heritage() as $module)
                     if (isset($module->__phuby__[$method_name]))
@@ -128,6 +128,7 @@ trait Core {
                 case '$': return isset($GLOBALS[$matches[2]]);
                 case '@@':
                     $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+
                     foreach ($module->heritage() as $module)
                         if (isset($module->__phuby__[$method_name]))
                             return true;
@@ -144,9 +145,11 @@ trait Core {
     function &__set($method_name, $args) {
         if (preg_match('/^@@(.+)/', $method_name, $matches)) {
             $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+
             foreach (array_reverse($module->heritage()) as $module)
                 if ($module->__isset($method_name))
                     break;
+
             $module->__phuby__[$method_name] = $args;
             $value = &$module->__phuby__[$method_name];
         } else if (preg_match('/^@(.+)/', $method_name, $matches)) {
@@ -177,6 +180,7 @@ trait Core {
                 case '$': unset($GLOBALS[$matches[2]]);
                 case '@@':
                     $module = is_a($this, __NAMESPACE__.'\Module') ? $this : $this->singleton_class();
+
                     foreach ($module->heritage() as $module)
                         if (isset($module->__phuby__[$method_name]))
                             unset($module->__phuby__[$method_name]);
@@ -192,6 +196,7 @@ trait Core {
     function instance_exec($args, $block) {
         $args = array_slice(0, -1, func_get_args());
         $singleton = $this->singleton_class();
+
         return $block->bindTo($singleton, $singleton)->invokeArgs($args);
     }
 
@@ -207,13 +212,13 @@ trait Core {
 
         if ($caller = $this->__caller__(['send', 'splat'])) {
             $module = $caller['class'];
-            foreach ($this->singleton_class()->ancestors() as $ancestor) {
+
+            foreach ($this->singleton_class()->ancestors() as $ancestor)
                 if ($ancestor->name() == $module) {
                     $found = true;
                 } else if (isset($found) && $method = $ancestor->instance_method($caller['function'])) {
                     return $method->bind($this)->splat($args);
                 }
-            }
         }
 
         return $this->__undefined__(__FUNCTION__, $args);

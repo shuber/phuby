@@ -50,6 +50,7 @@ namespace Phuby\String {
                 $object = chr($object);
 
             $this->{'@native'} .= (string) $object;
+
             return $this;
         }
 
@@ -58,6 +59,7 @@ namespace Phuby\String {
                 throw new \Phuby\ArgumentError('$integer must be greater that or equal to 0');
 
             $copy = '';
+
             for ($i = 0; $i < $integer; $i++)
                 $copy .= $this->{'@native'};
 
@@ -97,6 +99,7 @@ namespace Phuby\String {
         function prepend($other) {
             $other = (string) $other;
             $this->{'@native'} = $other.$this->{'@native'};
+
             return $this;
         }
 
@@ -153,7 +156,7 @@ namespace Phuby\String {
         }
 
         function to_str() {
-                return $this->{'@native'};
+            return $this->{'@native'};
         }
 
         function upcase() {

@@ -40,6 +40,7 @@ class Module extends Object {
         if (class_exists($name)) {
             self::$constants[$name] = new self;
             self::$constants[$name]->initialize($name);
+
             return self::$constants[$name];
         }
 
@@ -51,7 +52,9 @@ class Module extends Object {
             $class = 'Anonymous_'.uniqid();
             $namespace = __NAMESPACE__.'\Compiled';
             $name = "$namespace\\$class";
+
             $definition = "namespace $namespace { class $class extends \\".__NAMESPACE__.'\\Object { } }';
+
             eval($definition);
         }
 
