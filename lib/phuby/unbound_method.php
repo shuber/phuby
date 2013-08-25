@@ -18,7 +18,7 @@ class UnboundMethod extends Object {
     }
 
     function inspect() {
-        return '<'.get_called_class().': '.$this->{'@owner'}.'#'.$this->{'@name'}.'>';
+        return '#<'.get_called_class().': '.$this->{'@owner'}.'#'.$this->{'@name'}.'>';
     }
 
     function name() {
