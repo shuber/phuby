@@ -8,10 +8,10 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_it_should_inherit_basic_object() {
-        $this->assertContains(__NAMESPACE__.'\BasicObject', $this->Object->heritage());
+        $this->assertContains(__NAMESPACE__.'\BasicObject', $this->Object->heritage);
     }
 
     function test_it_should_include_kernel() {
-        $this->assertContains(__NAMESPACE__.'\Kernel', $this->Object->ancestors());
+        $this->assertContains(__NAMESPACE__.'\Kernel', $this->Object->ancestors);
     }
 }

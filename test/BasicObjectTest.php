@@ -8,6 +8,6 @@ class BasicObjectTest extends \PHPUnit_Framework_TestCase {
     }
 
     function test_it_should_use_core() {
-        $this->assertContains(__NAMESPACE__.'\Core', $this->BasicObject->traits());
+        $this->assertContains(__NAMESPACE__.'\Core', $this->BasicObject->traits);
     }
 }
