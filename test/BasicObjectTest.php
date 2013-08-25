@@ -1,17 +1,13 @@
 <?php
 
-class BasicObjectTest extends PHPUnit_Framework_TestCase {
-    /**
-     * @expectedException Phuby\NoMethodError
-     */
-    function testSendWithInvalidMethodName() {
-        $object = new Phuby\Object;
-        $object->__send__('invalid');
+namespace Phuby;
+
+class BasicObjectTest extends \PHPUnit_Framework_TestCase {
+    function setUp() {
+        $this->BasicObject = Phuby(__NAMESPACE__.'\BasicObject');
     }
 
-    function testDefineMethod() {
-        $object = new Phuby\Object;
-        $object->singleton_class->define_method('testing', function() { return 'test'; });
-        $this->assertEquals('test', $object->testing);
+    function test_it_should_use_core() {
+        $this->assertContains(__NAMESPACE__.'\Core', $this->BasicObject->traits());
     }
 }

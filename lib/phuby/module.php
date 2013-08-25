@@ -31,6 +31,7 @@ class Module extends Object {
     static function initialized($self) {
         $self->__include(__CLASS__.'\Accessor');
         $self->__include(__CLASS__.'\Alias');
+        $self->__include(__CLASS__.'\Reflection');
     }
 
     static function const_get($name) {
