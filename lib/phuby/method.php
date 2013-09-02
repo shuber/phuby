@@ -17,7 +17,7 @@ class Method extends Object {
     }
 
     function inspect() {
-        return '<'.get_called_class().': '.get_class($this->{'@receiver'}).'#'.$this->{'@unbound'}->name().'>';
+        return '#<'.get_called_class().': '.get_class($this->{'@receiver'}).'#'.$this->{'@unbound'}->name().'>';
     }
 
     function splat($args) {
