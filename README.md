@@ -1,5 +1,7 @@
 # phuby
 
+[![Build Status](https://travis-ci.org/shuber/phuby.png)](https://travis-ci.org/shuber/phuby)
+
 A port of [ruby](http://www.ruby-lang.org/) 2.0 to native [php](http://php.net/) 5.4+
 
 
